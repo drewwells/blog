@@ -16,20 +16,17 @@ My job is not to directly emulate what is going on in Ray's Post, but to explore
 
 Here she goes!
 
-{% codeblock lang:js %}
-<textarea cols="30" rows="2" id="address">Type address here</textarea>
-<br/>
-<img width="400" height="400" title="Map!" id="map" />
+[code]
+&lt;textarea cols=&quot;30&quot; rows=&quot;2&quot; id=&quot;address&quot;&gt;Type address here&lt;/textarea&gt;&lt;br/&gt;
+&lt;img width=&quot;400&quot; height=&quot;400&quot; title=&quot;Map!&quot; id=&quot;map&quot; /&gt;
 
-{% endcodeblock %}
-{% codeblock lang:js %}
+[/code]
+[code lang="js"]
 (function(){
-var base = "http://maps.google.com/maps/api/staticmap?zoom=12" +
-    "&size=400x400&maptype=roadmap&sensor=false&center=",
-    map = document.getElementById("map"),
-    area = document.getElementById("address"),
-    virgin = true;
-
+var base = &quot;http://maps.google.com/maps/api/staticmap?zoom=12&amp;size=400x400&amp;&quot; + &quot;maptype=roadmap&amp;sensor=false&amp;center=&quot;,
+ map = document.getElementById(&quot;map&quot;),
+ area = document.getElementById(&quot;address&quot;),
+ virgin = true;
 area.onfocus = function(ev){
   if( virgin ){  //Touched for the very first time?
     virgin = false;
@@ -37,12 +34,12 @@ area.onfocus = function(ev){
   }
 }
 area.onkeyup = function(ev){
-  //All sorts of broken things with detecting keycodes,
+  //All sorts of broken things with detecting keycodes, 
   //I'm just looking for value
-  map.src = this.value.length > 4 ? base + escape(this.value) : '';
+  map.src = this.value.length &gt; 4 ? base + escape(this.value) : '';
 }
 })();
-{% endcodeblock %}
+[/code]
 
 However, <a href="http://drewwells.net/demo/static-google-map.html">seeing is believing</a>
 

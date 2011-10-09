@@ -33,32 +33,32 @@ Currently, webkit/mozilla allow 5megs of globalStorage and IE allows 10megs.  Yo
 <strong>Implementation</strong>
 The first thing I did was start throwing structures in the localStorage.  I can't think of a reason I would want to put just key/value pairs in there.  So here's my code:
 
-[js]
+{% codeblock lang:js %}
 sessionStorage['results'] = {
   'query1': 'apple',
   'query2': 'banana'
 };
-[/js]
+{% endcodeblock %}
 
 I thought, now how do I extract these values back out.  Here's my first go:
 
-[js]
+{% codeblock lang:js %}
 console.log( sessionStorage['results']['query1']; ); //undefined
-[/js]
+{% endcodeblock %}
 
 Undefined? but why!  I inspected the storage in firebug here's what was stored to sessionStorage:
 
-[js]&quot;[object Object]&quot;[/js]
+{% codeblock lang:js %}"[object Object]"{% endcodeblock %}
 
 The w3 standard does not define anything beyond the fact that the Storage Interface stores key/value pairs via the setter method.  I can only postulate that it runs .toString() on anything with a typeof !== 'string'.  So, how do we store complex values in sessionStorage?  Easy, use JSON.
 
 Normally you deal with json in this fashion.  Using <a href="http://www.json.org/js.html">Crockford's JSON2</a> or native browser implementation.
 
-[js]JSON.parse(&quot;{'query1': 'apple', 'query2': 'banana'}&quot;);  //object with query1 and query2 properties[/js]
+{% codeblock lang:js %}JSON.parse("{'query1': 'apple', 'query2': 'banana'}");  //object with query1 and query2 properties{% endcodeblock %}
 
 However, this is the opposite of what we want.  We want to take an object and make a string out of it, enter <em>stringify</em>.
 
-[js]
+{% codeblock lang:js %}
 var querySet = {
   'query1': 'apple',
   'query2': 'banana'
@@ -68,7 +68,7 @@ var string = JSON.stringify(querySet);
 sessionStorage['results'] = string;
 
 var originalResult = JSON.parse( sessionStorage['results'] ); //original object with query1 and query2 attributes
-[/js]
+{% endcodeblock %}
 
 I do not know if this is the preferred way, but since JSON is an integral part of client/storage data communication.  I can only see it lending itself nicely to application/browser data communication as well.
 

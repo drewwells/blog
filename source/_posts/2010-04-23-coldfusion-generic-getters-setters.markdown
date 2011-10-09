@@ -15,34 +15,35 @@ One of the useful features missing from ColdFusion is automatic getters and sett
 I have slightly tweaked this.  You should know some limitations of onMissingMethod().  While external calls, say from a cfm page, will trigger the onMissingMethod calls, internal calls within the CFC will not utilize this behavior.
 
 The behavior I wish to achieve is something like this:
-[cf]
-  &lt;cfset object = CreateObject(&quot;Component&quot;,&quot;baseObject&quot;) /&gt;
-  &lt;cfset object.val(&quot;Value&quot;) /&gt;
-  &lt;cfoutput&gt;#object.val()#&lt;/cfoutput&gt; &lt;!--- Value ---&gt;
-[/cf]
+{% codeblock lang:html %}
+  <cfset object = CreateObject("Component","baseObject") />
+  <cfset object.val("Value") />
+  <cfoutput>#object.val()#</cfoutput> <!--- Value --->
+{% endcodeblock %}
 Inside the CFC is a different story, setting and getting is a little different
-[cf]
+{% codeblock lang:html %}
 ...
-&lt;cffunction name=&quot;GenericFunction&quot;&gt;
-  &lt;!--- Set some variables ---&gt;
-  &lt;cfset setValue(&quot;var1&quot;) = &quot;String1&quot; /&gt;
-  &lt;cfset value = getValue(&quot;var1&quot;) /&gt; &lt;!--- Value now set to &quot;String1&quot; ---&gt;
-&lt;/cffunction&gt;
-[/cf]
+<cffunction name="GenericFunction">
+  <!--- Set some variables --->
+  <cfset setValue("var1") = "String1" />
+  <cfset value = getValue("var1") /> <!--- Value now set to "String1" --->
+</cffunction>
+{% endcodeblock %}
 
 Here's the Helper functions to make this happen.  You can read about advanced version of this very basic getter/setter code at <a href="http://www.pbell.com/index.cfm/2008/4/8/Generic-Getters">Peter Bell's Blog</a>
-[cf]
-&lt;!--- 
-	Author: Drew Wells http://drewwells.net/blog/109-coldfusion-generic-getters-setters/
-    ---&gt;
-&lt;cfscript&gt;
+
+{% codeblock lang:js %}
+<!---
+    Author: Drew Wells http://drewwells.net/blog/2010/04/23/coldfusion-generic-getters-setters/
+--->
+
 //Handles calls to functions that do not exist
 //@MissingMethodName - Name of function being called
 //@MissingMethodArguments - Arguments passed to non-existant function
 function OnMissingMethod( ){
-	if( StructKeyExists( arguments[2], &quot;2&quot; ) ){ //invalid, expected 1 argument
+	if( StructKeyExists( arguments[2], "2" ) ){ //invalid, expected 1 argument
 
-	} else if( StructKeyExists( arguments[2], &quot;1&quot; )  ){ //setter
+	} else if( StructKeyExists( arguments[2], "1" )  ){ //setter
 
 		setValue( arguments[1], arguments[2][1] );
 
@@ -50,7 +51,7 @@ function OnMissingMethod( ){
 
 		return getValue( arguments[1] );
 
-	} 
+	}
 }
 //Setter method
 function setValue(){
@@ -62,5 +63,4 @@ function getValue(){
 		return variables.instance[ arguments[1] ];
 	}
 }
-&lt;/cfscript&gt;
-[/cf] 
+{% endcodeblock %}
