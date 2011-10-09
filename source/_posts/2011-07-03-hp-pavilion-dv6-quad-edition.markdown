@@ -14,10 +14,10 @@ My new laptop is wonderful and great.  It's also completely a pos in Ubuntu.  Nu
 
 In integrated graphics mode: use xrandr as so
 
-<code>xrandr --output LVDS1 --brightness 0.4</code>
+{% codeblock lang:js %}xrandr --output LVDS1 --brightness 0.4{% endcodeblock %}
 
 I made a script to use make this a little more automated:
-<code>xrandr --output LVDS1 --brightness $1</code>
+{% codeblock lang:js %}xrandr --output LVDS1 --brightness $1{% endcodeblock %}
 
-Save it to brightness.sh (no sudo required on my system).  
-<code>./brightness.sh 0.7</code>
+Save it to brightness.sh (no sudo required on my system).
+{% codeblock lang:js %}./brightness.sh 0.7{% endcodeblock %}

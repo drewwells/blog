@@ -10,21 +10,21 @@ wordpress_id: '86'
 : - JavaScript
 ---
 
-Recursion has always been fascinating to me, also confusing and difficult for me to wrap my head around.  I have been watching Douglas Crockford's <a href="http://developer.yahoo.com/yui/theater/video.php?v=crockonjs-3">Act III: Function the Ultimate</a>.  He details many, many things about Functions.  
+Recursion has always been fascinating to me, also confusing and difficult for me to wrap my head around.  I have been watching Douglas Crockford's <a href="http://developer.yahoo.com/yui/theater/video.php?v=crockonjs-3">Act III: Function the Ultimate</a>.  He details many, many things about Functions.
 
-The interesting concept that I had never heard of is called <a href="http://en.wikipedia.org/wiki/Memoization">memoization</a>.  You add an element in your recursive function that maintains a list of results to steps.  For example, 
+The interesting concept that I had never heard of is called <a href="http://en.wikipedia.org/wiki/Memoization">memoization</a>.  You add an element in your recursive function that maintains a list of results to steps.  For example,
 
-[js]
+{% codeblock lang:js %}
 var recursion = function(memo, n){
   var result = memo[n];  //see if memo contains an answer already
-  if( result === 'undefined' )  
+  if( result === 'undefined' )
     result = memo[n] = n + recursion(memo, n--);
   return result;
 }
-[/js]
+{% endcodeblock %}
 As you can see, the function first looks for the result to the function call in the <em>memo</em> array.  If it is not found there, it performs a recursive call <em>memo[n] = n + recursion(memo, n--);</em>.  This example is overly simplistic for illustrating the concept and relies on the user predefining a list of known calculations to preload the memo anytime they wish to call this.  This next example shows a better implementation.
 
-[js]
+{% codeblock lang:js %}
 function memoizer(memo, formula){
   var recur = function(n){
     var result = memo[n];
@@ -42,15 +42,15 @@ var factorial = memoizer([1,1], function(recur,n){
 
 factorial(5); //120
 factorial(10); //3628800
-[/js]
+{% endcodeblock %}
 
-Recursive algorithms have complicated execution paths, so I will try to break this down into some steps.  Lets start with our instantiation since this is what this <em>memoizer</em> function was defined to optimize.  You pass in your memo of known values factorial(0) = 1 and factorial(1) = 1, so our memo is [1,1] (position 0 equates to factorial(0) ).  The second argument is the recursive function you wish to call, for factorial this is simply 
-[js]
+Recursive algorithms have complicated execution paths, so I will try to break this down into some steps.  Lets start with our instantiation since this is what this <em>memoizer</em> function was defined to optimize.  You pass in your memo of known values factorial(0) = 1 and factorial(1) = 1, so our memo is [1,1] (position 0 equates to factorial(0) ).  The second argument is the recursive function you wish to call, for factorial this is simply
+{% codeblock lang:js %}
 //pass in the recursive function as an argument so that it can be called within the context of this new function
-var recur = function(recur,n){ return n * recur(n-1) };[/js]
+var recur = function(recur,n){ return n * recur(n-1) };{% endcodeblock %}
 
 Now the tricky part, <em>memoizer</em> is a closure around the <em>recur</em> function.  The <em>recur</em> function now has access to the variables passed into the <em>memoizer</em>.  The arguments are whatever the factorial method assigns them as.  This way, recur can call itself and all instances of recur share the same variables especially the <em>memo</em> of already calculated values and the function to call recurisevly (passed in by factorial).  You can see how this works by copying my code into firebug and calling <em>factorial</em> at the end.  You will see something that looks like this stored in factorial:
-[js]
+{% codeblock lang:js %}
  function(n){
     var result = memo[n];
     if( typeof result !== 'number' ){
@@ -59,7 +59,7 @@ Now the tricky part, <em>memoizer</em> is a closure around the <em>recur</em> fu
     }
     return result;
   }
-[/js]
+{% endcodeblock %}
 
 What you are not seeing are some private variables, memo and recur.  These have been stored in the <em>memoize</em> closure, jealous yet c++ programmers?  Now obviously, without a predefined list of calculated values the factorial function will run forever.  We provide it with factorial(0) = 1 and factorial(1) = 1 <em>[1,1]</em>, so that when these values are hit we return a number and stop the pattern of recursively executing.
 

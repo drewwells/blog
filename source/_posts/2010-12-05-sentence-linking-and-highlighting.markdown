@@ -28,15 +28,15 @@ The process for me was two fold.
 The second problem seems very simple, parse paragraphs and find sentences within them.  I'll start there.  I played around with a few regular expressions.  First I simply wrote something that found any text followed by a period.  This worked well in my regular expression test site: <a href="http://gskinner.com/RegExr/">RegExr</a> but didn't work at all in JavaScript.
 
 This is what I ended up with and works very well to split any length string finding periods.
-[code lang="js"]var sentences = $(&quot;p&quot;)[0].innerHTML.match( /[^.]/g )[/code]
+{% codeblock lang:js %}var sentences = $("p")[0].innerHTML.match( /[^.]/g ){% endcodeblock %}
 
 If you're not familiar with regular expressions, I told the engine to find all text that's not a period.  It will run match on a string and produce an array of sentences.
 
-[code type="javascript"]
-var p = &quot;This is a great paragraph.  It has many sentences. It is useful for testing&quot;;
+{% codeblock lang:js %}
+var p = "This is a great paragraph.  It has many sentences. It is useful for testing";
 var s = p.match( /[^.]/g );
-//[&quot;This is a great paragraph&quot;, &quot;It has many sentences&quot;, &quot;It is useful for testing&quot;]
-[/code]
+//["This is a great paragraph", "It has many sentences", "It is useful for testing"]
+{% endcodeblock %}
 
 You will notice periods aren't matched.  This is inline with NYT's behavior, so I stuck with it.  Since JavaScript doesn't support positive lookahead, there is no obvious way to catch those pesky periods and I need-ant bother looking for one right now.
 
@@ -46,7 +46,7 @@ Like many great ideas, I reused someone else's :D <a href="https://github.com/ki
 
 With jQuery, this is extremely simple.  See this, you need to be using jQuery 1.4 or 1.4.2 something new.  I don't remember the exact version that supports this syntax as it is hard to find examples of this syntax :D.
 
-[code type="javascript"]
+{% codeblock lang:js %}
 //page.para = index of paragraph
 //page.sent = index of sentence within paragraph
 
@@ -60,7 +60,7 @@ var para = paras.eq( page.para ),
 //Create a dummy div with any text preceding your sentence and
 // css properties of that element
 //Inspired by: https://github.com/kir/js_cursor_position
-dummy = $(&quot;&lt;div /&gt;&quot;,{
+dummy = $("<div />",{
     css:{
         position: 'absolute',
         left: '0',
@@ -73,10 +73,10 @@ dummy = $(&quot;&lt;div /&gt;&quot;,{
 	},
 	html: prefixSentences.join('')
     }).appendTo('body');
-top = para.offset().top + 
+top = para.offset().top +
      dummy.height() - parseInt( dummy.css('fontSize') ) * 1.2;
      dummy.remove(); //Remove dummy
 window.scrollTo(0, top);
-[/code]
+{% endcodeblock %}
 
 Feel free to link directly to the code: <a href="https://github.com/drewwells/sentence-highlighting/raw/master/main.js">sentence-highlighting</a>.  I'll update links and whatnot on Monday.  I'll work to make BBQ support included via progressive enhancement.
