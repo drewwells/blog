@@ -4,11 +4,11 @@
   <title><![CDATA[Tales from a JavaScript Developer]]></title>
   <link href="http://drewwells.net/blog/atom.xml" rel="self"/>
   <link href="http://drewwells.net/blog/"/>
-  <updated>2011-10-11T22:37:17-04:00</updated>
+  <updated>2011-10-11T22:51:31-04:00</updated>
   <id>http://drewwells.net/blog/</id>
   <author>
     <name><![CDATA[Drew Wells]]></name>
-    
+    <email><![CDATA[drewwells00@gmail.com]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
