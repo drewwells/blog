@@ -1,0 +1,375 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>ColdFusion generic getters/setters - Tales from a JavaScript Developer</title>
+  <meta name="author" content="Drew Wells">
+
+  
+  <meta name="description" content="One of the useful features missing from ColdFusion is automatic getters and setters.  This is a common practice used when writing Java Beans.  Stev...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://drewwells.net/blog/2010/coldfusion-generic-getters-setters/">
+  <link href="/blog/favicon.png" rel="icon">
+  <link href="/blog/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/blog/javascripts/modernizr-2.0.js"></script>
+  <script src="/blog/javascripts/ender.js"></script>
+  <script src="/blog/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Tales from a JavaScript Developer" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/blog/">Tales from a JavaScript Developer</a></h1>
+  
+    <h2>Practicing JavaScript ninja</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:drewwells.net/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul class="main-navigation">
+  <li><a href="/blog/">Blog</a></li>
+  <li><a href="/blog/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">ColdFusion Generic Getters/setters</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-04-23T15:02:44-04:00" pubdate  data-updated="true" >Apr 23<span>rd</span>, 2010</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>One of the useful features missing from ColdFusion is automatic getters and setters.  This is a common practice used when writing Java Beans.  Steven Ross wrote this utilizing onMissingMethod <a href="http://blog.stevensross.com/2008/7/16/using-missing-method-to-do-automatic-getters-and-setters">here</a></p>
+
+<p>I have slightly tweaked this.  You should know some limitations of onMissingMethod().  While external calls, say from a cfm page, will trigger the onMissingMethod calls, internal calls within the CFC will not utilize this behavior.</p>
+
+<p>The behavior I wish to achieve is something like this:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>  <span class="nt">&lt;cfset</span> <span class="na">object =</span><span class="err"> </span><span class="s">CreateObject(&quot;Component&quot;,&quot;baseObject&quot;)</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;cfset</span> <span class="na">object</span><span class="err">.</span><span class="na">val</span><span class="err">(&quot;</span><span class="na">Value</span><span class="err">&quot;)</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;cfoutput&gt;</span>#object.val()#<span class="nt">&lt;/cfoutput&gt;</span> <span class="c">&lt;!--- Value ---&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Inside the CFC is a different story, setting and getting is a little different</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>...
+</span><span class='line'><span class="nt">&lt;cffunction</span> <span class="na">name=</span><span class="s">&quot;GenericFunction&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="c">&lt;!--- Set some variables ---&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;cfset</span> <span class="na">setValue</span><span class="err">(&quot;</span><span class="na">var1</span><span class="err">&quot;)</span> <span class="err">=</span> <span class="err">&quot;</span><span class="na">String1</span><span class="err">&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;cfset</span> <span class="na">value =</span><span class="err"> </span><span class="s">getValue(&quot;var1&quot;)</span> <span class="nt">/&gt;</span> <span class="c">&lt;!--- Value now set to &quot;String1&quot; ---&gt;</span>
+</span><span class='line'><span class="nt">&lt;/cffunction&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&#8217;s the Helper functions to make this happen.  You can read about advanced version of this very basic getter/setter code at <a href="http://www.pbell.com/index.cfm/2008/4/8/Generic-Getters">Peter Bell&#8217;s Blog</a></p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c">&lt;!--</span><span class="o">-</span>
+</span><span class='line'>    <span class="nx">Author</span><span class="o">:</span> <span class="nx">Drew</span> <span class="nx">Wells</span> <span class="nx">http</span><span class="o">:</span><span class="c1">//drewwells.net/blog/2010/04/23/coldfusion-generic-getters-setters/</span>
+</span><span class='line'><span class="o">---&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//Handles calls to functions that do not exist</span>
+</span><span class='line'><span class="c1">//@MissingMethodName - Name of function being called</span>
+</span><span class='line'><span class="c1">//@MissingMethodArguments - Arguments passed to non-existant function</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">OnMissingMethod</span><span class="p">(</span> <span class="p">){</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span> <span class="nx">StructKeyExists</span><span class="p">(</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span> <span class="p">)</span> <span class="p">){</span> <span class="c1">//invalid, expected 1 argument</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="nx">StructKeyExists</span><span class="p">(</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;1&quot;</span> <span class="p">)</span>  <span class="p">){</span> <span class="c1">//setter</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nx">setValue</span><span class="p">(</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">//getter</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">getValue</span><span class="p">(</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">//Setter method</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">setValue</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">variables</span><span class="p">.</span><span class="nx">instance</span><span class="p">[</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">//Getter method</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">getValue</span><span class="p">(){</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span> <span class="nx">StructKeyExists</span><span class="p">(</span> <span class="nx">variables</span><span class="p">.</span><span class="nx">instance</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span> <span class="p">){</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">variables</span><span class="p">.</span><span class="nx">instance</span><span class="p">[</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">admin</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-04-23T15:02:44-04:00" pubdate  data-updated="true" >Apr 23<span>rd</span>, 2010</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://drewwells.net/blog/2010/coldfusion-generic-getters-setters/" data-via="coldfuser" data-counturl="http://drewwells.net/blog/2010/coldfusion-generic-getters-setters/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/my-adventures-into-webgl/">My adventures into WebGL</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/jodoc-js/">jodoc-js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/testing-for-optional-false-params-in-javascript/">Testing for optional false params in JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/github/">Github</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/hp-pavilion-dv6-quad-edition/">HP Pavilion dv6 Quad Edition</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/drewwells">@drewwells</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'drewwells',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/blog/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("coldfuser", 4, false);
+    });
+  </script>
+  <script src="/blog/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/coldfuser" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @coldfuser</a>
+  
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Drew Wells -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    var disqus_shortname = 'drewwells';
+
+      
+        
+        var disqus_script = 'count.js';
+      
+
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2783646-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

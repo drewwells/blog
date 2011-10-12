@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Adventures in Ruby: Depot Application - Tales from a JavaScript Developer</title>
+  <meta name="author" content="Drew Wells">
+
+  
+  <meta name="description" content="I find something amazing on every page turn in Agile Web Development with Rails Third Edition.  They have done so many things that would save me lo...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://drewwells.net/blog/2010/adventures-in-ruby-depot-application/">
+  <link href="/blog/favicon.png" rel="icon">
+  <link href="/blog/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/blog/javascripts/modernizr-2.0.js"></script>
+  <script src="/blog/javascripts/ender.js"></script>
+  <script src="/blog/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Tales from a JavaScript Developer" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/blog/">Tales from a JavaScript Developer</a></h1>
+  
+    <h2>Practicing JavaScript ninja</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:drewwells.net/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul class="main-navigation">
+  <li><a href="/blog/">Blog</a></li>
+  <li><a href="/blog/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Adventures in Ruby: Depot Application</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-02-09T23:49:18-05:00" pubdate  data-updated="true" >Feb 9<span>th</span>, 2010</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I find something amazing on every page turn in <a href="http://www.pragprog.com/titles/rails3/agile-web-development-with-rails-third-edition">Agile Web Development with Rails Third Edition</a>.  They have done so many things that would save me lots of development time vs ColdFusion.</p>
+
+<p>Case in point, given a new products table that looks something like this:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">CreateProducts</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">up</span>
+</span><span class='line'>    <span class="n">create_table</span> <span class="ss">:products</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:title</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">text</span> <span class="ss">:description</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:image_url</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">down</span>
+</span><span class='line'>    <span class="n">drop_table</span> <span class="ss">:products</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is a Rake migration.  By scripting SQL commands via the rake tool, your database changes are saved in a special section of the database with timestamps.  I can then migrate those scripts and they will issue the correct SQL scripts in order based on the timestamp.  Or, I can rollback scripts by migrating to a previous time.  Say, the customer went crazy on Tuesday and decided Wednesday everything was wrong, I hit one command and all the database/model changes on Tuesday are reverted.  What an idea!</p>
+
+<p>This isn&#8217;t the cool feature I found today, I&#8217;ll get to that.  Here is a bit of code saved to my model layer.  Model is how your application (controller) interacts with data (database/file).  Read this code below:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>    <span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>      <span class="n">validates_presence_of</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:description</span><span class="p">,</span> <span class="ss">:image_url</span>
+</span><span class='line'>      <span class="n">validates_uniqueness_of</span> <span class="ss">:title</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ActiveRecord::Base is a class that handles much of the heavy lifting with interacting with a database.  In fact, you can do all CRUD (Create, Read, Update, Delete) operations just by extending this class.</p>
+
+<p>The first line we have told Rails to make sure title, description, and image_url exist (not_nil?) and have a length.  The second line is the real magic trick.  This will verify the title does not already appear in the database.  How many times have you written logic like this?</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CREATE</span> <span class="k">PROCEDURE</span> <span class="n">sp_GetInventory</span>
+</span><span class='line'><span class="o">@</span><span class="n">Title</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+</span><span class='line'><span class="o">@</span><span class="n">Description</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span>
+</span><span class='line'><span class="o">@</span><span class="n">Image_URL</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</span><span class='line'><span class="k">AS</span>
+</span><span class='line'>  <span class="k">INSERT</span> <span class="n">TblProducts</span>
+</span><span class='line'>    <span class="p">(</span><span class="n">Title</span><span class="p">,</span> <span class="n">Description</span><span class="p">,</span> <span class="n">Image_URL</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">SELECT</span> <span class="o">@</span><span class="n">Title</span><span class="p">,</span> <span class="o">@</span><span class="n">Description</span><span class="p">,</span> <span class="o">@</span><span class="n">Image_URL</span>
+</span><span class='line'>    <span class="k">FROM</span> <span class="n">TblProducts</span>
+</span><span class='line'>    <span class="k">WHERE</span> <span class="o">@</span><span class="n">Title</span> <span class="k">NOT</span> <span class="k">IN</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">Title</span> <span class="k">FROM</span> <span class="n">TblProducts</span> <span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This code is made irrelevant by that one simple line.  Obviously, a lot of magic is going on behind the scenes, but you are saved from having to write, unit test, functional test, integration test, and migrate this stored procedure.  Even then, customer might just up and say sure Titles can have duplicates, no biggy, now you have to remove, unit test, functional test, and integration test this new version.  In Rails, you say <code>db:migrate version 20100209</code> and you are done, save for UI changes you may have made.</p>
+
+<p>Enough on this, my last gem for the night.  Let&#8217;s say you want to delete a product from the database.  Normally, you will POST some sort of id to a page and this will remove the record.  Rails, when available, actually posts HTTP delete to verify a delete operation is occurring.  They are being purists, since HTTP GET is supposed to be a retrieval operation without any side effects.  The HTTP DELETE code is allowed to cause things on the server.  Also, HTTP DELETE is not cached by the browser and web crawlers will not trigger the link.</p>
+
+<p>Let&#8217;s look at the code for this:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sx">%= link_to &#39;Destroy&#39;, product,</span>
+</span><span class='line'><span class="sx">        :confirm =</span><span class="o">&gt;</span> <span class="s1">&#39;Are you sure?&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:method</span> <span class="o">=&gt;</span> <span class="ss">:delete</span> <span class="o">%&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I thought to myself, this looks simple enough little JavaScript magic under the covers maybe.  The real wizardry here is the <code>:method => :delete</code> line.  Here&#8217;s what the HTML looks like on the page.  I will format it for ease of reading.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="n">a</span> <span class="n">onclick</span><span class="o">=</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">if (confirm(&#39;Are you sure?&#39;)){</span>
+</span><span class='line'><span class="s2">  var f = document.createElement(&#39;form&#39;);</span>
+</span><span class='line'><span class="s2">  f.style.display = &#39;none&#39;;</span>
+</span><span class='line'><span class="s2">  this.parentNode.appendChild(f);</span>
+</span><span class='line'><span class="s2">  f.method = &#39;POST&#39;;</span>
+</span><span class='line'><span class="s2">  f.action = this.href;</span>
+</span><span class='line'><span class="s2">  var m = document.createElement(&#39;input&#39;);</span>
+</span><span class='line'><span class="s2">  m.setAttribute(&#39;type&#39;, &#39;hidden&#39;);</span>
+</span><span class='line'><span class="s2">  m.setAttribute(&#39;name&#39;, &#39;_method&#39;);</span>
+</span><span class='line'><span class="s2">  m.setAttribute(&#39;value&#39;, &#39;delete&#39;);</span>
+</span><span class='line'><span class="s2">  f.appendChild(m);</span>
+</span><span class='line'><span class="s2">  var s = document.createElement(&#39;input&#39;);</span>
+</span><span class='line'><span class="s2">  s.setAttribute(&#39;type&#39;, &#39;hidden&#39;);</span>
+</span><span class='line'><span class="s2">  s.setAttribute(&#39;name&#39;, &#39;authenticity_token&#39;);</span>
+</span><span class='line'><span class="s2">  s.setAttribute(&#39;value&#39;, &#39;Q8fjLQXqfKaMSFr+tBki06LjojcBiPIwyN5CRigvnwk=&#39;);</span>
+</span><span class='line'><span class="s2">  f.appendChild(s);</span>
+</span><span class='line'><span class="s2">  f.submit(); };</span>
+</span><span class='line'><span class="s2">  return false;&quot;</span>
+</span><span class='line'><span class="n">href</span><span class="o">=</span><span class="s2">&quot;/depot/products/2&quot;</span><span class="o">&gt;</span><span class="no">Destroy</span><span class="o">&lt;</span><span class="sr">/a&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Isn&#8217;t that clever, my one little command <code>:method => :delete</code> is doing a lot on the page.  This does look a little messy when reading the HTML code, but it makes for an extremely neat interface for the User and it was all done, again, in one line of code.</p>
+
+<p>Note: Rails 3.0 beta is out today and one of their goals is to make unobtrusive JavaScript (and integrate <a href="http://jquery.com">jQuery</a> along side the currently implemented <a href="http://www.prototypejs.org/">Prototype</a> &amp; <a href="http://script.aculo.us/">Scriptaculous</a>).  So, I image this one line of code will be doing a lot more in the next iteration of Rails.  I can&#8217;t wait to see what that is!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">admin</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-02-09T23:49:18-05:00" pubdate  data-updated="true" >Feb 9<span>th</span>, 2010</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://drewwells.net/blog/2010/adventures-in-ruby-depot-application/" data-via="coldfuser" data-counturl="http://drewwells.net/blog/2010/adventures-in-ruby-depot-application/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/my-adventures-into-webgl/">My adventures into WebGL</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/jodoc-js/">jodoc-js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/testing-for-optional-false-params-in-javascript/">Testing for optional false params in JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/github/">Github</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/hp-pavilion-dv6-quad-edition/">HP Pavilion dv6 Quad Edition</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/drewwells">@drewwells</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'drewwells',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/blog/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("coldfuser", 4, false);
+    });
+  </script>
+  <script src="/blog/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/coldfuser" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @coldfuser</a>
+  
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Drew Wells -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    var disqus_shortname = 'drewwells';
+
+      
+        
+        var disqus_script = 'count.js';
+      
+
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2783646-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

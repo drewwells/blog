@@ -1,0 +1,446 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Dive into HTML5 Bullseye - Tales from a JavaScript Developer</title>
+  <meta name="author" content="Drew Wells">
+
+  
+  <meta name="description" content="I thought I would be clever today and make a button as a canvas element.  For some reason, I had it in my mind that this should be a bullseye.  Boy...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://drewwells.net/blog/2010/dive-into-html5-bullseye/">
+  <link href="/blog/favicon.png" rel="icon">
+  <link href="/blog/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/blog/javascripts/modernizr-2.0.js"></script>
+  <script src="/blog/javascripts/ender.js"></script>
+  <script src="/blog/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Tales from a JavaScript Developer" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/blog/">Tales from a JavaScript Developer</a></h1>
+  
+    <h2>Practicing JavaScript ninja</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:drewwells.net/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul class="main-navigation">
+  <li><a href="/blog/">Blog</a></li>
+  <li><a href="/blog/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Dive Into HTML5 Bullseye</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-10-13T18:55:24-04:00" pubdate  data-updated="true" >Oct 13<span>th</span>, 2010</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I thought I would be clever today and make a button as a canvas element.  For some reason, I had it in my mind that this should be a bullseye.  Boy was this difficult to do in canvas, probably took me 3 hours to go from knowing nothing about canvas to a working example.  Also, it may all be for nothing as jQuery doesn&#8217;t appear to like binding to a canvas element.</p>
+
+<p>The basic idea of a bullseye conceptually is to draw circles on top of each other.  Each circle within the next is red or white.  The final result looked something like this.
+<img src="http://drewwells.net/blog/wp-content/uploads/2010/10/bullseye.png" alt="Bullseye" /></p>
+
+<p>Canvas has some nice features for drawing arcs.  You basically access the context of a canvas element, and start drawing paths on it.  Filling an arc results in a circle or using stroke results in a circle as a line.  This is the same code but with strokes instead of fills.
+<img title="bullseye-stroke" src="http://drewwells.net/blog/wp-content/uploads/2010/10/bullseye-stroke.png" alt="" width="50" height="50" /></p>
+
+<p>Lets dive into the code here.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;canvas&gt;&lt;/canvas&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;bullseye&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;2d&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//I had issues with width/height so I manually set these</span>
+</span><span class='line'><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//Find the center, this will be used for drawing our arcs</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">center</span> <span class="o">=</span> <span class="p">[</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">/</span><span class="mi">2</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">context</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span> <span class="c1">//Tell canvas to start registering a path</span>
+</span><span class='line'><span class="nx">context</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span> <span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span class='line'>  <span class="nx">center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+</span><span class='line'>  <span class="mi">25</span><span class="p">,</span> <span class="c1">//Radius</span>
+</span><span class='line'>  <span class="mi">0</span><span class="p">,</span>   <span class="c1">//Starting point in radians (right side of a circle)</span>
+</span><span class='line'>  <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span>  <span class="c1">//Ending point in radians (same right side of circle)</span>
+</span><span class='line'>  <span class="kc">true</span>
+</span><span class='line'><span class="p">);</span>
+</span><span class='line'><span class="c1">//Now lets draw another circle inside this one</span>
+</span><span class='line'><span class="nx">context</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span> <span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span class='line'>  <span class="nx">center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+</span><span class='line'>  <span class="mi">18</span><span class="p">,</span>
+</span><span class='line'>  <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>  <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>  <span class="kc">true</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//Draw what we have done</span>
+</span><span class='line'><span class="nx">context</span><span class="p">.</span><span class="nx">stroke</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Cool stuff, that was easy why did you spend so long on this?  Well if you execute this code, this is what you get.  Two circles with a big line between them.</p>
+
+<p><img src="http://drewwells.net/blog/wp-content/uploads/2010/10/bullseye-lines.png" alt="" title="bullseye-lines" width="50" height="50" /></p>
+
+<p>I was looking at the example on the MDC, and simply could not figure out why mine had lines between the circles and theirs didn&#8217;t.  It did not help that their example was a smiley face, mocking me. <a href="https://developer.mozilla.org/samples/canvas-tutorial/2_2_canvas_moveto.html">Canvas moveto example</a>.</p>
+
+<p>Then I looked closely at their example, and saw that their moveTo was not realigning the center point of the arcs as I originally thought.  It was actually moving the path to the edge of one of the new shapes.  This prevents a line being drawn from the end point of your initial circle to the start of the next one.  I later discovered, you can also just start a new path with <code>beginPath()</code>.</p>
+
+<p>So the final code is such:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;bullseye&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+</span><span class='line'><span class="nx">drawCircle</span><span class="p">(</span> <span class="nx">canvas</span><span class="p">,</span> <span class="p">[</span><span class="mi">24</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">]);</span>
+</span><span class='line'><span class="c1">//I could probably just ask for two colors to alternate, eh?</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">drawCircle</span><span class="p">(</span><span class="nx">canvas</span><span class="p">,</span> <span class="nx">radius</span> <span class="cm">/* array */</span><span class="p">,</span> <span class="nx">color</span> <span class="cm">/* array */</span><span class="p">){</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;2d&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">center</span> <span class="o">=</span> <span class="p">[</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">/</span><span class="mi">2</span><span class="p">];</span>
+</span><span class='line'>    <span class="c1">//Sanity check, I don&#39;t want to attempt to draw</span>
+</span><span class='line'>    <span class="c1">// circles that don&#39;t have an associated color</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="nx">radius</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;=</span> <span class="nx">color</span><span class="p">.</span><span class="nx">length</span> <span class="p">){</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span> <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">length</span> <span class="o">=</span> <span class="nx">radius</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="p">){</span>
+</span><span class='line'>      <span class="c1">//must move to next circle first, or else you get a line between circles</span>
+</span><span class='line'>      <span class="nx">context</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span> <span class="nx">radius</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="o">+</span><span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
+</span><span class='line'>            <span class="nx">context</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span>
+</span><span class='line'>                <span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span class='line'>                <span class="nx">center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+</span><span class='line'>                <span class="nx">radius</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span>
+</span><span class='line'>                <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>                <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>                <span class="kc">false</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nx">context</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="nx">color</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</span><span class='line'>      <span class="nx">context</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now this works, right?  Wait, no it doesn&#8217;t.  You see strokes would work fine, but we are trying to fill our drawn shapes.  So a little more work is needed here.</p>
+
+<p>I thought as I draw each arc, the fill would just fill that one path I had drawn.  However, fill iterates through the entire context stack and fills each object.  So what you end up with is a big circle drawn, then filled, then another circle drawn, and both of those circles filled, etc.</p>
+
+<p>It took a bit of digging, and frankly the w3c document wasn&#8217;t a huge help.  Basically what we need to do, is draw our shape, fill it, then empty it from the stack.  beginPath() does this.  Add this to the line prior to context.moveTo and you should be in business.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">//must move to next circle first, or else you get a line between circles</span>
+</span><span class='line'><span class="nx">context</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+</span><span class='line'><span class="nx">context</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span> <span class="nx">radius</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="o">+</span><span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&#8217;ll update this when I find out how to bind a click to this.  Even if it takes a div wrapper <em>sigh</em>.  I&#8217;d like to know which command is more efficient, moveTo or beginPath.  I can only imagine moveTo is more efficient, but nothing to back that up at the moment.</p>
+
+<p>This was an interesting topic for me, but really I was taking a break from my ginormous work project and getting a feel for emacs at the same time.  I think I will end up with a very oddly shaped left hand if I continue to use emacs, but the fact that everything is available via the keyboard (or maybe home row) is extraordinarily more efficient than eclipse.  I fear digging into the JavaScript templates to tweak some of the odd autoformating things it does to my files.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">admin</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-10-13T18:55:24-04:00" pubdate  data-updated="true" >Oct 13<span>th</span>, 2010</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://drewwells.net/blog/2010/dive-into-html5-bullseye/" data-via="coldfuser" data-counturl="http://drewwells.net/blog/2010/dive-into-html5-bullseye/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/my-adventures-into-webgl/">My adventures into WebGL</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/jodoc-js/">jodoc-js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/testing-for-optional-false-params-in-javascript/">Testing for optional false params in JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/github/">Github</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/hp-pavilion-dv6-quad-edition/">HP Pavilion dv6 Quad Edition</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/drewwells">@drewwells</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'drewwells',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/blog/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("coldfuser", 4, false);
+    });
+  </script>
+  <script src="/blog/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/coldfuser" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @coldfuser</a>
+  
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Drew Wells -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    var disqus_shortname = 'drewwells';
+
+      
+        
+        var disqus_script = 'count.js';
+      
+
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2783646-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

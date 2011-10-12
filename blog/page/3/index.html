@@ -1,0 +1,992 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Tales from a JavaScript Developer</title>
+  <meta name="author" content="Drew Wells">
+
+  
+  <meta name="description" content="Recursion has always been fascinating to me, also confusing and difficult for me to wrap my head around.  I have been watching Douglas Crockford&#8...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://drewwells.net/blog/blog/page/3/">
+  <link href="/blog/favicon.png" rel="icon">
+  <link href="/blog/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/blog/javascripts/modernizr-2.0.js"></script>
+  <script src="/blog/javascripts/ender.js"></script>
+  <script src="/blog/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Tales from a JavaScript Developer" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/blog/">Tales from a JavaScript Developer</a></h1>
+  
+    <h2>Practicing JavaScript ninja</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:drewwells.net/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul class="main-navigation">
+  <li><a href="/blog/">Blog</a></li>
+  <li><a href="/blog/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/recursion-in-javascript/">Recursion in JavaScript</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-03-29T22:53:02-04:00" pubdate  data-updated="true" >Mar 29<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/recursion-in-javascript/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recursion has always been fascinating to me, also confusing and difficult for me to wrap my head around.  I have been watching Douglas Crockford&#8217;s <a href="http://developer.yahoo.com/yui/theater/video.php?v=crockonjs-3">Act III: Function the Ultimate</a>.  He details many, many things about Functions.</p>
+
+<p>The interesting concept that I had never heard of is called <a href="http://en.wikipedia.org/wiki/Memoization">memoization</a>.  You add an element in your recursive function that maintains a list of results to steps.  For example,</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">recursion</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">n</span><span class="p">){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">memo</span><span class="p">[</span><span class="nx">n</span><span class="p">];</span>  <span class="c1">//see if memo contains an answer already</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span> <span class="nx">result</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span> <span class="p">)</span>
+</span><span class='line'>    <span class="nx">result</span> <span class="o">=</span> <span class="nx">memo</span><span class="p">[</span><span class="nx">n</span><span class="p">]</span> <span class="o">=</span> <span class="nx">n</span> <span class="o">+</span> <span class="nx">recursion</span><span class="p">(</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">n</span><span class="o">--</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, the function first looks for the result to the function call in the <em>memo</em> array.  If it is not found there, it performs a recursive call <em>memo[n] = n + recursion(memo, n&#8211;);</em>.  This example is overly simplistic for illustrating the concept and relies on the user predefining a list of known calculations to preload the memo anytime they wish to call this.  This next example shows a better implementation.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">memoizer</span><span class="p">(</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">formula</span><span class="p">){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">recur</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">memo</span><span class="p">[</span><span class="nx">n</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="k">typeof</span> <span class="nx">result</span> <span class="o">!==</span> <span class="s1">&#39;number&#39;</span> <span class="p">){</span>
+</span><span class='line'>      <span class="nx">result</span> <span class="o">=</span> <span class="nx">formula</span><span class="p">(</span><span class="nx">recur</span><span class="p">,</span> <span class="nx">n</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">memo</span><span class="p">[</span><span class="nx">n</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">recur</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">factorial</span> <span class="o">=</span> <span class="nx">memoizer</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">recur</span><span class="p">,</span><span class="nx">n</span><span class="p">){</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">n</span> <span class="o">*</span> <span class="nx">recur</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">factorial</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">//120</span>
+</span><span class='line'><span class="nx">factorial</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span> <span class="c1">//3628800</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Recursive algorithms have complicated execution paths, so I will try to break this down into some steps.  Lets start with our instantiation since this is what this <em>memoizer</em> function was defined to optimize.  You pass in your memo of known values factorial(0) = 1 and factorial(1) = 1, so our memo is [1,1] (position 0 equates to factorial(0) ).  The second argument is the recursive function you wish to call, for factorial this is simply</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">//pass in the recursive function as an argument so that it can be called within the context of this new function</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">recur</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">recur</span><span class="p">,</span><span class="nx">n</span><span class="p">){</span> <span class="k">return</span> <span class="nx">n</span> <span class="o">*</span> <span class="nx">recur</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now the tricky part, <em>memoizer</em> is a closure around the <em>recur</em> function.  The <em>recur</em> function now has access to the variables passed into the <em>memoizer</em>.  The arguments are whatever the factorial method assigns them as.  This way, recur can call itself and all instances of recur share the same variables especially the <em>memo</em> of already calculated values and the function to call recurisevly (passed in by factorial).  You can see how this works by copying my code into firebug and calling <em>factorial</em> at the end.  You will see something that looks like this stored in factorial:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">memo</span><span class="p">[</span><span class="nx">n</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="k">typeof</span> <span class="nx">result</span> <span class="o">!==</span> <span class="s1">&#39;number&#39;</span> <span class="p">){</span>
+</span><span class='line'>      <span class="nx">result</span> <span class="o">=</span> <span class="nx">formula</span><span class="p">(</span><span class="nx">recur</span><span class="p">,</span> <span class="nx">n</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">memo</span><span class="p">[</span><span class="nx">n</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What you are not seeing are some private variables, memo and recur.  These have been stored in the <em>memoize</em> closure, jealous yet c++ programmers?  Now obviously, without a predefined list of calculated values the factorial function will run forever.  We provide it with factorial(0) = 1 and factorial(1) = 1 <em>[1,1]</em>, so that when these values are hit we return a number and stop the pattern of recursively executing.</p>
+
+<p>The magic of memoization is that anytime during execution of these recursive functions we store the results of substeps.  Factorial(2) = 2 * factorial(1) = 2 * 1 = 2, it stores <em>memo[2] = 2</em>.  Now when we execute factorial(3) or factorial(4), the value for factorial(2) is already known and does not need to be calculated it is determined from <em>memo[2]</em>.</p>
+
+<p>That&#8217;s it for now enjoy memoization, I hope to find a use for this possibly in the <a href="http://en.wikipedia.org/wiki/Composite_pattern">Composite Pattern</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/spam/">Spam</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-03-29T22:07:53-04:00" pubdate  data-updated="true" >Mar 29<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/spam/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am getting hammered with spam, I have unapproved what I believe is the offending comment that started it.  The damage is probably already done, so I have turned on a simple anti-spam plugin to the comment blog.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/coldfusers-book-list/">Coldfuser&#8217;s Book List</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-03-15T21:27:17-04:00" pubdate  data-updated="true" >Mar 15<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/coldfusers-book-list/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am throughly enjoying <a href="http://www.amazon.com/JavaScript-Design-Patterns-Recipes-Problem-Solution/dp/159059908X/ref=sr_1_1?ie=UTF8&s=books&qid=1268702575&sr=8-1">Pro JavaScript Design Patterns</a>.  Much of JavaScript is a mystery to me and it does not help that despite calling itself Object-Oriented, it has one of the most convoluted implementations of Object-Oriented techniques.  Encapsulation is replaced by Closures and Inheritance is replaced by the prototype chain.</p>
+
+<p>Coldfuser is hoping for some light at the end of the Coldfusion.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/classical-inheritance-in-js/">Classical Inheritance in JS</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-03-11T17:16:24-05:00" pubdate  data-updated="true" >Mar 11<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/classical-inheritance-in-js/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Edit: Alex pointed out this example uses classical not prototypal inheritance as stated on John Resig&#8217;s blog.</p>
+
+<p>Recently I&#8217;ve been introduced to Prototypal Inheritance thanks to Alex Sexton <a href="http://alexsexton.com/?p=51">Using Inheritance to Organize Large jQuery Applications</a>.  I will attempt to give a short introduction to this concept.  My understanding of the how is very limited.  Fortunately, as I have found out, that doesn&#8217;t prevent me from using it!</p>
+
+<p><strong>Background, skip this if you know about Prototypal Inheritance</strong>
+JavaScript supports inheritance via the idea of a prototype.  Everything in JavaScript is an object and every object has a prototype.  You can inherit attributes from another object by pointing to it&#8217;s prototype.  You can read about that in the above article or from many other great resources:</p>
+
+<ul>
+    <li><a href="http://javascript.crockford.com/prototypal.html">Prototypal Inheritance in JavaScript</a></li>
+    <li><a href="http://www.bennadel.com/blog/1566-Using-Super-Constructors-Is-Critical-In-Prototypal-Inheritance-In-Javascript.htm">Using Super Constructors Is Critical In Prototypal Inheritance In Javascript</a></li>
+</ul>
+
+
+<p>I wanted to go beyond a simple example and really implement this in a working application and explore the pros and cons of this methodology.  Fortunately, Ben Nadel posted a fun little application to take apart.  Read about it <a href="http://www.bennadel.com/blog/1872-Using-Base64-Canvas-Data-In-jQuery-To-Create-ColdFusion-Images.htm">here</a>.  I would like to point out that I did not write this code, I am only borrowing it to show how to take some reasonably sophisticated JavaScript and refactor it for utilizing Inheritance.</p>
+
+<p>I had a couple goals here.  One, add Android support.  Two, explore Inheritance.  Now, I need to settle on a inheritance pattern.  I chose to utilize John Resig&#8217;s <a href="http://ejohn.org/blog/simple-javascript-inheritance/">Simple JavaScript Inheritance</a>.  Why?  It is simple to understand and Alex&#8217;s method is a little over my pay grade.</p>
+
+<p>So I create a super class, a class that other objects can use Classical-ly inherit from.  This became the Touch Class:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">Touch</span> <span class="o">=</span> <span class="nx">Class</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">localPosition</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">lastPenPoint</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">touch</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class='line'>          <span class="nx">isIPhone</span> <span class="o">?</span>
+</span><span class='line'>              <span class="nb">window</span><span class="p">.</span><span class="nx">event</span><span class="p">.</span><span class="nx">targetTouches</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">:</span>
+</span><span class='line'>              <span class="nx">event</span>
+</span><span class='line'>      <span class="p">)</span>
+</span><span class='line'>      <span class="nx">position</span> <span class="o">=</span>
+</span><span class='line'>          <span class="nx">canvas</span><span class="p">.</span><span class="nx">offset</span><span class="p">(),</span>
+</span><span class='line'>      <span class="nx">localPosition</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">x</span><span class="o">:</span> <span class="p">(</span> <span class="nx">touch</span><span class="p">.</span><span class="nx">pageX</span> <span class="o">-</span> <span class="nx">position</span><span class="p">.</span><span class="nx">left</span> <span class="p">),</span>
+</span><span class='line'>          <span class="nx">y</span><span class="o">:</span> <span class="p">(</span> <span class="nx">touch</span><span class="p">.</span><span class="nx">pageY</span> <span class="o">-</span> <span class="nx">position</span><span class="p">.</span><span class="nx">top</span> <span class="p">)</span>
+</span><span class='line'>      <span class="p">},</span>
+</span><span class='line'>      <span class="nx">lastPenPoint</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">x</span><span class="o">:</span> <span class="nx">localPosition</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span>
+</span><span class='line'>          <span class="nx">y</span><span class="o">:</span> <span class="nx">localPosition</span><span class="p">.</span><span class="nx">y</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Previously, the position and penpoint were being calculated by a seperate function.  I have added these to the init of the prototype.  So everytime a new Touch class is constructed (keyword new), these fields are already populated.  Now, we can rewrite onTouchStart and onTouchMove to extend this class and remove a lot of redundant code.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// I handle the touch start event. With this event,</span>
+</span><span class='line'><span class="c1">// we will be starting a new line.</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">onTouchStart</span> <span class="o">=</span> <span class="nx">Touch</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>  <span class="c1">//inherit some common touch properties</span>
+</span><span class='line'>      <span class="nx">pen</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+</span><span class='line'>      <span class="nx">pen</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span> <span class="nx">lastPenPoint</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">lastPenPoint</span><span class="p">.</span><span class="nx">y</span> <span class="p">);</span>
+</span><span class='line'>      <span class="c1">// Now that we have initiated a line, we need to</span>
+</span><span class='line'>      <span class="c1">// bind the touch/mouse event listeners.</span>
+</span><span class='line'>      <span class="nx">canvas</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span>
+</span><span class='line'>          <span class="p">(</span><span class="nx">isTouch</span> <span class="o">?</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">touchmove</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span> <span class="o">:</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">mousemove</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;),</span>
+</span><span class='line'>          <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+</span><span class='line'>              <span class="k">new</span> <span class="nx">onTouchMove</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>      <span class="p">);</span>
+</span><span class='line'>      <span class="c1">// Bind the touch/mouse end events so we know</span>
+</span><span class='line'>      <span class="c1">// when to end the line.</span>
+</span><span class='line'>      <span class="nx">canvas</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span>
+</span><span class='line'>          <span class="p">(</span><span class="nx">isTouch</span> <span class="o">?</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">touchend</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span> <span class="o">:</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">mouseup</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;),</span>
+</span><span class='line'>          <span class="nx">onTouchEnd</span>
+</span><span class='line'>      <span class="p">);</span>
+</span><span class='line'>                <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>  <span class="c1">//prevent page from moving while drawing</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="c1">// I handle the touch move event. With this event, we</span>
+</span><span class='line'><span class="c1">// will be drawing a line from the previous point to</span>
+</span><span class='line'><span class="c1">// the current point.</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">onTouchMove</span> <span class="o">=</span> <span class="nx">Touch</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">event</span> <span class="p">){</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">(</span> <span class="nx">event</span> <span class="p">);</span>
+</span><span class='line'>      <span class="nx">pen</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span> <span class="nx">lastPenPoint</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">lastPenPoint</span><span class="p">.</span><span class="nx">y</span> <span class="p">);</span>
+</span><span class='line'>      <span class="nx">pen</span><span class="p">.</span><span class="nx">stroke</span><span class="p">();</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>  <span class="c1">//prevent page from moving while drawing</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The important part of these functions is that they call this._super( event ).  When you create new onTouchStart/onTouchMove, they will run their own constructors but not the super classes (inheritance at work don&#8217;t want to run super class constructors unless they are needed).  You will need to call super to run the super class&#8217;s constructor which is handling most of the heavy work of calculating mouse positions and whatnot.</p>
+
+<p>Now, we have converted our function callbacks into classes.  We need to create new instances of these classes to actually use them.  References to the original functions will now be creating instances.  You do this simply with:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">new</span> <span class="nx">onTouchMove</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you are done, your constructor (init) will run and lines are drawn on the screen.</p>
+
+<p>Comment below any tips for improving on this or questions about how it works.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/new-domain/">New Domain</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-03-06T22:29:41-05:00" pubdate  data-updated="true" >Mar 6<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/new-domain/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m up and running on a VPS.  The bandwidth doesn&#8217;t seem great, maybe I should put it on a CDN! hahaha&#8230;
+I&#8217;m now using <a href="http://RailsPlayground.com">RailsPlayground.com</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/coldfuser-on-google/">Coldfuser on Google!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-02-10T00:12:45-05:00" pubdate  data-updated="true" >Feb 10<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/coldfuser-on-google/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Looks like the spam bots and wordpress&#8217;s automatic ping to <a href="http://pingomatic.com">pingomatic.com</a> have linked <a href="http://america.kicks-ass.net/blog/">Coldfuser</a> on Google.  I checked google right after posting and they had already sniffed my post from just minutes earlier.  I guess no surprize, Google does everything and does it fast, really fast.</p>
+
+<p><img src="http://hphotos-snc3.fbcdn.net/hs170.snc3/19765_653574060446_26500048_36369697_6467787_n.jpg" alt="Coldfuser Google Results!" /></p>
+
+<p>My traffic is up 1,066.67% as well, I think the facebook plugin is mostly to thank for that.  Tricking all those unsuspecting people into reading another try post on Rails or other technically related issues.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/adventures-in-ruby-depot-application/">Adventures in Ruby: Depot Application</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-02-09T23:49:18-05:00" pubdate  data-updated="true" >Feb 9<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/adventures-in-ruby-depot-application/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I find something amazing on every page turn in <a href="http://www.pragprog.com/titles/rails3/agile-web-development-with-rails-third-edition">Agile Web Development with Rails Third Edition</a>.  They have done so many things that would save me lots of development time vs ColdFusion.</p>
+
+<p>Case in point, given a new products table that looks something like this:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">CreateProducts</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">up</span>
+</span><span class='line'>    <span class="n">create_table</span> <span class="ss">:products</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:title</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">text</span> <span class="ss">:description</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:image_url</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">down</span>
+</span><span class='line'>    <span class="n">drop_table</span> <span class="ss">:products</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is a Rake migration.  By scripting SQL commands via the rake tool, your database changes are saved in a special section of the database with timestamps.  I can then migrate those scripts and they will issue the correct SQL scripts in order based on the timestamp.  Or, I can rollback scripts by migrating to a previous time.  Say, the customer went crazy on Tuesday and decided Wednesday everything was wrong, I hit one command and all the database/model changes on Tuesday are reverted.  What an idea!</p>
+
+<p>This isn&#8217;t the cool feature I found today, I&#8217;ll get to that.  Here is a bit of code saved to my model layer.  Model is how your application (controller) interacts with data (database/file).  Read this code below:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>    <span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>      <span class="n">validates_presence_of</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:description</span><span class="p">,</span> <span class="ss">:image_url</span>
+</span><span class='line'>      <span class="n">validates_uniqueness_of</span> <span class="ss">:title</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ActiveRecord::Base is a class that handles much of the heavy lifting with interacting with a database.  In fact, you can do all CRUD (Create, Read, Update, Delete) operations just by extending this class.</p>
+
+<p>The first line we have told Rails to make sure title, description, and image_url exist (not_nil?) and have a length.  The second line is the real magic trick.  This will verify the title does not already appear in the database.  How many times have you written logic like this?</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CREATE</span> <span class="k">PROCEDURE</span> <span class="n">sp_GetInventory</span>
+</span><span class='line'><span class="o">@</span><span class="n">Title</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+</span><span class='line'><span class="o">@</span><span class="n">Description</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span>
+</span><span class='line'><span class="o">@</span><span class="n">Image_URL</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</span><span class='line'><span class="k">AS</span>
+</span><span class='line'>  <span class="k">INSERT</span> <span class="n">TblProducts</span>
+</span><span class='line'>    <span class="p">(</span><span class="n">Title</span><span class="p">,</span> <span class="n">Description</span><span class="p">,</span> <span class="n">Image_URL</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">SELECT</span> <span class="o">@</span><span class="n">Title</span><span class="p">,</span> <span class="o">@</span><span class="n">Description</span><span class="p">,</span> <span class="o">@</span><span class="n">Image_URL</span>
+</span><span class='line'>    <span class="k">FROM</span> <span class="n">TblProducts</span>
+</span><span class='line'>    <span class="k">WHERE</span> <span class="o">@</span><span class="n">Title</span> <span class="k">NOT</span> <span class="k">IN</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">Title</span> <span class="k">FROM</span> <span class="n">TblProducts</span> <span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This code is made irrelevant by that one simple line.  Obviously, a lot of magic is going on behind the scenes, but you are saved from having to write, unit test, functional test, integration test, and migrate this stored procedure.  Even then, customer might just up and say sure Titles can have duplicates, no biggy, now you have to remove, unit test, functional test, and integration test this new version.  In Rails, you say <code>db:migrate version 20100209</code> and you are done, save for UI changes you may have made.</p>
+
+<p>Enough on this, my last gem for the night.  Let&#8217;s say you want to delete a product from the database.  Normally, you will POST some sort of id to a page and this will remove the record.  Rails, when available, actually posts HTTP delete to verify a delete operation is occurring.  They are being purists, since HTTP GET is supposed to be a retrieval operation without any side effects.  The HTTP DELETE code is allowed to cause things on the server.  Also, HTTP DELETE is not cached by the browser and web crawlers will not trigger the link.</p>
+
+<p>Let&#8217;s look at the code for this:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sx">%= link_to &#39;Destroy&#39;, product,</span>
+</span><span class='line'><span class="sx">        :confirm =</span><span class="o">&gt;</span> <span class="s1">&#39;Are you sure?&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:method</span> <span class="o">=&gt;</span> <span class="ss">:delete</span> <span class="o">%&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I thought to myself, this looks simple enough little JavaScript magic under the covers maybe.  The real wizardry here is the <code>:method => :delete</code> line.  Here&#8217;s what the HTML looks like on the page.  I will format it for ease of reading.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="n">a</span> <span class="n">onclick</span><span class="o">=</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">if (confirm(&#39;Are you sure?&#39;)){</span>
+</span><span class='line'><span class="s2">  var f = document.createElement(&#39;form&#39;);</span>
+</span><span class='line'><span class="s2">  f.style.display = &#39;none&#39;;</span>
+</span><span class='line'><span class="s2">  this.parentNode.appendChild(f);</span>
+</span><span class='line'><span class="s2">  f.method = &#39;POST&#39;;</span>
+</span><span class='line'><span class="s2">  f.action = this.href;</span>
+</span><span class='line'><span class="s2">  var m = document.createElement(&#39;input&#39;);</span>
+</span><span class='line'><span class="s2">  m.setAttribute(&#39;type&#39;, &#39;hidden&#39;);</span>
+</span><span class='line'><span class="s2">  m.setAttribute(&#39;name&#39;, &#39;_method&#39;);</span>
+</span><span class='line'><span class="s2">  m.setAttribute(&#39;value&#39;, &#39;delete&#39;);</span>
+</span><span class='line'><span class="s2">  f.appendChild(m);</span>
+</span><span class='line'><span class="s2">  var s = document.createElement(&#39;input&#39;);</span>
+</span><span class='line'><span class="s2">  s.setAttribute(&#39;type&#39;, &#39;hidden&#39;);</span>
+</span><span class='line'><span class="s2">  s.setAttribute(&#39;name&#39;, &#39;authenticity_token&#39;);</span>
+</span><span class='line'><span class="s2">  s.setAttribute(&#39;value&#39;, &#39;Q8fjLQXqfKaMSFr+tBki06LjojcBiPIwyN5CRigvnwk=&#39;);</span>
+</span><span class='line'><span class="s2">  f.appendChild(s);</span>
+</span><span class='line'><span class="s2">  f.submit(); };</span>
+</span><span class='line'><span class="s2">  return false;&quot;</span>
+</span><span class='line'><span class="n">href</span><span class="o">=</span><span class="s2">&quot;/depot/products/2&quot;</span><span class="o">&gt;</span><span class="no">Destroy</span><span class="o">&lt;</span><span class="sr">/a&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Isn&#8217;t that clever, my one little command <code>:method => :delete</code> is doing a lot on the page.  This does look a little messy when reading the HTML code, but it makes for an extremely neat interface for the User and it was all done, again, in one line of code.</p>
+
+<p>Note: Rails 3.0 beta is out today and one of their goals is to make unobtrusive JavaScript (and integrate <a href="http://jquery.com">jQuery</a> along side the currently implemented <a href="http://www.prototypejs.org/">Prototype</a> &amp; <a href="http://script.aculo.us/">Scriptaculous</a>).  So, I image this one line of code will be doing a lot more in the next iteration of Rails.  I can&#8217;t wait to see what that is!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/hacked/">Hacked</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-02-04T18:09:16-05:00" pubdate  data-updated="true" >Feb 4<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/hacked/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Looks like my wordpress settings file was hacked while I was fine tuning my Apache settings today.  Next time, I&#8217;ll be sure to limit access to the server while doing server maintenance.  Attack looks pretty harmless some typos were entered in my wp-settings.php.  I changed my database passwords anyways just in case he read some stuff that I don&#8217;t see in my access logs.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/stack-overflow/">Stack Overflow</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-01-30T20:41:50-05:00" pubdate  data-updated="true" >Jan 30<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/stack-overflow/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I ended my paid for listings of my CV (as they call it ) at <a href="http://careers.stackoverflow.com/drew">http://careers.stackoverflow.com/drew</a>.</p>
+
+<p>The site is terrific (regular <a href="http://stackoverflow.com">StackOverflow.com</a>) and I did feel like giving them a bit of money was well worth the other things they do.  However, I have not been very happy with the traffic I am seeing on my CV.  It may be that the economy is slow and nobody is looking for resumes or it may be that <a href="http://careers.stackoverflow.com/">StackOverflow&#8217;s Careers</a> has not picked up yet.  Whatever the reason, it seems that the time is not right for me to pay for listing my CV.  I will just hold off until another time.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/server-upgrade/">Server Upgrade</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-01-28T02:44:35-05:00" pubdate  data-updated="true" >Jan 28<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/server-upgrade/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was having a few issues with my server so I ran some remote upgrades, yes you can upgrade full Ubuntu versions remotely.  It even restarts the ssh-server without interrupting your session, how cool!</p>
+
+<p>Anyways, after 2 upgrades 8.04-8.10 8.10-9.04, I rebooted to find my computer not responding to SSH.  It was failing to recover from some bad stuff on the main drive.  I ran a disk check (which I&#8217;ve been wanting to run for years but never thought to do)  and fixed the problems.  Reboot again, all is well with the main drive&#8230; but the raid isn&#8217;t working.  After reviewing Google, it seems there is a bug in the 9.04 upgrade this fixes it:
+<code><a href="https://bugs.launchpad.net/ubuntu/+source/mdadm/+bug/330298">https://bugs.launchpad.net/ubuntu/+source/mdadm/+bug/330298</a></code></p>
+
+<p>All still was not well, one hard drive was removed for an unknown reason.  This fixed that&#8230;</p>
+
+<p><code>sudo mdadm --add /dev/md0 [/dev/sdc1]
+</code>
+/dev/sdc1 is the hard drive in question.  I now patiently wait for it to rebuild the array.  You can check the status with this:
+<code>sudo mdadm --detail /dev/md0</code></p>
+
+<p>I&#8217;m off to bed, finally.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <nav class="pagination">
+    <div>
+      
+        <a class="prev" href="/blog/blog/page/4/">&larr; Older</a>
+      
+      <a href="/blog/blog/archives">Blog Archives</a>
+      
+      <a class="next" href="/blog/blog/page/2/">Newer &rarr;</a>
+      
+    </div>
+  </nav>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/my-adventures-into-webgl/">My adventures into WebGL</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/jodoc-js/">jodoc-js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/testing-for-optional-false-params-in-javascript/">Testing for optional false params in JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/github/">Github</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/hp-pavilion-dv6-quad-edition/">HP Pavilion dv6 Quad Edition</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/drewwells">@drewwells</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'drewwells',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/blog/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("coldfuser", 4, false);
+    });
+  </script>
+  <script src="/blog/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/coldfuser" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @coldfuser</a>
+  
+</section>
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Drew Wells -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    var disqus_shortname = 'drewwells';
+
+      
+        
+        var disqus_script = 'count.js';
+      
+
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2783646-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

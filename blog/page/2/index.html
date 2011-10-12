@@ -1,0 +1,1413 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Tales from a JavaScript Developer</title>
+  <meta name="author" content="Drew Wells">
+
+  
+  <meta name="description" content="It took a little digging, I started with these instructions.  However you must use npm with sudo and any scripts you download have full access to r...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://drewwells.net/blog/blog/page/2/">
+  <link href="/blog/favicon.png" rel="icon">
+  <link href="/blog/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/blog/javascripts/modernizr-2.0.js"></script>
+  <script src="/blog/javascripts/ender.js"></script>
+  <script src="/blog/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Tales from a JavaScript Developer" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/blog/">Tales from a JavaScript Developer</a></h1>
+  
+    <h2>Practicing JavaScript ninja</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:drewwells.net/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul class="main-navigation">
+  <li><a href="/blog/">Blog</a></li>
+  <li><a href="/blog/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/installing-npm-on-ubuntu-10-10-wo-sudo/">Installing NPM on Ubuntu 10.10 W/o Sudo</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-01-01T11:56:10-05:00" pubdate  data-updated="true" >Jan 1<span>st</span>, 2011</time>
+        
+         | <a href="/blog/2011/installing-npm-on-ubuntu-10-10-wo-sudo/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It took a little digging, I started with these instructions.  However you must use npm with sudo and any scripts you download have full access to ravage your system.<a href="http://utahjs.com/2010/09/07/running-node-js-on-ubuntu-10-04/">Running node js on Ubuntu 10 04</a></p>
+
+<p>The process is simple.  If you followed these instructions previously, you need to uninstall it or NPM will continue to install in /usr/local/bin.  If you are starting fresh move onto step 2.</p>
+
+<p>Step 1. Remove old npm/node
+<code>
+cd ~/node-previously-installed
+./configure
+make uninstall
+</code></p>
+
+<p>Step 2. Install node locally</p>
+
+<p>The following taken from <a href="https://gist.github.com/579814">gist</a></p>
+
+<p><code></p>
+
+<h1>IIRC, this only works for shell windows opened</h1>
+
+<p>echo 'export PATH=$HOME/local/bin:$PATH' &gt;&gt; ~/.bashrc
+. ~/.bashrc
+mkdir ~/local
+mkdir ~/node-latest-install
+cd ~/node-latest-install
+curl http://nodejs.org/dist/node-latest.tar.gz | tar xz --strip-components=1
+./configure --prefix=~/local
+make install # ok, fine, this step probably takes more than 30 seconds...
+curl http://npmjs.org/install.sh | sh</code></p>
+
+<p>Now you can install useful middleware like express without sudo.
+<code>npm install express</code></p>
+
+<p>Happy Noding</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/sentence-linking-and-highlighting/">Sentence Linking and Highlighting</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-12-05T17:24:45-05:00" pubdate  data-updated="true" >Dec 5<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/sentence-linking-and-highlighting/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A couple new server upgrades.  I&#8217;ve moved to Wordlpress 3.0.2 no hiccups so far and I have upgraded to using Disquss.  This should make it super easy to post comments on my blog.  All old posts have been upgraded to use this.</p>
+
+<p>On to this new non-plugin&#8230; located <a href="https://github.com/drewwells/sentence-highlighting">Here</a>.  I noticed BBQ support is missing, I must have forgotten to push that.  I&#8217;ll get to that on Monday.</p>
+
+<p>NYT has added a cool new feature that this website is calling <a href="http://www.swiss-miss.com/2010/12/the-evolution-of-the-hyperlink.html">The Evolution of the Hyperlink</a>.  I think this is a great example of hyperbole, anyways I thought it involved some nifty JavaScript and went ahead and wrote it based on jQuery.  Their implementation is a bit lame as it only runs when the page initially loads, I stepped it up a notch and used Ben Alman&#8217;s excellent <a href="http://benalman.com/projects/jquery-bbq-plugin/">BBQ: Back Button and Query Library</a>.</p>
+
+<p>The premise is simple, allow people to generate links to particular sentences in a page without use of any HTML help.  So this must work without generating tons of ID&#8217;s all over the page.</p>
+
+<p>The process for me was two fold.</p>
+
+<ol>
+<li>I needed a way to find the position of sentences in a page which was simpler than initially predicted.</li>
+<li>I need a way to highlight these sentences.
+</li>
+</ol>
+
+
+<p>The second problem seems very simple, parse paragraphs and find sentences within them.  I&#8217;ll start there.  I played around with a few regular expressions.  First I simply wrote something that found any text followed by a period.  This worked well in my regular expression test site: <a href="http://gskinner.com/RegExr/">RegExr</a> but didn&#8217;t work at all in JavaScript.</p>
+
+<p>This is what I ended up with and works very well to split any length string finding periods.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">sentences</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span> <span class="sr">/[^.]/g</span> <span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you&#8217;re not familiar with regular expressions, I told the engine to find all text that&#8217;s not a period.  It will run match on a string and produce an array of sentences.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="s2">&quot;This is a great paragraph.  It has many sentences. It is useful for testing&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">p</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span> <span class="sr">/[^.]/g</span> <span class="p">);</span>
+</span><span class='line'><span class="c1">//[&quot;This is a great paragraph&quot;, &quot;It has many sentences&quot;, &quot;It is useful for testing&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You will notice periods aren&#8217;t matched.  This is inline with NYT&#8217;s behavior, so I stuck with it.  Since JavaScript doesn&#8217;t support positive lookahead, there is no obvious way to catch those pesky periods and I need-ant bother looking for one right now.</p>
+
+<p>Now, to find where sentences are.  This is needed so we can scroll to them.</p>
+
+<p>Like many great ideas, I reused someone else&#8217;s :D <a href="https://github.com/kir/js_cursor_position">Kir&#8217;s JS Cursor Position</a>.  The idea is simple create a fake div with the preceding text and determine how big it is.  Based on this, we can determine where the sentence in question lives.</p>
+
+<p>With jQuery, this is extremely simple.  See this, you need to be using jQuery 1.4 or 1.4.2 something new.  I don&#8217;t remember the exact version that supports this syntax as it is hard to find examples of this syntax :D.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">//page.para = index of paragraph</span>
+</span><span class='line'><span class="c1">//page.sent = index of sentence within paragraph</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">para</span> <span class="o">=</span> <span class="nx">paras</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span> <span class="nx">page</span><span class="p">.</span><span class="nx">para</span> <span class="p">),</span>
+</span><span class='line'>     <span class="c1">//Collect all sentences before the necessary one</span>
+</span><span class='line'>     <span class="nx">sentences</span> <span class="o">=</span> <span class="nx">para</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span> <span class="sr">/[^.]+/g</span> <span class="p">),</span>
+</span><span class='line'>     <span class="nx">prefixSentences</span> <span class="o">=</span> <span class="nx">sentences</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">page</span><span class="p">.</span><span class="nx">sent</span> <span class="p">),</span>
+</span><span class='line'>     <span class="nx">dummy</span><span class="p">,</span>
+</span><span class='line'>     <span class="nx">top</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//Create a dummy div with any text preceding your sentence and</span>
+</span><span class='line'><span class="c1">// css properties of that element</span>
+</span><span class='line'><span class="c1">//Inspired by: https://github.com/kir/js_cursor_position</span>
+</span><span class='line'><span class="nx">dummy</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;&lt;div /&gt;&quot;</span><span class="p">,{</span>
+</span><span class='line'>    <span class="nx">css</span><span class="o">:</span><span class="p">{</span>
+</span><span class='line'>        <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;absolute&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">left</span><span class="o">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">fontSize</span><span class="o">:</span> <span class="nx">para</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;fontSize&#39;</span><span class="p">),</span>
+</span><span class='line'>        <span class="nx">fontFamily</span><span class="o">:</span> <span class="nx">para</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;fontFamily&#39;</span><span class="p">),</span>
+</span><span class='line'>        <span class="nx">fontWeight</span><span class="o">:</span> <span class="nx">para</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;fontWeight&#39;</span><span class="p">),</span>
+</span><span class='line'>        <span class="nx">fontStyle</span><span class="o">:</span> <span class="nx">para</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;fontStyle&#39;</span><span class="p">),</span>
+</span><span class='line'>  <span class="nx">fontVarient</span><span class="o">:</span> <span class="nx">para</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;fontVarient&#39;</span><span class="p">),</span>
+</span><span class='line'>  <span class="nx">fontTransform</span><span class="o">:</span> <span class="nx">para</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;fontTransform&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">html</span><span class="o">:</span> <span class="nx">prefixSentences</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">}).</span><span class="nx">appendTo</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">top</span> <span class="o">=</span> <span class="nx">para</span><span class="p">.</span><span class="nx">offset</span><span class="p">().</span><span class="nx">top</span> <span class="o">+</span>
+</span><span class='line'>     <span class="nx">dummy</span><span class="p">.</span><span class="nx">height</span><span class="p">()</span> <span class="o">-</span> <span class="nb">parseInt</span><span class="p">(</span> <span class="nx">dummy</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;fontSize&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">;</span>
+</span><span class='line'>     <span class="nx">dummy</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span> <span class="c1">//Remove dummy</span>
+</span><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">scrollTo</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">top</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Feel free to link directly to the code: <a href="https://github.com/drewwells/sentence-highlighting/raw/master/main.js">sentence-highlighting</a>.  I&#8217;ll update links and whatnot on Monday.  I&#8217;ll work to make BBQ support included via progressive enhancement.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/jquery-plugin-authoring/">jQuery Plugin Authoring</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-10-25T22:42:00-04:00" pubdate  data-updated="true" >Oct 25<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/jquery-plugin-authoring/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I often find jQuery plugin development is a little over-hyped.  It is also severely lacking in documentation.  This may be because the jQuery core team are hoping we the developers revolutionize the practice and they see no reason to make us conform to a particular pattern.</p>
+
+<p>Anyways, if you&#8217;re like me, you just want to know what jQuery is doing under the covers and what the penalties and benefits of architecting your code in a certain way.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">borderize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">options</span> <span class="p">){</span>
+</span><span class='line'>  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is the basic pattern, <em>this</em> is set to the jQuery object and you can use your plugin like so.  To access to the underlying dom, you return this.each() and doing so enables <a href="http://ejohn.org/blog/ultra-chaining-with-jquery/">chaining</a>.</p>
+
+<p>I see three different areas to attach methods to a plugin, each with their own costs and benefits.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">borderize</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">//I don&#39;t need access to the dom directly, and I am only</span>
+</span><span class='line'>  <span class="c1">//initialized once.  I have to be called via global jQuery</span>
+</span><span class='line'>  <span class="c1">//object.  I do not have access to any closures, so I rely</span>
+</span><span class='line'>  <span class="c1">//on this manipulation or passing in arguments.</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">borderize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">options</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">//I need access to the jQuery collection.  I am initialized</span>
+</span><span class='line'>  <span class="c1">//once per plugin instance and I can be accessed within</span>
+</span><span class='line'>  <span class="c1">//the return if need be.  I have access to the closure created</span>
+</span><span class='line'>  <span class="c1">//by $.fn.borderize</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>    <span class="c1">//I need access to the direct dom, but not necessarily</span>
+</span><span class='line'>    <span class="c1">//the original jQuery collection.  I require two closures</span>
+</span><span class='line'>    <span class="c1">//so I am the least memory efficient of the methods.</span>
+</span><span class='line'>    <span class="c1">//I am instantiated for every dom targeted by this plugin.</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Moving on, passing in options and default parameters.  I won&#8217;t discuss this topic, there&#8217;s a lot of documentation on this pattern so I&#8217;ll be terse.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">borderize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">options</span> <span class="p">){</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">opts</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">({},</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">borderize</span><span class="p">.</span><span class="nx">defaults</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">wrapDiv</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div style=&quot;border: solid &#39;</span> <span class="o">+</span>
+</span><span class='line'>          <span class="nx">opts</span><span class="p">.</span><span class="nx">color</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">width</span> <span class="o">+</span> <span class="s1">&#39;;&quot; /&gt;;&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">wrap</span><span class="p">(</span><span class="nx">wrapDiv</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">borderize</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">color</span><span class="o">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">width</span><span class="o">:</span> <span class="s1">&#39;1px&#39;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you are using basic key/value pairs in your defaults and options, this extending is sufficient.  Otherwise, you should look at deep copy option of <em>$.extend</em> in the documentation.  You notice, we aren&#8217;t putting this code inside this.each, that&#8217;s because the jQuery collection being acted on is the context of the plugin.  If would be silly to do this.each on the collection, then wrap each item in a jQuery collection just to wrap it.</p>
+
+<p>So that leaves the question, if we are doing something different like providing functionality.  Where should we put our code?  As best I understand, $.fn.borderize is best if you need access to the jQuery collection and $.borderize is best for when you don&#8217;t.</p>
+
+<p>I&#8217;ll add two types of methods to this plugin, one is a simple utility function that doesn&#8217;t need any sort of context or state information and another that does.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">borderize</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">debug</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">){</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="nx">console</span> <span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">){</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">msg</span> <span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="c1">//Number of initialized elements globally</span>
+</span><span class='line'>  <span class="nx">initialized</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">borderize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">options</span> <span class="p">){</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">instanceInitialized</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">initUpdate</span><span class="p">(){</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">instanceInitialized</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">$</span><span class="p">.</span><span class="nx">borderize</span><span class="p">.</span><span class="nx">initialized</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>    <span class="nx">initUpdate</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is a silly example, we could just as easily update these values procedurally.  It would also be more efficient to update the value via this.length (length of the jQuery collection) rather than as each is initialized.</p>
+
+<p>I&#8217;ll post about converting singletons to jQuery plugins.  The singleton pattern is one of the most prolific patterns on the internet and being able to wrap that in a jQuery plugin provides a powerful pattern for building jQuery plugins.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/dive-into-html5-bullseye/">Dive Into HTML5 Bullseye</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-10-13T18:55:24-04:00" pubdate  data-updated="true" >Oct 13<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/dive-into-html5-bullseye/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I thought I would be clever today and make a button as a canvas element.  For some reason, I had it in my mind that this should be a bullseye.  Boy was this difficult to do in canvas, probably took me 3 hours to go from knowing nothing about canvas to a working example.  Also, it may all be for nothing as jQuery doesn&#8217;t appear to like binding to a canvas element.</p>
+
+<p>The basic idea of a bullseye conceptually is to draw circles on top of each other.  Each circle within the next is red or white.  The final result looked something like this.
+<img src="http://drewwells.net/blog/wp-content/uploads/2010/10/bullseye.png" alt="Bullseye" /></p>
+
+<p>Canvas has some nice features for drawing arcs.  You basically access the context of a canvas element, and start drawing paths on it.  Filling an arc results in a circle or using stroke results in a circle as a line.  This is the same code but with strokes instead of fills.
+<img title="bullseye-stroke" src="http://drewwells.net/blog/wp-content/uploads/2010/10/bullseye-stroke.png" alt="" width="50" height="50" /></p>
+
+<p>Lets dive into the code here.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;canvas&gt;&lt;/canvas&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;bullseye&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;2d&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//I had issues with width/height so I manually set these</span>
+</span><span class='line'><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//Find the center, this will be used for drawing our arcs</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">center</span> <span class="o">=</span> <span class="p">[</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">/</span><span class="mi">2</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">context</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span> <span class="c1">//Tell canvas to start registering a path</span>
+</span><span class='line'><span class="nx">context</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span> <span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span class='line'>  <span class="nx">center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+</span><span class='line'>  <span class="mi">25</span><span class="p">,</span> <span class="c1">//Radius</span>
+</span><span class='line'>  <span class="mi">0</span><span class="p">,</span>   <span class="c1">//Starting point in radians (right side of a circle)</span>
+</span><span class='line'>  <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span>  <span class="c1">//Ending point in radians (same right side of circle)</span>
+</span><span class='line'>  <span class="kc">true</span>
+</span><span class='line'><span class="p">);</span>
+</span><span class='line'><span class="c1">//Now lets draw another circle inside this one</span>
+</span><span class='line'><span class="nx">context</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span> <span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span class='line'>  <span class="nx">center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+</span><span class='line'>  <span class="mi">18</span><span class="p">,</span>
+</span><span class='line'>  <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>  <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>  <span class="kc">true</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//Draw what we have done</span>
+</span><span class='line'><span class="nx">context</span><span class="p">.</span><span class="nx">stroke</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Cool stuff, that was easy why did you spend so long on this?  Well if you execute this code, this is what you get.  Two circles with a big line between them.</p>
+
+<p><img src="http://drewwells.net/blog/wp-content/uploads/2010/10/bullseye-lines.png" alt="" title="bullseye-lines" width="50" height="50" /></p>
+
+<p>I was looking at the example on the MDC, and simply could not figure out why mine had lines between the circles and theirs didn&#8217;t.  It did not help that their example was a smiley face, mocking me. <a href="https://developer.mozilla.org/samples/canvas-tutorial/2_2_canvas_moveto.html">Canvas moveto example</a>.</p>
+
+<p>Then I looked closely at their example, and saw that their moveTo was not realigning the center point of the arcs as I originally thought.  It was actually moving the path to the edge of one of the new shapes.  This prevents a line being drawn from the end point of your initial circle to the start of the next one.  I later discovered, you can also just start a new path with <code>beginPath()</code>.</p>
+
+<p>So the final code is such:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;bullseye&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+</span><span class='line'><span class="nx">drawCircle</span><span class="p">(</span> <span class="nx">canvas</span><span class="p">,</span> <span class="p">[</span><span class="mi">24</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">]);</span>
+</span><span class='line'><span class="c1">//I could probably just ask for two colors to alternate, eh?</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">drawCircle</span><span class="p">(</span><span class="nx">canvas</span><span class="p">,</span> <span class="nx">radius</span> <span class="cm">/* array */</span><span class="p">,</span> <span class="nx">color</span> <span class="cm">/* array */</span><span class="p">){</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;2d&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">center</span> <span class="o">=</span> <span class="p">[</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">/</span><span class="mi">2</span><span class="p">];</span>
+</span><span class='line'>    <span class="c1">//Sanity check, I don&#39;t want to attempt to draw</span>
+</span><span class='line'>    <span class="c1">// circles that don&#39;t have an associated color</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="nx">radius</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;=</span> <span class="nx">color</span><span class="p">.</span><span class="nx">length</span> <span class="p">){</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span> <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">length</span> <span class="o">=</span> <span class="nx">radius</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="p">){</span>
+</span><span class='line'>      <span class="c1">//must move to next circle first, or else you get a line between circles</span>
+</span><span class='line'>      <span class="nx">context</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span> <span class="nx">radius</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="o">+</span><span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
+</span><span class='line'>            <span class="nx">context</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span>
+</span><span class='line'>                <span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span class='line'>                <span class="nx">center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+</span><span class='line'>                <span class="nx">radius</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span>
+</span><span class='line'>                <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>                <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>                <span class="kc">false</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nx">context</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="nx">color</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</span><span class='line'>      <span class="nx">context</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now this works, right?  Wait, no it doesn&#8217;t.  You see strokes would work fine, but we are trying to fill our drawn shapes.  So a little more work is needed here.</p>
+
+<p>I thought as I draw each arc, the fill would just fill that one path I had drawn.  However, fill iterates through the entire context stack and fills each object.  So what you end up with is a big circle drawn, then filled, then another circle drawn, and both of those circles filled, etc.</p>
+
+<p>It took a bit of digging, and frankly the w3c document wasn&#8217;t a huge help.  Basically what we need to do, is draw our shape, fill it, then empty it from the stack.  beginPath() does this.  Add this to the line prior to context.moveTo and you should be in business.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">//must move to next circle first, or else you get a line between circles</span>
+</span><span class='line'><span class="nx">context</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+</span><span class='line'><span class="nx">context</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span> <span class="nx">radius</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="o">+</span><span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&#8217;ll update this when I find out how to bind a click to this.  Even if it takes a div wrapper <em>sigh</em>.  I&#8217;d like to know which command is more efficient, moveTo or beginPath.  I can only imagine moveTo is more efficient, but nothing to back that up at the moment.</p>
+
+<p>This was an interesting topic for me, but really I was taking a break from my ginormous work project and getting a feel for emacs at the same time.  I think I will end up with a very oddly shaped left hand if I continue to use emacs, but the fact that everything is available via the keyboard (or maybe home row) is extraordinarily more efficient than eclipse.  I fear digging into the JavaScript templates to tweak some of the odd autoformating things it does to my files.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/my-first-geospatial-project/">My First Geospatial Project</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-09-15T13:04:10-04:00" pubdate  data-updated="true" >Sep 15<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/my-first-geospatial-project/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Not sure why I never posted this.  I made a test project to get ready for my Geospatial job.  This is a simple mashup with <a href="http://openlayers.org/">OpenLayers</a>, Twitter, and Google Maps.</p>
+
+<p>When I wrote this, the World Cup was still going on.  I included some of the stadiums in South Africa and a static list of Trending topics on Twitter.  The twitter birds may not work as these trending locations can change over time.  I didn&#8217;t bother to use their trending locations availability service since WOEID to real LAT/LON transation wasn&#8217;t readily available when I wrote this, so I had to manually translate all of the WOEIDs when I wrote this.
+<a href="http://drewwells.net/mapmashup">Map Mashup</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/new-job/">New Job</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-08-26T20:23:16-04:00" pubdate  data-updated="true" >Aug 26<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/new-job/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have started a new job with <a href="http://www.erdas.com/">ERDAS</a>.  They are an established geospatial company looking to get into the websphere.  I&#8217;m doing all sorts of JavaScript/Java and Java build tooling.</p>
+
+<p>I should have some exciting topics down the road!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/coldfusion-generic-getters-setters/">ColdFusion Generic Getters/setters</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-04-23T15:02:44-04:00" pubdate  data-updated="true" >Apr 23<span>rd</span>, 2010</time>
+        
+         | <a href="/blog/2010/coldfusion-generic-getters-setters/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of the useful features missing from ColdFusion is automatic getters and setters.  This is a common practice used when writing Java Beans.  Steven Ross wrote this utilizing onMissingMethod <a href="http://blog.stevensross.com/2008/7/16/using-missing-method-to-do-automatic-getters-and-setters">here</a></p>
+
+<p>I have slightly tweaked this.  You should know some limitations of onMissingMethod().  While external calls, say from a cfm page, will trigger the onMissingMethod calls, internal calls within the CFC will not utilize this behavior.</p>
+
+<p>The behavior I wish to achieve is something like this:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>  <span class="nt">&lt;cfset</span> <span class="na">object =</span><span class="err"> </span><span class="s">CreateObject(&quot;Component&quot;,&quot;baseObject&quot;)</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;cfset</span> <span class="na">object</span><span class="err">.</span><span class="na">val</span><span class="err">(&quot;</span><span class="na">Value</span><span class="err">&quot;)</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;cfoutput&gt;</span>#object.val()#<span class="nt">&lt;/cfoutput&gt;</span> <span class="c">&lt;!--- Value ---&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Inside the CFC is a different story, setting and getting is a little different</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>...
+</span><span class='line'><span class="nt">&lt;cffunction</span> <span class="na">name=</span><span class="s">&quot;GenericFunction&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="c">&lt;!--- Set some variables ---&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;cfset</span> <span class="na">setValue</span><span class="err">(&quot;</span><span class="na">var1</span><span class="err">&quot;)</span> <span class="err">=</span> <span class="err">&quot;</span><span class="na">String1</span><span class="err">&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;cfset</span> <span class="na">value =</span><span class="err"> </span><span class="s">getValue(&quot;var1&quot;)</span> <span class="nt">/&gt;</span> <span class="c">&lt;!--- Value now set to &quot;String1&quot; ---&gt;</span>
+</span><span class='line'><span class="nt">&lt;/cffunction&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&#8217;s the Helper functions to make this happen.  You can read about advanced version of this very basic getter/setter code at <a href="http://www.pbell.com/index.cfm/2008/4/8/Generic-Getters">Peter Bell&#8217;s Blog</a></p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c">&lt;!--</span><span class="o">-</span>
+</span><span class='line'>    <span class="nx">Author</span><span class="o">:</span> <span class="nx">Drew</span> <span class="nx">Wells</span> <span class="nx">http</span><span class="o">:</span><span class="c1">//drewwells.net/blog/2010/04/23/coldfusion-generic-getters-setters/</span>
+</span><span class='line'><span class="o">---&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//Handles calls to functions that do not exist</span>
+</span><span class='line'><span class="c1">//@MissingMethodName - Name of function being called</span>
+</span><span class='line'><span class="c1">//@MissingMethodArguments - Arguments passed to non-existant function</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">OnMissingMethod</span><span class="p">(</span> <span class="p">){</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span> <span class="nx">StructKeyExists</span><span class="p">(</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span> <span class="p">)</span> <span class="p">){</span> <span class="c1">//invalid, expected 1 argument</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="nx">StructKeyExists</span><span class="p">(</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;1&quot;</span> <span class="p">)</span>  <span class="p">){</span> <span class="c1">//setter</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nx">setValue</span><span class="p">(</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">//getter</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">getValue</span><span class="p">(</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">//Setter method</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">setValue</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">variables</span><span class="p">.</span><span class="nx">instance</span><span class="p">[</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">//Getter method</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">getValue</span><span class="p">(){</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span> <span class="nx">StructKeyExists</span><span class="p">(</span> <span class="nx">variables</span><span class="p">.</span><span class="nx">instance</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span> <span class="p">){</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">variables</span><span class="p">.</span><span class="nx">instance</span><span class="p">[</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/setting-up-wordpress-ses-urls/">Setting Up Wordpress SES URLs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-04-13T23:01:59-04:00" pubdate  data-updated="true" >Apr 13<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/setting-up-wordpress-ses-urls/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A few quick updates.  I have installed the wp-touch plugin, so it will auto apply a mobile friendly theme when viewed on iPhone, Android, Blackberry or Opera (woohoo).</p>
+
+<p>Also, I have updated to SES URLs, it was a bit of a challenge.  You must update your apache settings, wordpress will take care of the .htaccess file configuration automatically.</p>
+
+<p>To enable the use of .htaccess, you must configure your apache site configuration.  This could be default or a specialized file inside the /etc/apache2/sites-available/ directory ie.
+[code light=&#8221;true&#8221;]/etc/apache2/sites-available/default[/code]</p>
+
+<p>Go to the directory definition (or add one if it doesn&#8217;t exist) and turn on these two options at a mininum.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;Directory /var/www/blog>
+</span><span class='line'>    Options FollowSymLinks
+</span><span class='line'>    AllowOverride FileInfo
+</span><span class='line'>  &lt;/Directory></span></code></pre></td></tr></table></div></figure>
+
+
+<p>Afterwards, reload your apache configuration.  On Ubuntu, this is</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo /etc/init.d/apache2 reload</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Piece of cake</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/sessionstorage-localstorage/">sessionStorage localStorage</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-04-12T23:11:05-04:00" pubdate  data-updated="true" >Apr 12<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/sessionstorage-localstorage/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One common problem with JavaScript applications is saving data between page refreshes.  HTML5 solves this with the Storage interface.  This is not to be confused with Mozilla&#8217;s now ObsoleteStorage interface and globalStorage, which while supported in Mozilla is not part of the <a href="http://www.w3.org/TR/webstorage/#contents">w3 Standard</a>.</p>
+
+<p><strong>Storage Interface</strong>
+The interface is incredibly easy to use, the Storage interface defines two attributes (and an event): sessionStorage and localStorage.</p>
+
+<p>Storage Interface definition:</p>
+
+<blockquote>Each Storage object is associated with a list of key/value pairs when it is created, as defined in the sections on the sessionStorage and localStorage attributes. Multiple separate objects implementing the Storage interface can all be associated with the same list of key/value pairs simultaneously.</blockquote>
+
+
+<p><strong>sessionStorage</strong>
+Per the w3 standard,</p>
+
+<blockquote>Sites can add data to the session storage, and it will be accessible to any page from the same site opened in that window.</blockquote>
+
+
+<p>This means that data can be stored in a uniform object and retrieved only from within that window/tab and for the site defined.  These structures are also deleted when the browser is closed, except if the browser crashes in which the object is restored.  The actual data is scoped to a HTML5 origin (scheme + hostname + non-standard port).  This means https://google.com and http://google.com can not access each others localStorage.</p>
+
+<p>Mozilla gives a good example of a use case for this.  Saving a text field in the event that their browser crashes, which would restore any data in that text field when the browser recovers.</p>
+
+<p><strong>localStorage</strong>
+The localStorage attribute of Storage is a different beast.  It follows the same basic concept, objects are stored in the HTML5 origin (scheme + hostname + non-standard port).  The difference being that these values are stored forever, surviving browser closing.</p>
+
+<p>Currently, webkit/mozilla allow 5megs of globalStorage and IE allows 10megs.  You can see this is high use in your HTML5 web browsers after opening applications like GMail or Facebook.  One thing to note, if you overfill the space, the w3 standard defines an error is thrown.  So be sure to maintain your space, and wrap storage attempts in a try/catch. w3: <em>&#8220;If it couldn&#8217;t set the new value, the method must raise an QUOTA_EXCEEDED_ERR exception. (Setting could fail if, e.g., the user has disabled storage for the site, or if the quota has been exceeded.)&#8221;</em></p>
+
+<p><strong>Implementation</strong>
+The first thing I did was start throwing structures in the localStorage.  I can&#8217;t think of a reason I would want to put just key/value pairs in there.  So here&#8217;s my code:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">sessionStorage</span><span class="p">[</span><span class="s1">&#39;results&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;query1&#39;</span><span class="o">:</span> <span class="s1">&#39;apple&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s1">&#39;query2&#39;</span><span class="o">:</span> <span class="s1">&#39;banana&#39;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I thought, now how do I extract these values back out.  Here&#8217;s my first go:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">sessionStorage</span><span class="p">[</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="s1">&#39;query1&#39;</span><span class="p">];</span> <span class="p">);</span> <span class="c1">//undefined</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Undefined? but why!  I inspected the storage in firebug here&#8217;s what was stored to sessionStorage:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="s2">&quot;[object Object]&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The w3 standard does not define anything beyond the fact that the Storage Interface stores key/value pairs via the setter method.  I can only postulate that it runs .toString() on anything with a typeof !== &#8216;string&#8217;.  So, how do we store complex values in sessionStorage?  Easy, use JSON.</p>
+
+<p>Normally you deal with json in this fashion.  Using <a href="http://www.json.org/js.html">Crockford&#8217;s JSON2</a> or native browser implementation.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s2">&quot;{&#39;query1&#39;: &#39;apple&#39;, &#39;query2&#39;: &#39;banana&#39;}&quot;</span><span class="p">);</span>  <span class="c1">//object with query1 and query2 properties</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However, this is the opposite of what we want.  We want to take an object and make a string out of it, enter <em>stringify</em>.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">querySet</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;query1&#39;</span><span class="o">:</span> <span class="s1">&#39;apple&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s1">&#39;query2&#39;</span><span class="o">:</span> <span class="s1">&#39;banana&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">string</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">querySet</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//Now store this string in sessionStorage</span>
+</span><span class='line'><span class="nx">sessionStorage</span><span class="p">[</span><span class="s1">&#39;results&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">string</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">originalResult</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span> <span class="nx">sessionStorage</span><span class="p">[</span><span class="s1">&#39;results&#39;</span><span class="p">]</span> <span class="p">);</span> <span class="c1">//original object with query1 and query2 attributes</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I do not know if this is the preferred way, but since JSON is an integral part of client/storage data communication.  I can only see it lending itself nicely to application/browser data communication as well.</p>
+
+<p>Happy storing data on the browser, I&#8217;m sure your users will enjoy the speed and resilience of your applications.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/module-pattern/">Module Pattern</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-04-06T23:25:29-04:00" pubdate  data-updated="true" >Apr 6<span>th</span>, 2010</time>
+        
+         | <a href="/blog/2010/module-pattern/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The Module Pattern was a pattern coined by Douglas Crockford.  If you don&#8217;t know who that is&#8230; his website is <a href="http://www.crockford.com/">http://www.crockford.com/</a>.  He maintains the JSON standard and writes fancy tools like JSMin and JSLint and is currently employed at Yahoo! as a Senior JavaScript Architect.  A quick primer for the module pattern is on <a href="http://www.yuiblog.com/blog/2007/06/12/module-pattern/">YUI Blog</a>.</p>
+
+<p>I will say this pattern is a very elegant and simple way of generating very flexible objects that can be used in any number of ways.  You will be well served by evaluating your current JavaScript applications and seeing if this pattern will help you, I know it helped me.</p>
+
+<p>I will try to keep this short.  Here we start with a simple singleton.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">myPlugin</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">){</span>
+</span><span class='line'>    <span class="c1">//I act as the constructor for my object</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">alert</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>    <span class="nx">alert</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I can use this as so:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">MyPlugin</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="s2">&quot;plugin&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">MyPlugin</span><span class="p">.</span><span class="nx">alert</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>All well and good, well security team comes down and informs us that users are using your site to input a security attack.  You are forced to clean up these messages before alerting them to the user.  Simple enough, we will manipulate the prototype.  This will make our function globally accessible by instances of MyPlugin.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">myPlugin</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">sanitize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">){</span>
+</span><span class='line'>  <span class="c1">//create noncapturing groups to remove &lt;script&gt;, optional captures</span>
+</span><span class='line'>  <span class="c1">//use capturing group to extract the text in between the script tags</span>
+</span><span class='line'>  <span class="k">return</span> <span class="sr">/(?:&lt;script&gt;)?([^&lt;]+)(?:&lt;\/script&gt;)?/</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">message</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we modify the alert function to utilize this santize</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">MyPlugin</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  <span class="nx">alert</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>    <span class="nx">alert</span><span class="p">(</span> <span class="nx">MyPlugin</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">santize</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">message</span><span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So, works well but this pattern is a little ugly also we have no way of defining private functions/methods.  We have to specify MyPlugin[method] everytime we call a method within the singleton.  Here is the same singleton implemented via the module pattern.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">//create a self-executing function, it will execute immediately after</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//the compiler instantiates myPlugin</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">myPlugin</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">//private variables/methods these will only be accessible from</span>
+</span><span class='line'>  <span class="c1">//within the function returned by this self-executing function</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">sanitize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">){</span>
+</span><span class='line'>    <span class="k">return</span> <span class="sr">/(?:&lt;script&gt;)?([^&lt;]+)(?:&lt;\/script&gt;)?/</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">message</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//open struct on this line or return will execute and ignore</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// whatever is left in the function</span>
+</span><span class='line'>    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">){</span>
+</span><span class='line'>      <span class="c1">//I act as the constructor for my object</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">alert</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">alert</span><span class="p">(</span> <span class="nx">sanitize</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">message</span><span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}());</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You call this like so:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">MyPlugin</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">MyPlugin</span><span class="p">.</span><span class="nx">alert</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The details of this pattern are very simple.  The self-executing function creates a closure around the return structure.  Therefore, the methods in the return have access to any variables declared inside this function.  Also, access to the private methods/variables do not require a long namespace declaration.  You simple call <em>sanitize</em>.</p>
+
+<p>This is merely a modified singleton pattern, one of those most prolific patterns on the web.  So, it is easy to use within other design patterns.  I have used this when creating widgets with $.widget (<a href="http://bililite.com/blog/understanding-jquery-ui-widgets-a-tutorial/">jQuery UI Widget factory</a>), currently my favorite way for developing jQuery plugins.</p>
+
+<p>I will post how to utilize widget factory in my next post, pointing out some conventions that will make your life easier.  It is an incredibly well thought out framework that has very little documentation.</p>
+
+<p>Enjoy.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <nav class="pagination">
+    <div>
+      
+        <a class="prev" href="/blog/blog/page/3/">&larr; Older</a>
+      
+      <a href="/blog/blog/archives">Blog Archives</a>
+      
+      <a class="next" href="/blog/">Newer &rarr;</a>
+      
+    </div>
+  </nav>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/my-adventures-into-webgl/">My adventures into WebGL</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/jodoc-js/">jodoc-js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/testing-for-optional-false-params-in-javascript/">Testing for optional false params in JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/github/">Github</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/hp-pavilion-dv6-quad-edition/">HP Pavilion dv6 Quad Edition</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/drewwells">@drewwells</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'drewwells',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/blog/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("coldfuser", 4, false);
+    });
+  </script>
+  <script src="/blog/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/coldfuser" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @coldfuser</a>
+  
+</section>
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Drew Wells -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    var disqus_shortname = 'drewwells';
+
+      
+        
+        var disqus_script = 'count.js';
+      
+
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2783646-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
