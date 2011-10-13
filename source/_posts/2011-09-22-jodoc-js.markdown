@@ -8,7 +8,9 @@ title: jodoc-js
 comments: true
 wordpress_id: '246'
 ? ''
-: - Uncategorized
+categories:
+- javascript
+- projects
 ---
 
 So it's about time to post an update on things I'm working on lately which have been a lot, just look at my github feed: https://github.com/drewwells
