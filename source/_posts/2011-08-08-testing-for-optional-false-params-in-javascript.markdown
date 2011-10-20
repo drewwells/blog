@@ -28,14 +28,17 @@ The trick here is to detect whether the variable is undefined, then for it's tru
 
 {% codeblock lang:js %}
 
-if( config.blur != null &amp;&amp; !config.blur ){
-  //Won't execute != null is false
-}
-config.blur = false;
+  if( !config.blur === false ){
+  //Won't execute
+  }
+  config.blur = false;
 
-if( config.blur != null &amp;&amp; !config.blur ){
-  //Logic executes
-}
+  if( config.blur === false ){
+  //Will execute
+  }
 {% endcodeblock %}
 
 Pretty cool huh?  Test with if/else structures or you will get errors.
+
+*Update:*
+Thanks [Toby](http://drewwells.net/blog/2011/testing-for-optional-false-params-in-javascript/#comment-339580774) for that one
