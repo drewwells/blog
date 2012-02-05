@@ -7,6 +7,7 @@ require "stringex"
 ssh_user       = "drew@drewwells"
 ssh_port       = "22"
 document_root  = "/var/www/blog"
+rsync_delete   = true
 #deploy_default = "push" #drewwells.github.com
 deploy_default = "rsync" #drewwells.net/blog
 
