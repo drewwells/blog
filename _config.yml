@@ -94,9 +94,7 @@ disqus_short_name: coldfuser
 disqus_show_comment_count: true
 
 # Google Analytics
-google_analytics_tracking_id:UA-2783646-1
-google_analytics_tracking_id:UA-2783646-1
+google_analytics_tracking_id: UA-2783646-1
 
 # Facebook Like
-facebook_like:ebook Likeke: false
-google_analytics_tracking_id:UA-2783646-1
+facebook_like: false
