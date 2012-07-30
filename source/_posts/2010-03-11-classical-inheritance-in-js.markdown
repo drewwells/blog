@@ -5,6 +5,7 @@ layout: post
 slug: classical-inheritance-in-js
 status: publish
 title: Classical Inheritance in JS
+comments: true
 wordpress_id: '64'
 ? ''
 : - Coldfuser
@@ -17,6 +18,7 @@ Recently I've been introduced to Prototypal Inheritance thanks to Alex Sexton <a
 
 <strong>Background, skip this if you know about Prototypal Inheritance</strong>
 JavaScript supports inheritance via the idea of a prototype.  Everything in JavaScript is an object and every object has a prototype.  You can inherit attributes from another object by pointing to it's prototype.  You can read about that in the above article or from many other great resources:
+
 <ul>
 	<li><a href="http://javascript.crockford.com/prototypal.html">Prototypal Inheritance in JavaScript</a></li>
 	<li><a href="http://www.bennadel.com/blog/1566-Using-Super-Constructors-Is-Critical-In-Prototypal-Inheritance-In-Javascript.htm">Using Super Constructors Is Critical In Prototypal Inheritance In Javascript</a></li>
@@ -96,7 +98,7 @@ var onTouchStart = Touch.extend({
 The important part of these functions is that they call this._super( event ).  When you create new onTouchStart/onTouchMove, they will run their own constructors but not the super classes (inheritance at work don't want to run super class constructors unless they are needed).  You will need to call super to run the super class's constructor which is handling most of the heavy work of calculating mouse positions and whatnot.
 
 Now, we have converted our function callbacks into classes.  We need to create new instances of these classes to actually use them.  References to the original functions will now be creating instances.  You do this simply with:
-[js]new onTouchMove(event)[/js]
+{% codeblock lang:js %}new onTouchMove(event){% endcodeblock %}
 
 Then you are done, your constructor (init) will run and lines are drawn on the screen.
 
