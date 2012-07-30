@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://drewwells.github.com
+url: http://drewwells.net/blog
 title: Tales from a JavaScript Developer
 subtitle: Practicing JavaScript ninja
 author: Drew Wells
@@ -90,7 +90,7 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name: coldfuser
+disqus_short_name: drewwells
 disqus_show_comment_count: true
 
 # Google Analytics
