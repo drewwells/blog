@@ -5,6 +5,7 @@ layout: post
 slug: jodoc-js
 status: publish
 title: jodoc-js
+comments: true
 wordpress_id: '246'
 ? ''
 : - Uncategorized

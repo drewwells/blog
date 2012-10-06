@@ -5,6 +5,7 @@ layout: post
 slug: testing-for-optional-false-params-in-javascript
 status: publish
 title: Testing for optional false params in JavaScript
+comments: true
 wordpress_id: '230'
 ? ''
 : - Uncategorized

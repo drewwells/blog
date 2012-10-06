@@ -6,6 +6,7 @@ slug: installing-npm-on-ubuntu-10-10-wo-sudo
 status: publish
 title: Installing NPM on Ubuntu 10.10 w/o sudo
 wordpress_id: '183'
+comments: true
 ? ''
 : - Uncategorized
 ---
