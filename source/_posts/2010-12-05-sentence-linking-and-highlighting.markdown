@@ -6,6 +6,7 @@ slug: sentence-linking-and-highlighting
 status: publish
 title: Sentence Linking and Highlighting
 wordpress_id: '172'
+comments: true
 ? ''
 : - Uncategorized
 ---

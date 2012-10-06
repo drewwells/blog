@@ -6,6 +6,7 @@ slug: hello-world
 status: publish
 title: Hello world!
 wordpress_id: '1'
+comments: true
 ? ''
 : - Uncategorized
 ---
