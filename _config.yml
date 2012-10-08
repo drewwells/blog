@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://drewwells.net/blog
+url: http://drewwells.net/newblog
 title: Tales from a JavaScript Developer
 subtitle: Practicing JavaScript ninja
 author: Drew Wells
@@ -16,7 +16,7 @@ description:
 date_format: "ordinal"
 
 # RSS / Email (optional) subscription links (change if using something like Feedburner)
-subscribe_rss: /blog/atom.xml
+subscribe_rss: /newblog/atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
 email: drewwells00@gmail.com
@@ -26,11 +26,11 @@ email: drewwells00@gmail.com
 # ----------------------- #
 
 # If publishing to a subdirectory as in http://site.com/project set 'root: /project'
-root: /blog
+root: /newblog
 #permalink: /:year/:month/:day/:title/
 permalink: /:year/:title/
 source: source
-destination: public/blog
+destination: public/newblog
 plugins: plugins
 code_dir: downloads/code
 category_dir: blog/categories

@@ -2,10 +2,10 @@
 project_type = :stand_alone
 
 # Publishing paths
-http_path = "/blog/"
-http_images_path = "/blog/images"
-http_fonts_path = "/blog/fonts"
-css_dir = "public/blog/stylesheets"
+http_path = "/newblog/"
+http_images_path = "/newblog/images"
+http_fonts_path = "/newblog/fonts"
+css_dir = "public/newblog/stylesheets"
 
 # Local development paths
 sass_dir = "sass"
@@ -14,3 +14,4 @@ fonts_dir = "source/fonts"
 
 line_comments = false
 output_style = :compressed
+
