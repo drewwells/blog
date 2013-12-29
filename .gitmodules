@@ -1,0 +1,3 @@
+[submodule ".themes/octopress-flat"]
+	path = .themes/octopress-flat
+	url = git://github.com/alexharris/octopress-flat.git
