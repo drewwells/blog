@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-04-23 15:02:44'
+date: 2010-04-23 15:02
 layout: post
 slug: coldfusion-generic-getters-setters
 status: publish

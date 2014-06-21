@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-10-13 18:55:24'
+date: 2010-10-13 18:55
 layout: post
 slug: dive-into-html5-bullseye
 status: publish

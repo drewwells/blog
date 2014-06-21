@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-02-09 23:49:18'
+date: 2010-02-09 23:49
 layout: post
 slug: adventures-in-ruby-depot-application
 status: publish

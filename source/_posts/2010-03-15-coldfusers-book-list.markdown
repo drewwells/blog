@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-03-15 21:27:17'
+date: 2010-03-15 21:27
 layout: post
 slug: coldfusers-book-list
 status: publish

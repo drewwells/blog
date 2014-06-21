@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2009-07-01 22:41:01'
+date: 2009-07-01 22:41
 layout: post
 slug: ie-quirks-mode
 status: publish

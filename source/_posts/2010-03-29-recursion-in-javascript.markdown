@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-03-29 22:53:02'
+date: 2010-03-29 22:53
 layout: post
 slug: recursion-in-javascript
 status: publish

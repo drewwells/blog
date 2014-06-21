@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-03-06 22:29:41'
+date: 2010-03-06 22:29
 layout: post
 slug: new-domain
 status: publish

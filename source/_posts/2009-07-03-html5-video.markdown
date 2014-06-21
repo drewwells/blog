@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2009-07-03 02:11:56'
+date: 2009-07-03 02:11
 layout: post
 slug: html5-video
 status: publish

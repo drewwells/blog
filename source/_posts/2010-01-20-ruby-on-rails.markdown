@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-01-20 14:24:40'
+date: 2010-01-20 14:24
 layout: post
 slug: ruby-on-rails
 status: publish

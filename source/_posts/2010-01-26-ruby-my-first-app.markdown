@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-01-26 21:44:02'
+date: 2010-01-26 21:44
 layout: post
 slug: ruby-my-first-app
 status: publish

@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2011-01-03 12:42:34'
+date: 2011-01-03 12:42
 layout: post
 slug: nodejs-proxy-to-simplify-iws-api
 status: publish

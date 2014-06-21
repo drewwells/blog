@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-12-05 17:24:45'
+date: 2010-12-05 17:24
 layout: post
 slug: sentence-linking-and-highlighting
 status: publish

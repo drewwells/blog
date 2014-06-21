@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-01-30 20:41:50'
+date: 2010-01-30 20:41
 layout: post
 slug: stack-overflow
 status: publish

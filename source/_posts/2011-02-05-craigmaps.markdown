@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2011-02-05 18:12:40'
+date: 2011-02-05 18:12
 layout: post
 slug: craigmaps
 status: publish

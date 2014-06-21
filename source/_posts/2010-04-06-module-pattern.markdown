@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-04-06 23:25:29'
+date: 2010-04-06 23:25
 layout: post
 slug: module-pattern
 status: publish

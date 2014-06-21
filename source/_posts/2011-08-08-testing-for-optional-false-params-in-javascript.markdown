@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2011-08-08 15:10:30'
+date: 2011-08-08 15:10
 layout: post
 slug: testing-for-optional-false-params-in-javascript
 status: publish

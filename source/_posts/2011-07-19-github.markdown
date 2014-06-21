@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2011-07-19 21:04:35'
+date: 2011-07-19 21:04
 layout: post
 slug: github
 status: publish

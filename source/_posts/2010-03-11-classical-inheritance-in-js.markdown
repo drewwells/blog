@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-03-11 17:16:24'
+date: 2010-03-11 17:16
 layout: post
 slug: classical-inheritance-in-js
 status: publish

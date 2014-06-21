@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-04-12 23:11:05'
+date: 2010-04-12 23:11
 layout: post
 slug: sessionstorage-localstorage
 status: publish

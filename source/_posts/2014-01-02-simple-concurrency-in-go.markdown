@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Simple concurrency in Go"
-date: 2014-01-02 15:57:34 -0600
+date: 2014-01-02 15:57
 comments: true
 categories: go
 ---

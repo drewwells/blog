@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2011-01-01 11:56:10'
+date: 2011-01-01 11:56
 layout: post
 slug: installing-npm-on-ubuntu-10-10-wo-sudo
 status: publish

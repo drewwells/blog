@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2011-03-02 18:01:13'
+date: 2011-03-02 18:01
 layout: post
 slug: syntaxhighlighter-evolved-is-broken
 status: publish

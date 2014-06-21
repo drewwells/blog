@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pipelines in Go Templates"
-date: 2013-12-29 02:13:50 -0500
+date: 2013-12-29 02:13
 comments: true
 categories: go
 ---

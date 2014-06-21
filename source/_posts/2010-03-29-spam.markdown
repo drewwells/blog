@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-03-29 22:07:53'
+date: 2010-03-29 22:07
 layout: post
 slug: spam
 status: publish

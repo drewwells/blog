@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2011-09-30 00:04:49'
+date: 2011-09-30 00:04
 layout: post
 slug: my-adventures-into-webgl
 status: publish

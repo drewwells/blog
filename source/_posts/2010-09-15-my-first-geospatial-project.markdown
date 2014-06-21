@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-09-15 13:04:10'
+date: 2010-09-15 13:04
 layout: post
 slug: my-first-geospatial-project
 status: publish

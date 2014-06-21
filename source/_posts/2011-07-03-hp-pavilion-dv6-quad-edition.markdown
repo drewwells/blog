@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2011-07-03 01:16:03'
+date: 2011-07-03 01:16
 layout: post
 slug: hp-pavilion-dv6-quad-edition
 status: publish

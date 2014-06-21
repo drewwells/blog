@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-04-13 23:01:59'
+date: 2010-04-13 23:01
 layout: post
 slug: setting-up-wordpress-ses-urls
 status: publish

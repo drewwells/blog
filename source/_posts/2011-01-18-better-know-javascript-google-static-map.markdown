@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2011-01-18 20:17:57'
+date: 2011-01-18 20:17
 layout: post
 slug: better-know-javascript-google-static-map
 status: publish

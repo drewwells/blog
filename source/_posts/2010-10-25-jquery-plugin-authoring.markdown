@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-10-25 22:42:00'
+date: 2010-10-25 22:42
 layout: post
 slug: jquery-plugin-authoring
 status: publish

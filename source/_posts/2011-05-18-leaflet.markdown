@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2011-05-18 22:48:08'
+date: 2011-05-18 22:48
 layout: post
 slug: leaflet
 status: publish

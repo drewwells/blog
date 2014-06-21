@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-02-10 00:12:45'
+date: 2010-02-10 00:12
 layout: post
 slug: coldfuser-on-google
 status: publish

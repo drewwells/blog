@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2010-01-28 02:44:35'
+date: 2010-01-28 02:44
 layout: post
 slug: server-upgrade
 status: publish

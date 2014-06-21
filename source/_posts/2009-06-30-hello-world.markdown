@@ -1,6 +1,6 @@
 ---
 author: admin
-date: '2009-06-30 21:19:01'
+date: 2009-06-30 21:19
 layout: post
 slug: hello-world
 status: publish
