@@ -1,0 +1,14 @@
+baseurl = "http://madewithdrew.com/blog"
+languageCode = "en-us"
+title = "My New Hugo Site"
+pygmentsuseclasses = false
+pygmentsstyle = "monokai"
+
+[params]
+  Subtitle = "Your site's subtitle/tagline"
+  GithubID = "drewwells"
+  TwitterID = "coldfuser"
+  AnalyticsID = "UA-2783646-2"
+  Summary = true  # takes true or false
+  Content = false  # takes true or false
+  # if both are set to true, summary is shown.
