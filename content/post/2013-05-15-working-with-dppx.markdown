@@ -18,32 +18,32 @@ Now your first question, why do we need dppx when device-pixel-ratio exists?  We
 
 Currently, a combination of device-pixel-ratio and dpi are used to target retina devices.  Due to the varying support of these CSS data types, our media queries look a bit weird today.  An example, Bourbon 3.1.6 has a hidpi tag that takes as input device-pixel-ratio and generates the others for you.
 
-{% codeblock lang:css %}
+{{< highlight css >}}
 @include hidpi(1.3)
-{% endcodeblock %}
+{{< /highlight >}}
 Outputs:
-{% codeblock lang:css %}
+{{< highlight css >}}
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3),
     only screen and (min--moz-device-pixel-ratio: 1.3),
     only screen and (-o-min-device-pixel-ratio: 1.3 / 1),
     only screen and (min-resolution: 125dpi)
-{% endcodeblock %}
+{{< /highlight >}}
 
 A recommended change may be this:
-{% codeblock lang:css %}
+{{< highlight css >}}
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3),
     only screen and (min--moz-device-pixel-ratio: 1.3),
     only screen and (-o-min-device-pixel-ratio: 1.3 / 1),
     only screen and (min-resolution: 1.3dppx)
-{% endcodeblock %}
+{{< /highlight >}}
 
 Yet, the likely outcome will be this:
-{% codeblock lang:css %}
+{{< highlight css >}}
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3),
     only screen and (min--moz-device-pixel-ratio: 1.3),
     only screen and (-o-min-device-pixel-ratio: 1.3 / 1),
     only screen and (min-resolution: 1.3dppx),
     only screen and (min-resolution: 125dpi)
-{% endcodeblock %}
+{{< /highlight >}}
 
 I checked out the support. As per usual, it's strange: [CSS Resolution](https://developer.mozilla.org/en-US/docs/Web/CSS/resolution)
