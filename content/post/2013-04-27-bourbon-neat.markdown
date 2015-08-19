@@ -19,13 +19,14 @@ From a developer perspective, Grid layout is really design-speak for modular des
 
 Here's a screenshot to show the difference.
 
-{% img /images/oldcouponvsnewcoupon.png %}
+![old coupon vs new coupon](/blog/im/oldcouponvsnewcoupon.png)
 
 We simplified the design of the page and as a result the CSS was much simpler.  By making the offer larger, we also made more room for larger font size and buttons with more defined click targets.  Instead of focusing on making our buttons bigger, we made all text margins larger and uniform.  The page now has a steady rhythm going down the page.
 
 Under the covers, this was a matter of having being consistent with our design and CSS.  Line heights have a consistent ratio and margins are always standard multiples of our pixel ratio.  When exceptions are made it's on purpose, not on accident.  For frameworks, I settled on [Bourbon Neat](http://neat.bourbon.io).  I was familiar and impressed with the bourbon mixin library, so it was an obvious choice to use Bourbon Neat.  [Thoughtbot](http://www.thoughtbot.com) does an excellent job integrating perfectly with SASS.  If you are already using SASS, I would highly recommend using Bourbon.
 
 Bourbon Neat is a framework for implementing a Grid Design.  Installing Bourbon Neat is as simple as running:
+
         gem install neat
 
 Enjoy!
