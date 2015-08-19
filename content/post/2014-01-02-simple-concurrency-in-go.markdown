@@ -9,7 +9,7 @@ categories: go
 I have been hearing about Go a lot lately including it being the most requested language at my work. This got me interested in why people find it so appealing.  Developer enthusiasm boils down to one of a few reasons:
 
 - The New Hotness
-- Marketing (Develop 50% faster, that's more time for showers!)
+- Marketing - Develop 50% faster, that's more time for showers!
 - Developers wanting to learn something new
 
 I fell very strongly into #3.  I like to get my hands dirty, and learning a new language is a great way to do that.  It gives you an opportunity to look at old problems in new ways.  As somebody very experienced in JavaScript, I ususally groan at the site of static typed variables and compiling.  However, there's a few things in [http://golang.org/doc/faq#What_is_the_purpose_of_the_project](Go's Project Goals) that really strucky my fancy.  Go is statically typed compiled code  and it's excellent at catching errors right at compile time.  It has super simple [http://golang.org/doc/effective_go.html#concurrency](concurrency) with goroutines and communication channels.  I've also found [http://golangtutorials.blogspot.com/2011/06/formatting-go-code-with-gofmt.html](gofmt) to be very convenient and frees me from all the tedious steps of formatting my code.
