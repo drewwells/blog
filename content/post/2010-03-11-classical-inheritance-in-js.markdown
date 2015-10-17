@@ -29,76 +29,74 @@ I wanted to go beyond a simple example and really implement this in a working ap
 I had a couple goals here.  One, add Android support.  Two, explore Inheritance.  Now, I need to settle on a inheritance pattern.  I chose to utilize John Resig's <a href="http://ejohn.org/blog/simple-javascript-inheritance/">Simple JavaScript Inheritance</a>.  Why?  It is simple to understand and Alex's method is a little over my pay grade.
 
 So I create a super class, a class that other objects can use Classical-ly inherit from.  This became the Touch Class:
-{% codeblock lang:js %}
-var Touch = Class.extend({
-	localPosition: '',
-	lastPenPoint: '',
-	position: '',
-	init: function(event){
-		var touch = (
-			isIPhone ?
-				window.event.targetTouches[ 0 ] :
-				event
-		)
-		position =
-			canvas.offset(),
-		localPosition = {
-			x: ( touch.pageX - position.left ),
-			y: ( touch.pageY - position.top )
-		},
-		lastPenPoint = {
-			x: localPosition.x,
-			y: localPosition.y
-		}
-		return false;
-	}
-});
-{% endcodeblock %}
+
+    var Touch = Class.extend({
+    	localPosition: '',
+    	lastPenPoint: '',
+    	position: '',
+    	init: function(event){
+    		var touch = (
+    			isIPhone ?
+    				window.event.targetTouches[ 0 ] :
+    				event
+    		)
+    		position =
+    			canvas.offset(),
+    		localPosition = {
+    			x: ( touch.pageX - position.left ),
+    			y: ( touch.pageY - position.top )
+    		},
+    		lastPenPoint = {
+    			x: localPosition.x,
+    			y: localPosition.y
+    		}
+    		return false;
+    	}
+    });
 
 Previously, the position and penpoint were being calculated by a seperate function.  I have added these to the init of the prototype.  So everytime a new Touch class is constructed (keyword new), these fields are already populated.  Now, we can rewrite onTouchStart and onTouchMove to extend this class and remove a lot of redundant code.
 
-{% codeblock lang:js %}
-// I handle the touch start event. With this event,
-// we will be starting a new line.
-var onTouchStart = Touch.extend({
-	init: function(event){
-		this._super(event);  //inherit some common touch properties
-		pen.beginPath();
-		pen.moveTo( lastPenPoint.x, lastPenPoint.y );
-		// Now that we have initiated a line, we need to
-		// bind the touch/mouse event listeners.
-		canvas.bind(
-			(isTouch ? &quot;touchmove&quot; : &quot;mousemove&quot;),
-			function(event){
-				new onTouchMove(event)
-			}
-		);
-		// Bind the touch/mouse end events so we know
-		// when to end the line.
-		canvas.bind(
-			(isTouch ? &quot;touchend&quot; : &quot;mouseup&quot;),
-			onTouchEnd
-		);
-                return false;  //prevent page from moving while drawing
-	}
-});
-// I handle the touch move event. With this event, we
-// will be drawing a line from the previous point to
-// the current point.
-	var onTouchMove = Touch.extend({
-	init: function( event ){
-		this._super( event );
-		pen.lineTo( lastPenPoint.x, lastPenPoint.y );
-		pen.stroke();
-		return false;  //prevent page from moving while drawing
-	}
-});
-{% endcodeblock %}
+    // I handle the touch start event. With this event,
+    // we will be starting a new line.
+    var onTouchStart = Touch.extend({
+    	init: function(event){
+    		this._super(event);  //inherit some common touch properties
+    		pen.beginPath();
+    		pen.moveTo( lastPenPoint.x, lastPenPoint.y );
+    		// Now that we have initiated a line, we need to
+    		// bind the touch/mouse event listeners.
+    		canvas.bind(
+    			(isTouch ? &quot;touchmove&quot; : &quot;mousemove&quot;),
+    			function(event){
+    				new onTouchMove(event)
+    			}
+    		);
+    		// Bind the touch/mouse end events so we know
+    		// when to end the line.
+    		canvas.bind(
+    			(isTouch ? &quot;touchend&quot; : &quot;mouseup&quot;),
+    			onTouchEnd
+    		);
+                    return false;  //prevent page from moving while drawing
+    	}
+    });
+    // I handle the touch move event. With this event, we
+    // will be drawing a line from the previous point to
+    // the current point.
+    	var onTouchMove = Touch.extend({
+    	init: function( event ){
+    		this._super( event );
+    		pen.lineTo( lastPenPoint.x, lastPenPoint.y );
+    		pen.stroke();
+    		return false;  //prevent page from moving while drawing
+    	}
+    });
 
 The important part of these functions is that they call this._super( event ).  When you create new onTouchStart/onTouchMove, they will run their own constructors but not the super classes (inheritance at work don't want to run super class constructors unless they are needed).  You will need to call super to run the super class's constructor which is handling most of the heavy work of calculating mouse positions and whatnot.
 
 Now, we have converted our function callbacks into classes.  We need to create new instances of these classes to actually use them.  References to the original functions will now be creating instances.  You do this simply with:
-{% codeblock lang:js %}new onTouchMove(event){% endcodeblock %}
+
+    new onTouchMove(event)
 
 Then you are done, your constructor (init) will run and lines are drawn on the screen.
 

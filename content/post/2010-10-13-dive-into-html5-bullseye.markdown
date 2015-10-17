@@ -20,42 +20,39 @@ Canvas has some nice features for drawing arcs.  You basically access the contex
 <img title="bullseye-stroke" src="http://drewwells.net/blog/wp-content/uploads/2010/10/bullseye-stroke.png" alt="" width="50" height="50" />
 
 Lets dive into the code here.
-{% codeblock lang:html %}
-<html>
-  <body>
-    <canvas></canvas>
-  </body>
-</html>
-{% endcodeblock %}
 
-{% codeblock lang:js %}
+    <html>
+      <body>
+        <canvas></canvas>
+      </body>
+    </html>
 
-var canvas = document.getElementById("bullseye");
-var context = canvas.getContext("2d");
-//I had issues with width/height so I manually set these
-canvas.width = canvas.height = 50;
-//Find the center, this will be used for drawing our arcs
-var center = [canvas.width/2, canvas.height/2];
 
-context.beginPath(); //Tell canvas to start registering a path
-context.arc( center[0],
-  center[1],
-  25, //Radius
-  0,   //Starting point in radians (right side of a circle)
-  Math.PI*2,  //Ending point in radians (same right side of circle)
-  true
-);
-//Now lets draw another circle inside this one
-context.arc( center[0],
-  center[1],
-  18,
-  0,
-  Math.PI*2,
-  true);
-//Draw what we have done
-context.stroke();
+    var canvas = document.getElementById("bullseye");
+    var context = canvas.getContext("2d");
+    //I had issues with width/height so I manually set these
+    canvas.width = canvas.height = 50;
+    //Find the center, this will be used for drawing our arcs
+    var center = [canvas.width/2, canvas.height/2];
 
-{% endcodeblock %}
+    context.beginPath(); //Tell canvas to start registering a path
+    context.arc( center[0],
+      center[1],
+      25, //Radius
+      0,   //Starting point in radians (right side of a circle)
+      Math.PI*2,  //Ending point in radians (same right side of circle)
+      true
+    );
+    //Now lets draw another circle inside this one
+    context.arc( center[0],
+      center[1],
+      18,
+      0,
+      Math.PI*2,
+      true);
+    //Draw what we have done
+    context.stroke();
+
 Cool stuff, that was easy why did you spend so long on this?  Well if you execute this code, this is what you get.  Two circles with a big line between them.
 
 <img src="http://drewwells.net/blog/wp-content/uploads/2010/10/bullseye-lines.png" alt="" title="bullseye-lines" width="50" height="50" />
@@ -65,50 +62,48 @@ I was looking at the example on the MDC, and simply could not figure out why min
 Then I looked closely at their example, and saw that their moveTo was not realigning the center point of the arcs as I originally thought.  It was actually moving the path to the edge of one of the new shapes.  This prevents a line being drawn from the end point of your initial circle to the start of the next one.  I later discovered, you can also just start a new path with <code>beginPath()</code>.
 
 So the final code is such:
-{% codeblock lang:js %}
-var canvas = document.getElementById("bullseye");
-canvas.width = canvas.height = 50;
-drawCircle( canvas, [24,18,12,6], ['red','white','red','white']);
-//I could probably just ask for two colors to alternate, eh?
 
-function drawCircle(canvas, radius /* array */, color /* array */){
+    var canvas = document.getElementById("bullseye");
+    canvas.width = canvas.height = 50;
+    drawCircle( canvas, [24,18,12,6], ['red','white','red','white']);
+    //I could probably just ask for two colors to alternate, eh?
 
-    var context = canvas.getContext("2d");
-    center = [canvas.width/2, canvas.height/2];
-    //Sanity check, I don't want to attempt to draw
-    // circles that don't have an associated color
-    if( radius.length <= color.length ){
+    function drawCircle(canvas, radius /* array */, color /* array */){
 
-	for( var i = 0, length = radius.length; i < length; ++i ){
-	    //must move to next circle first, or else you get a line between circles
-	    context.moveTo( radius[i]+center[0], center[0] );
-            context.arc(
-                center[0],
-                center[1],
-                radius[i],
-                0,
-                Math.PI*2,
-                false);
+        var context = canvas.getContext("2d");
+        center = [canvas.width/2, canvas.height/2];
+        //Sanity check, I don't want to attempt to draw
+        // circles that don't have an associated color
+        if( radius.length <= color.length ){
 
-	    context.fillStyle = color[i];
-	    context.fill();
-	}
+    	for( var i = 0, length = radius.length; i < length; ++i ){
+    	    //must move to next circle first, or else you get a line     between circles
+    	    context.moveTo( radius[i]+center[0], center[0] );
+                context.arc(
+                    center[0],
+                    center[1],
+                    radius[i],
+                    0,
+                    Math.PI*2,
+                    false);
+
+    	    context.fillStyle = color[i];
+    	    context.fill();
+    	}
+
+        }
 
     }
-
-}
-{% endcodeblock %}
 
 Now this works, right?  Wait, no it doesn't.  You see strokes would work fine, but we are trying to fill our drawn shapes.  So a little more work is needed here.
 
 I thought as I draw each arc, the fill would just fill that one path I had drawn.  However, fill iterates through the entire context stack and fills each object.  So what you end up with is a big circle drawn, then filled, then another circle drawn, and both of those circles filled, etc.
 
 It took a bit of digging, and frankly the w3c document wasn't a huge help.  Basically what we need to do, is draw our shape, fill it, then empty it from the stack.  beginPath() does this.  Add this to the line prior to context.moveTo and you should be in business.
-{% codeblock lang:js %}
-//must move to next circle first, or else you get a line between circles
-context.beginPath();
-context.moveTo( radius[i]+center[0], center[0] );
-{% endcodeblock %}
+
+    //must move to next circle first, or else you get a line between circles
+    context.beginPath();
+    context.moveTo( radius[i]+center[0], center[0] );
 
 I'll update this when I find out how to bind a click to this.  Even if it takes a div wrapper *sigh*.  I'd like to know which command is more efficient, moveTo or beginPath.  I can only imagine moveTo is more efficient, but nothing to back that up at the moment.
 

@@ -15,28 +15,22 @@ Sounds like a silly thing, but sometimes you want optional false parameters.  If
 
 So let's start out:
 
-{% codeblock lang:js %}
-var config = {
-  //blur: false
-};
+    var config = {
+      //blur: false
+    };
 
-!config.blur //Oh noes reports true
-
-{% endcodeblock %}
+    !config.blur //Oh noes reports true
 
 The trick here is to detect whether the variable is undefined, then for it's truthy value.  Fixed implementation:
 
-{% codeblock lang:js %}
+      if( !config.blur === false ){
+      //Won't execute
+      }
+      config.blur = false;
 
-  if( !config.blur === false ){
-  //Won't execute
-  }
-  config.blur = false;
-
-  if( config.blur === false ){
-  //Will execute
-  }
-{% endcodeblock %}
+      if( config.blur === false ){
+      //Will execute
+      }
 
 Pretty cool huh?  Test with if/else structures or you will get errors.
 

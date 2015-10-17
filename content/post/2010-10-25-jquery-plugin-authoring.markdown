@@ -17,63 +17,59 @@ I often find jQuery plugin development is a little over-hyped.  It is also sever
 
 Anyways, if you're like me, you just want to know what jQuery is doing under the covers and what the penalties and benefits of architecting your code in a certain way.
 
-{% codeblock lang:js %}
-$.fn.borderize = function( options ){
-  return this.each(function(){
+    $.fn.borderize = function( options ){
+      return this.each(function(){
 
-  });
-}
-{% endcodeblock %}
+      });
+    }
 
 This is the basic pattern, <em>this</em> is set to the jQuery object and you can use your plugin like so.  To access to the underlying dom, you return this.each() and doing so enables <a href="http://ejohn.org/blog/ultra-chaining-with-jquery/">chaining</a>.
 
 I see three different areas to attach methods to a plugin, each with their own costs and benefits.
-{% codeblock lang:js %}
-$.borderize = {
-  //I don't need access to the dom directly, and I am only
-  //initialized once.  I have to be called via global jQuery
-  //object.  I do not have access to any closures, so I rely
-  //on this manipulation or passing in arguments.
-}
 
-$.fn.borderize = function( options ) {
-  //I need access to the jQuery collection.  I am initialized
-  //once per plugin instance and I can be accessed within
-  //the return if need be.  I have access to the closure created
-  //by $.fn.borderize
+    $.borderize = {
+      //I don't need access to the dom directly, and I am only
+      //initialized once.  I have to be called via global jQuery
+      //object.  I do not have access to any closures, so I rely
+      //on this manipulation or passing in arguments.
+    }
 
-  return this.each(function(){
-    //I need access to the direct dom, but not necessarily
-    //the original jQuery collection.  I require two closures
-    //so I am the least memory efficient of the methods.
-    //I am instantiated for every dom targeted by this plugin.
+    $.fn.borderize = function( options ) {
+      //I need access to the jQuery collection.  I am initialized
+      //once per plugin instance and I can be accessed within
+      //the return if need be.  I have access to the closure created
+      //by $.fn.borderize
 
-  });
-}
-{% endcodeblock %}
+      return this.each(function(){
+        //I need access to the direct dom, but not necessarily
+        //the original jQuery collection.  I require two closures
+        //so I am the least memory efficient of the methods.
+        //I am instantiated for every dom targeted by this plugin.
+
+      });
+    }
 
 Moving on, passing in options and default parameters.  I won't discuss this topic, there's a lot of documentation on this pattern so I'll be terse.
-{% codeblock lang:js %}
-$.fn.borderize = function( options ){
 
-    var opts = $.extend({}, options, $.fn.borderize.defaults);
+    $.fn.borderize = function( options ){
 
-    var wrapDiv = $('<div style="border: solid ' +
-		    opts.color + ' ' + opts.width + ';" />;');
+        var opts = $.extend({}, options, $.fn.borderize.defaults);
 
-    this.wrap(wrapDiv);
+        var wrapDiv = $('<div style="border: solid ' +
+    		    opts.color + ' ' + opts.width + ';" />;');
 
-    return this.each(function(){
+        this.wrap(wrapDiv);
 
-    });
-};
+        return this.each(function(){
 
-$.fn.borderize.defaults = {
+        });
+    };
 
-    color: 'red',
-    width: '1px'
-};
-{% endcodeblock %}
+    $.fn.borderize.defaults = {
+
+        color: 'red',
+        width: '1px'
+    };
 
 If you are using basic key/value pairs in your defaults and options, this extending is sufficient.  Otherwise, you should look at deep copy option of <em>$.extend</em> in the documentation.  You notice, we aren't putting this code inside this.each, that's because the jQuery collection being acted on is the context of the plugin.  If would be silly to do this.each on the collection, then wrap each item in a jQuery collection just to wrap it.
 
@@ -81,35 +77,32 @@ So that leaves the question, if we are doing something different like providing 
 
 I'll add two types of methods to this plugin, one is a simple utility function that doesn't need any sort of context or state information and another that does.
 
-{% codeblock lang:js %}
-$.borderize = {
-  debug: function(msg){
-    if( console &amp;&amp; console.log ){
-      console.log( msg );
-    }
-  },
-  //Number of initialized elements globally
-  initialized = 0
-};
-{% endcodeblock %}
-{% codeblock lang:js %}
-$.fn.borderize = function( options ){
+    $.borderize = {
+      debug: function(msg){
+        if( console &amp;&amp; console.log ){
+          console.log( msg );
+        }
+      },
+      //Number of initialized elements globally
+      initialized = 0
+    };
 
-  ...
 
-  var instanceInitialized = 0;
+    $.fn.borderize = function( options ){
 
-  function initUpdate(){
+      ...
 
-    instanceInitialized += 1;
-    $.borderize.initialized += 1;
-  }
+      var instanceInitialized = 0;
 
-  return this.each(function(){
-    initUpdate();
-  });
+      function initUpdate(){
 
-{% endcodeblock %}
+        instanceInitialized += 1;
+        $.borderize.initialized += 1;
+      }
+
+      return this.each(function(){
+        initUpdate();
+      });
 
 This is a silly example, we could just as easily update these values procedurally.  It would also be more efficient to update the value via this.length (length of the jQuery collection) rather than as each is initialized.
 

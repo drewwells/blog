@@ -16,77 +16,70 @@ The Module Pattern was a pattern coined by Douglas Crockford.  If you don't know
 I will say this pattern is a very elegant and simple way of generating very flexible objects that can be used in any number of ways.  You will be well served by evaluating your current JavaScript applications and seeing if this pattern will help you, I know it helped me.
 
 I will try to keep this short.  Here we start with a simple singleton.
-{% codeblock lang:js %}
-var myPlugin = {
-  init: function(msg){
-    //I act as the constructor for my object
-    this.message = msg;
-  },
-  alert: function(){
-    alert(this.message);
-  }
-}
-{% endcodeblock %}
+
+    var myPlugin = {
+      init: function(msg){
+        //I act as the constructor for my object
+        this.message = msg;
+      },
+      alert: function(){
+        alert(this.message);
+      }
+    }
 
 I can use this as so:
-{% codeblock lang:js %}
-MyPlugin.init("plugin");
-MyPlugin.alert();
-{% endcodeblock %}
+
+    MyPlugin.init("plugin");
+    MyPlugin.alert();
 
 All well and good, well security team comes down and informs us that users are using your site to input a security attack.  You are forced to clean up these messages before alerting them to the user.  Simple enough, we will manipulate the prototype.  This will make our function globally accessible by instances of MyPlugin.
-{% codeblock lang:js %}
-myPlugin.prototype.sanitize = function(message){
-  //create noncapturing groups to remove <script>, optional captures
-  //use capturing group to extract the text in between the script tags
-  return /(?:<script>)?([^<]+)(?:<\/script>)?/.exec(message)[1];
-}
-{% endcodeblock %}
+
+    myPlugin.prototype.sanitize = function(message){
+      //create noncapturing groups to remove <script>, optional captures
+      //use capturing group to extract the text in between the script tags
+      return /(?:<script>)?([^<]+)(?:<\/script>)?/.exec(message)[1];
+    }
 
 Now we modify the alert function to utilize this santize
-{% codeblock lang:js %}
-var MyPlugin = {
-  ...
-  alert: function(){
-    alert( MyPlugin.prototype.santize(this.message) );
-  }
-}
-{% endcodeblock %}
+
+    var MyPlugin = {
+      ...
+      alert: function(){
+        alert( MyPlugin.prototype.santize(this.message) );
+      }
+    }
 
 So, works well but this pattern is a little ugly also we have no way of defining private functions/methods.  We have to specify MyPlugin[method] everytime we call a method within the singleton.  Here is the same singleton implemented via the module pattern.
-{% codeblock lang:js %}
-//create a self-executing function, it will execute immediately after
 
-//the compiler instantiates myPlugin
-var myPlugin = (function(){
+    //create a self-executing function, it will execute immediately after
 
-  //private variables/methods these will only be accessible from
-  //within the function returned by this self-executing function
-  var sanitize = function(message){
-    return /(?:<script>)?([^<]+)(?:<\/script>)?/.exec(message)[1];
-  }
-  return {
+    //the compiler instantiates myPlugin
+    var myPlugin = (function(){
 
-    //open struct on this line or return will execute and ignore
+      //private variables/methods these will only be accessible from
+      //within the function returned by this self-executing function
+      var sanitize = function(message){
+        return /(?:<script>)?([^<]+)(?:<\/script>)?/.exec(message)[1];
+      }
+      return {
 
-    // whatever is left in the function
-    init: function(msg){
-      //I act as the constructor for my object
-      this.message = msg;
-    },
-    alert: function(){
-      alert( sanitize(this.message) );
-    }
-  }
-}());
-{% endcodeblock %}
+        //open struct on this line or return will execute and ignore
+
+        // whatever is left in the function
+        init: function(msg){
+          //I act as the constructor for my object
+          this.message = msg;
+        },
+        alert: function(){
+          alert( sanitize(this.message) );
+        }
+      }
+    }());
 
 You call this like so:
-{% codeblock lang:js %}
-MyPlugin.init("Hello");
-MyPlugin.alert();
-{% endcodeblock %}
 
+    MyPlugin.init("Hello");
+    MyPlugin.alert();
 
 The details of this pattern are very simple.  The self-executing function creates a closure around the return structure.  Therefore, the methods in the return have access to any variables declared inside this function.  Also, access to the private methods/variables do not require a long namespace declaration.  You simple call <em>sanitize</em>.
 

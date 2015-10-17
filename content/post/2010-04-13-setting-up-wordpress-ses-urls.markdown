@@ -20,14 +20,14 @@ To enable the use of .htaccess, you must configure your apache site configuratio
 
 Go to the directory definition (or add one if it doesn't exist) and turn on these two options at a mininum.
 
-{% codeblock %}
-  <Directory /var/www/blog>
-    Options FollowSymLinks
-    AllowOverride FileInfo
-  </Directory>
-{% endcodeblock %}
+
+      <Directory /var/www/blog>
+        Options FollowSymLinks
+        AllowOverride FileInfo
+      </Directory>
 
 Afterwards, reload your apache configuration.  On Ubuntu, this is
-{% codeblock %}sudo /etc/init.d/apache2 reload{% endcodeblock %}
+
+    sudo /etc/init.d/apache2 reload
 
 Piece of cake

@@ -31,19 +31,18 @@ I don't know markdown give me the <a href="http://daringfireball.net/projects/ma
 Sample JavaScript file
 
 file.js
-{% codeblock lang:js %}
-/**
-# file.js
-Some information about the file.  The h1 above is
-## main
 
-Hey what is this, C code?
-*/
+    /**
+    # file.js
+    Some information about the file.  The h1 above is
+    ## main
 
-function main(){
-  return 'I am not C code, see ' + 5;
-}
-{% endcodeblock %}
+    Hey what is this, C code?
+    */
+
+    function main(){
+        return 'I am not C code, see ' + 5;
+    }
 
 So, thanks to the /** part you will get a big h1 tag with 'file.js' which also acts as the index.  Anywhere you link to [file.js] now links to the html page created for file.js.
 

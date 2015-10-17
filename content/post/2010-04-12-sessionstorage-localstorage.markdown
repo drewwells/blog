@@ -33,42 +33,37 @@ Currently, webkit/mozilla allow 5megs of globalStorage and IE allows 10megs.  Yo
 <strong>Implementation</strong>
 The first thing I did was start throwing structures in the localStorage.  I can't think of a reason I would want to put just key/value pairs in there.  So here's my code:
 
-{% codeblock lang:js %}
-sessionStorage['results'] = {
-  'query1': 'apple',
-  'query2': 'banana'
-};
-{% endcodeblock %}
+
+    sessionStorage['results'] = {
+      'query1': 'apple',
+      'query2': 'banana'
+    };
 
 I thought, now how do I extract these values back out.  Here's my first go:
 
-{% codeblock lang:js %}
-console.log( sessionStorage['results']['query1']; ); //undefined
-{% endcodeblock %}
+    console.log( sessionStorage['results']['query1']; ); //undefined
 
 Undefined? but why!  I inspected the storage in firebug here's what was stored to sessionStorage:
 
-{% codeblock lang:js %}"[object Object]"{% endcodeblock %}
+    "[object Object]"
 
 The w3 standard does not define anything beyond the fact that the Storage Interface stores key/value pairs via the setter method.  I can only postulate that it runs .toString() on anything with a typeof !== 'string'.  So, how do we store complex values in sessionStorage?  Easy, use JSON.
 
 Normally you deal with json in this fashion.  Using <a href="http://www.json.org/js.html">Crockford's JSON2</a> or native browser implementation.
 
-{% codeblock lang:js %}JSON.parse("{'query1': 'apple', 'query2': 'banana'}");  //object with query1 and query2 properties{% endcodeblock %}
+    JSON.parse("{'query1': 'apple', 'query2': 'banana'}");  //object with query1 and query2 properties
 
 However, this is the opposite of what we want.  We want to take an object and make a string out of it, enter <em>stringify</em>.
 
-{% codeblock lang:js %}
-var querySet = {
-  'query1': 'apple',
-  'query2': 'banana'
-}
-var string = JSON.stringify(querySet);
-//Now store this string in sessionStorage
-sessionStorage['results'] = string;
+    var querySet = {
+      'query1': 'apple',
+      'query2': 'banana'
+    }
+    var string = JSON.stringify(querySet);
+    //Now store this string in sessionStorage
+    sessionStorage['results'] = string;
 
-var originalResult = JSON.parse( sessionStorage['results'] ); //original object with query1 and query2 attributes
-{% endcodeblock %}
+    var originalResult = JSON.parse( sessionStorage['results'] ); //original object with query1 and query2 attributes
 
 I do not know if this is the preferred way, but since JSON is an integral part of client/storage data communication.  I can only see it lending itself nicely to application/browser data communication as well.
 
