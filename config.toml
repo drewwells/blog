@@ -1,8 +1,7 @@
 baseurl = "http://madewithdrew.com/blog"
 languageCode = "en-us"
 title = "Made with Drew"
-pygmentsuseclasses = false
-pygmentsstyle = "native"
+pygmentsuseclasses = true
 
 [params]
   Subtitle = "Recovering JavaScript developer"
