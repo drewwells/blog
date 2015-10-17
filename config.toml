@@ -2,6 +2,7 @@ baseurl = "http://madewithdrew.com/blog"
 languageCode = "en-us"
 title = "Made with Drew"
 pygmentsuseclasses = true
+disqusShortname = "drewwells"
 
 [params]
   Subtitle = "Recovering JavaScript developer"
