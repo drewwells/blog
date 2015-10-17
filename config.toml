@@ -1,11 +1,11 @@
 baseurl = "http://madewithdrew.com/blog"
 languageCode = "en-us"
-title = "My New Hugo Site"
+title = "Made with Drew"
 pygmentsuseclasses = false
 pygmentsstyle = "native"
 
 [params]
-  Subtitle = "Your site's subtitle/tagline"
+  Subtitle = "Recovering JavaScript developer"
   GithubID = "drewwells"
   TwitterID = "coldfuser"
   AnalyticsID = "UA-2783646-2"
