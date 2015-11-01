@@ -1,4 +1,4 @@
-baseurl = "http://madewithdrew.com/blog"
+baseurl = "http://blog.madewithdrew.com"
 languageCode = "en-us"
 title = "Made with Drew"
 pygmentsuseclasses = true
