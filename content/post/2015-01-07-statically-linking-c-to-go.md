@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Statically Linking C to Go"
-date: 2015-10-17 14:59:47 -0500
+date: 2015-01-07 14:59:47 -0500
 comments: true
 categories: go
 ---
