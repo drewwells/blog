@@ -11,12 +11,13 @@ There's a lot of information out there about how to link C and Go. I found it to
 
 To start, let's talk about what you can do in cgo. Much of this is reiterating information available in C? Go? Cgo!.
 
-cgo can compile C code
-cgo can not compile C++ code (see Swig for that)
-cgo supports both dynamic and static linking of compiled C code
-by default, cgo will dynamically link (more on this later)
-cgo does not support relative lookups of C files
-#cgo pkg-config
+- cgo does not compile C/C++ code, you need gcc/g++ for this
+- cgo creates Go packages that use C code
+- cgo can link against C libraries, but not C++ (see swig for this)
+- by default, cgo will dynamically link (more on this later)
+- cgo does not support relative lookups of C files
+- #cgo pkg-config
+
 So let's talk about what this all means. By default, Cgo will compile C code for us if needed. Let's skip that part for now and focus on linking against compiled libraries.
 
 Linking
@@ -34,7 +35,7 @@ ldflags Extra flags to give to compilers when they are supposed to invoke the li
 import "C"
 {{< /highlight >}}
 
-Once linked, you can include headers from the library. By default, LD_LIBRARY_PATH is searched for headers. Soon, we will see how to remove this requirement. The linker will attempt to locate sass_context in the dynamic/shared and static libraries. Linking is done by the external linker ld, you can reference documentation further for uses of ld.
+Once linked, you can include headers from the library. By default, LD_LIBRARY_PATH is searched for libraries. Soon, we will see how to remove this requirement. The linker will attempt to locate sass_context in the dynamic/shared and static libraries. Linking is done by the external linker ld, you can reference documentation further for uses of ld.
 
 Wait doesn't the title say we will statically link C libraries? Okay, so let's keep going. You can instruct the external linker to ignore shared libraries and only use static libraries. However, this is not quite possible on OS X as many of the system libraries are purposely not compiled with static libraries.
 
@@ -52,3 +53,7 @@ make install
 {{< /highlight >}}
 
 Now, autotools will build only static libraries. This little trick will successfully generate static Go binaries that have no runtime dynamic dependencies.
+
+
+Update:
+Correct mistakes in post. LD_LIBRARY_PATH is not used for locating headers. cgo does not compile, it passes off compilation to g[++|cc] and links against compiled library.
