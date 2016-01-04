@@ -2,7 +2,8 @@
 date = "2016-01-04T11:34:56-06:00"
 draft = false
 title = "Turn Up the Heat Level 9 Week 10"
-
+tags = [ "turn-up-the-heat", "protein" ]
+categories = [ "turn-up-the-heat" ]
 +++
 
 Decided it was easiest to post these on the blog.
