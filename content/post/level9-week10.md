@@ -9,8 +9,8 @@ categories = [ "turn-up-the-heat" ]
 Decided it was easiest to post these on the blog.
 
 
-|Week 10|Category|Exchanges|Sample food|Quantity|
-| ------- | ------ | ------ | ----------- | ------- |
+|Week 10|Category|Tx|Sample food|Quantity|
+| :------- | :------ | :------ | :----------- | :------- |
 |**Meal 1**|Fruit|2|banana|1 item|
 ||shake|2|whey protein shake|2 scoops|
 |**Meal 2**|Meat (Nut)|1|almond butter|1 tbsp|
