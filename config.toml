@@ -3,6 +3,7 @@ languageCode = "en-us"
 title = "Made with Drew"
 pygmentsuseclasses = true
 disqusShortname = "drewwells"
+googleAnalytics = "UA-2783646-2"
 
 [params]
   Subtitle = "Go enthusiast"

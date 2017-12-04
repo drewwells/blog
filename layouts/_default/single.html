@@ -7,7 +7,7 @@
 
   <body>
     <div class="container">
-      {{ partial "header.html" . }}
+      {{/* partial "header.html" . */}}
       <div class="content">
         <div class="posts">
           <div class="post">
@@ -24,14 +24,15 @@
         </div>
         {{ partial "comments.html" . }}
       </div>
-      {{ partial "footer.html" . }}
+      {{/* partial "footer.html" . */}}
     </div>
     <script src="{{ .Site.BaseURL }}/js/slim.js"></script>
     <script src="{{ .Site.BaseURL }}/js/highlight.min.js"></script>
     <script>
-     hljs.initHighlightingOnLoad();
+      hljs.initHighlightingOnLoad();
     </script>
-    {{ with .Site.Params.AnalyticsID }}{{ partial "analytics.html" . }}{{ end }}
+    {{ template "_internal/google_analytics_async.html" . }}
+    {{/* with .Site.Params.AnalyticsID }}{{ partial "analytics.html" . }}{{ end */}}
   </body>
 
 </html>
