@@ -7,4 +7,4 @@ build:
 deploy: rsync
 
 rsync: build
-	rsync -avz --delete public/* do:~/blog
+	rsync -avz --delete public/* do:/var/www/blog
