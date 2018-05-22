@@ -12,7 +12,7 @@ categories = [ "turn-up-the-heat" ]
 |          |Fruit|1|Cantaloupe|1/2 item|
 |          |Meat|2|egg|2 items|
 |**Meal 2**|Fruit|1|apple|1 item|
-||Meat (nut)|1|peanut butter|1 tablespoon|
+|          |Meat (nut)|1|peanut butter|1 tablespoon|
 |**Meal 3**|Bread|3|Pita|1 1/2 items|
 |          |Meat|4|Turkey|4 items|
 |          |Vegetable|1|romaine lettuce|3 cups|
