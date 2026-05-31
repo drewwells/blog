@@ -1,0 +1,22 @@
+---
+import { SITE_TITLE } from '../consts';
+
+interface Props {
+  /** When true, render the masthead as the page's primary heading (home page). */
+  home?: boolean;
+}
+const { home = false } = Astro.props;
+const Brand = home ? 'h1' : 'div';
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <Brand class="site-header__brand">
+      <a href="/">{SITE_TITLE}</a>
+    </Brand>
+    <nav class="site-header__nav" aria-label="Primary">
+      <a href="/">Posts</a>
+      <a href="/rss.xml">RSS</a>
+    </nav>
+  </div>
+</header>

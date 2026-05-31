@@ -1,0 +1,36 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { SITE_TITLE } from '../consts';
+import type { Post } from '../posts';
+import '../styles/site.css';
+
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const displayDate = new Date(post.date + 'T00:00:00Z').toLocaleDateString(
+  'en-US',
+  { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' },
+);
+const year = new Date().getUTCFullYear();
+---
+
+<BaseLayout title={post.title} description={post.dek} type="article">
+  <SiteHeader />
+
+  <div class="post-top">
+    <a class="post-top__back" href="/">← All posts</a>
+  </div>
+
+  <!-- The Claude Design article markup is slotted in here, with its own
+       self-contained stylesheet imported by the page. -->
+  <slot />
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span>{SITE_TITLE} · {year}</span>
+      <a href="/">More posts →</a>
+    </div>
+  </footer>
+</BaseLayout>

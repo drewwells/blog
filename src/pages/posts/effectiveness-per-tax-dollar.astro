@@ -1,0 +1,158 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getPost } from '../../posts';
+// Self-contained article stylesheet (from the Claude Design bundle, verbatim).
+// Imported here so Astro scopes the bundle to this page only.
+import '../../styles/posts/effectiveness-per-tax-dollar.css';
+
+const post = getPost('effectiveness-per-tax-dollar');
+---
+
+<PostLayout post={post}>
+  <div class="article">
+
+    <!-- ===================== MASTHEAD ===================== -->
+    <header class="mast reveal" data-screen-label="Masthead">
+      <div class="kicker">Texas School Finance &middot; A 4-District Comparison</div>
+      <h1 class="headline">Austin's schools lead Texas on outcomes. Whether they look &ldquo;efficient&rdquo; depends on which dollars you count.</h1>
+      <p class="dek">Austin ISD raises and spends the most per pupil of Texas's big urban districts &mdash; and posts the best results. It also sends roughly half of its local property taxes back to the state. That single fact can move its efficiency ranking from last toward the top.</p>
+      <div class="byline">An analysis &middot; Outcomes <b>SY&nbsp;2023&ndash;24</b> &middot; Dollars <b>FY&nbsp;2023&ndash;24</b> &middot; May 2026</div>
+    </header>
+
+    <!-- ===================== STAT STRIP ===================== -->
+    <div class="full statstrip" data-screen-label="Headline stats">
+      <div class="stat">
+        <div class="num">52.2%</div>
+        <div class="lab">of Austin's local property taxes sent back to the state <span class="yr">FY23&ndash;24</span></div>
+      </div>
+      <div class="stat">
+        <div class="num">~$699M</div>
+        <div class="lab">Austin's recapture payment &mdash; #1 in Texas, $467.8M more than the next district</div>
+      </div>
+      <div class="stat">
+        <div class="num">90.9%</div>
+        <div class="lab">Austin graduation rate &mdash; highest of any major Texas city <span class="yr">Class of 2023</span></div>
+      </div>
+      <div class="stat neutral">
+        <div class="num">~2&times;</div>
+        <div class="lab">how much Austin's outcomes-per-dollar improve, measured against net rather than gross taxes</div>
+      </div>
+    </div>
+
+    <!-- ===================== SECTION 1 ===================== -->
+    <div class="block reveal">
+      <div class="section-no">01 &middot; The outcomes</div>
+      <h2 class="section">On raw results, Austin is on top</h2>
+    </div>
+    <p class="body gap-s reveal">Across the four largest urban districts in Texas, <span class="austin-name">Austin ISD</span> posts the strongest measured outcomes for the 2023&ndash;24 school year: the highest share of students at &ldquo;Meets Grade Level or above&rdquo; on STAAR, and the highest graduation rate of the group.</p>
+
+    <figure class="fig wide" data-screen-label="Chart 1 — outcomes">
+      <div class="fig-head">
+        <p class="take">On raw outcomes, Austin is on top.</p>
+        <span class="fig-tag">Chart 1 &middot; SY 2023&ndash;24</span>
+      </div>
+      <p class="fig-sub">STAAR &ldquo;Meets&rdquo; or above (all grades, all subjects) and four-year graduation rate, by district. Sorted by graduation rate.</p>
+      <div class="panel" id="chart1"></div>
+      <figcaption>STAAR is spring 2024; graduation rate is the class of 2023. <b>*</b> Fort Worth's STAAR figure (~25%) is approximate, weighted across grades 3&ndash;8. Source: TEA Texas Academic Performance Reports, 2023&ndash;24.</figcaption>
+    </figure>
+
+    <!-- ===================== SECTION 2 ===================== -->
+    <div class="block reveal">
+      <div class="section-no">02 &middot; The caveat</div>
+      <h2 class="section">&hellip;but it serves a different population</h2>
+    </div>
+    <p class="body gap-s reveal">Outcomes are driven heavily by student need, not by spending alone. Before reading too much into Chart 1, it's worth seeing who each district teaches. <span class="austin-name">Austin</span> serves the <b>least economically disadvantaged</b> population of the four &mdash; and the smallest share of emergent-bilingual students &mdash; context that partly explains its higher scores.</p>
+
+    <figure class="fig wide" data-screen-label="Chart 2 — demographics">
+      <div class="fig-head">
+        <p class="take">Austin teaches a lighter-need population than its peers.</p>
+        <span class="fig-tag">Chart 2 &middot; SY 2023&ndash;24</span>
+      </div>
+      <p class="fig-sub">Share of students who are economically disadvantaged, and who are emergent bilingual / English learners (EB/EL), by district. Same order as Chart 1.</p>
+      <div class="panel" id="chart2"></div>
+      <figcaption>Economically-disadvantaged shares for Houston and Dallas are reported as approximate. Source: TEA PEIMS 2023&ndash;24 special-populations report.</figcaption>
+    </figure>
+
+    <!-- ===================== SECTION 3 ===================== -->
+    <div class="block reveal">
+      <div class="section-no">03 &middot; The money</div>
+      <h2 class="section">Where the money goes: recapture</h2>
+    </div>
+    <p class="body gap-s reveal">Here is the fact that complicates every efficiency comparison. <span class="austin-name">Austin</span> raises far more local property tax per pupil than its peers &mdash; but it does not keep most of it.</p>
+    <div class="define reveal"><b>Recapture (&ldquo;Robin Hood&rdquo;):</b> Texas requires property-wealthy districts to send a portion of their local tax dollars back to the state, which redistributes the money to property-poor districts.</div>
+
+    <figure class="fig wide" data-screen-label="Chart 3 — recapture (centerpiece)">
+      <div class="fig-head">
+        <p class="take">Roughly half of Austin's local tax never reaches an Austin classroom.</p>
+        <span class="fig-tag">Chart 3 &middot; FY 2023&ndash;24</span>
+      </div>
+      <p class="fig-sub">Gross local property tax per pupil, split into the amount the district keeps and the amount sent to the state through recapture.</p>
+      <div class="legend">
+        <div class="li"><span class="sw austin"></span>Net retained &mdash; Austin</div>
+        <div class="li"><span class="sw peer"></span>Net retained &mdash; peers <span class="est-tag" style="vertical-align:0">est</span></div>
+        <div class="li"><span class="sw recap"></span>Sent to state (recapture)</div>
+        <div class="li"><span class="sw est"></span>Estimated value</div>
+      </div>
+      <div class="panel" id="chart3"></div>
+      <div class="recap-callout reveal"><b>52% &mdash; about $699M &mdash; sent back to the state.</b> The largest recapture payment of any district in Texas, and $467.8M more than the next-highest payer.</div>
+      <figcaption>Only Austin's figures are firmly derived (from the district's own 52.2% / $699M disclosure). Houston, Dallas, and Fort Worth gross-per-pupil amounts are <b>estimates</b> pending each district's FY2024 ACFR / TEA PEIMS data &mdash; shown hatched. Because their recapture is small, net &asymp; gross.</figcaption>
+    </figure>
+
+    <!-- ===================== SECTION 4 ===================== -->
+    <div class="block reveal">
+      <div class="section-no">04 &middot; The flip</div>
+      <h2 class="section">The efficiency flip</h2>
+    </div>
+    <p class="body gap-s reveal">Now combine the two halves &mdash; outcomes and dollars &mdash; into a single ratio: <b>outcome per $1,000 of local tax per pupil.</b> Measured against the dollars a district <b>raises</b>, Austin looks inefficient; it raises so much. Measured against the dollars it actually <b>keeps</b>, its efficiency roughly doubles.</p>
+    <p class="body reveal">The asymmetry is the whole point. <span class="austin-name">Austin</span>'s dots jump a long way. The peers' barely move &mdash; because recapture barely touches them.</p>
+
+    <figure class="fig wide" data-screen-label="Chart 4 — efficiency flip (insight)">
+      <div class="fig-head">
+        <p class="take">Switch the denominator, and only Austin moves.</p>
+        <span class="fig-tag">Chart 4 &middot; SY/FY 2023&ndash;24</span>
+      </div>
+      <p class="fig-sub">Each district's effectiveness ratio shown twice &mdash; against gross taxes (hollow dot) and net-of-recapture taxes (filled). The connecting line is the size of the recapture distortion.</p>
+      <div class="panel" id="chart4"></div>
+      <figcaption>Recapture &mdash; not classroom performance &mdash; drives the change. Peer ratios use <b>estimated</b> per-pupil denominators and are shown for scale, not precision; their gross and net values nearly coincide. <b>*</b> Fort Worth STAAR approximate.</figcaption>
+    </figure>
+
+    <!-- ===================== SECTION 5 ===================== -->
+    <div class="block reveal">
+      <div class="section-no">05 &middot; Two rankings</div>
+      <h2 class="section">Two ways to rank the same district</h2>
+    </div>
+    <p class="body gap-s reveal">The same outcomes and the same district can land in opposite halves of the table &mdash; depending only on which dollars sit in the denominator. Rank the four districts by STAAR points per $1,000 of tax and watch <span class="austin-name">Austin</span> move.</p>
+
+    <figure class="fig wide" data-screen-label="Chart 5 — rank flip">
+      <div class="fig-head">
+        <p class="take">Same district, opposite story.</p>
+        <span class="fig-tag">Chart 5 &middot; STAAR per $1k</span>
+      </div>
+      <p class="fig-sub">Districts ranked by efficiency against taxes raised (left) and taxes kept (right). Austin is the only district recapture moves; the peers stay put.</p>
+      <div class="panel" id="chart5"></div>
+      <p class="flip-note">Measured on dollars raised, Austin ranks last &mdash; it raises the most per pupil. On dollars kept, it climbs past Fort Worth into the upper half. It doesn't overtake Houston or Dallas, which raise far less per pupil to begin with; peer positions depend on estimated denominators. <span class="aster">*</span> Fort Worth STAAR approximate.</p>
+    </figure>
+
+    <!-- ===================== CLOSER ===================== -->
+    <div class="block reveal">
+      <p class="closer">Same outcomes, same district &mdash; <b>opposite story, depending on which dollars you count.</b> Austin is the most efficient big district in Texas, or among the least, and recapture is the reason the answer flips.</p>
+    </div>
+
+    <!-- ===================== FOOTNOTES ===================== -->
+    <section class="notes reveal" data-screen-label="Footnotes">
+      <h3>Notes &amp; Methods</h3>
+      <ol>
+        <li><b>Year mismatch.</b> STAAR data are spring 2024 (SY2023&ndash;24); the graduation rate is the class of 2023 (SY2022&ndash;23). Combined effectiveness ratios are illustrative, not precise.</li>
+        <li><b>Estimated figures.</b> Gross local-tax-per-pupil for Houston, Dallas, and Fort Worth are estimates pending each district's FY2024 ACFR / TEA PEIMS Summarized Financial Data. Austin's figures derive from the district's own recapture disclosure (52.2% / $699M).</li>
+        <li><b>Recapture volatility.</b> Dallas's recapture swings sharply year to year ($215.6M in 2023 &rarr; $46.1M in 2024) following 2023 homestead-exemption changes (Prop 4) and M&amp;O rate compression. Fort Worth is a recent, very small recapture payer &mdash; not $0.</li>
+        <li><b>&ldquo;Effectiveness per dollar&rdquo; is a contested framing.</b> Property taxes collected are not the same as dollars spent on students, and outcomes are driven heavily by student need rather than spending alone. Treat this as one lens, not a verdict.</li>
+        <li><b>Sources.</b> TEA Texas Academic Performance Reports (TAPR) 2023&ndash;24; TEA recapture ledger; austinisd.org/budget/recapture; district budget documents; enrollment from TEA 2023&ndash;24 PEIMS; EB/EL figures from TEA PEIMS special-populations report.</li>
+      </ol>
+    </section>
+
+    <footer class="foot">Educational effectiveness per local property-tax dollar &mdash; Austin ISD vs. Houston, Dallas, Fort Worth.</footer>
+
+  </div>
+
+  <script src="/posts/effectiveness-per-tax-dollar/charts.js" is:inline></script>
+</PostLayout>

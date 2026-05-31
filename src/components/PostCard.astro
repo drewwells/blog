@@ -1,0 +1,24 @@
+---
+import type { Post } from '../posts';
+
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const displayDate = new Date(post.date + 'T00:00:00Z').toLocaleDateString(
+  'en-US',
+  { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' },
+);
+---
+
+<article class="post-card">
+  <a class="post-card__link" href={`/posts/${post.slug}/`}>
+    <div class="post-card__kicker">{post.kicker}</div>
+    <h2 class="post-card__title">{post.title}</h2>
+    <p class="post-card__dek">{post.dek}</p>
+    <div class="post-card__meta">
+      <time datetime={post.date}>{displayDate}</time>
+      <span class="post-card__more">Read →</span>
+    </div>
+  </a>
+</article>

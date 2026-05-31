@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import PostCard from '../components/PostCard.astro';
+import { sortedPosts } from '../posts';
+import { SITE_TAGLINE, SITE_TITLE } from '../consts';
+import '../styles/site.css';
+
+const year = new Date().getUTCFullYear();
+---
+
+<BaseLayout>
+  <SiteHeader home />
+
+  <main class="home">
+    <section class="home__intro">
+      <p class="home__tagline">{SITE_TAGLINE}</p>
+    </section>
+
+    <section class="home__list" aria-label="Posts">
+      {sortedPosts.map((post) => <PostCard post={post} />)}
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span>{SITE_TITLE} · {year}</span>
+      <a href="/rss.xml">RSS feed</a>
+    </div>
+  </footer>
+</BaseLayout>
