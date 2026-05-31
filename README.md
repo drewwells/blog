@@ -87,14 +87,23 @@ Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds the site
 branch at the custom domain. The `CNAME` file and `.nojekyll` marker ship in `dist/` (from
 `public/`) so the domain and `_astro/` assets keep working on every deploy.
 
-### One-time DNS setup (manual)
+### One-time DNS setup (manual — at Cloudflare)
 
-For `blog.wellsstar.dev` to resolve, add this record at the DNS provider for `wellsstar.dev`:
+DNS for `wellsstar.dev` is hosted at **Cloudflare**. As of launch, `blog.wellsstar.dev` had a
+**pre-existing `A` record → `155.138.246.6`** (an old Vultr/nginx host) that must be **replaced**,
+not added alongside. In the Cloudflare dashboard:
 
-```
-Type    Name    Value
-CNAME   blog    drewwells.github.io
-```
+1. **Delete** the existing `A` record for `blog`.
+2. **Add** a `CNAME` record:
 
-GitHub auto-provisions an HTTPS certificate once DNS resolves (can take up to ~24h). Until then
-the published content is also viewable from the `gh-pages` branch in repo settings.
+   ```
+   Type    Name    Target                  Proxy status
+   CNAME   blog    drewwells.github.io     DNS only (grey cloud)
+   ```
+
+   Use **DNS only** (grey cloud) — Cloudflare's orange-cloud proxy prevents GitHub from issuing
+   its Let's Encrypt cert and breaks "Enforce HTTPS".
+
+GitHub auto-provisions the HTTPS certificate once DNS points at it (usually minutes, up to ~24h).
+Then enable **Settings → Pages → Enforce HTTPS** in the repo. Until DNS is switched, the built
+site lives on the `gh-pages` branch and Pages reports it as published at the custom domain.
