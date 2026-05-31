@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { SITE_TITLE } from '../consts';
+import '../styles/site.css';
+
+const year = new Date().getUTCFullYear();
+---
+
+<BaseLayout title="Page not found">
+  <SiteHeader />
+
+  <main class="home">
+    <section class="notfound">
+      <p class="notfound__code">404</p>
+      <h1 class="notfound__title">This page wandered off.</h1>
+      <p class="notfound__dek">
+        The link may be broken or the post may have moved.
+      </p>
+      <p><a class="notfound__back" href="/">← Back to all posts</a></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span>{SITE_TITLE} · {year}</span>
+      <a href="/">Home</a>
+    </div>
+  </footer>
+</BaseLayout>
+
+<style>
+  .notfound {
+    padding: clamp(56px, 12vw, 140px) 0;
+    max-width: 32em;
+  }
+  .notfound__code {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: var(--accent-ink);
+    margin: 0 0 0.8em;
+  }
+  .notfound__title {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(30px, 5vw, 48px);
+    line-height: 1.08;
+    letter-spacing: -0.012em;
+    margin: 0 0 0.3em;
+    text-wrap: balance;
+  }
+  .notfound__dek {
+    font-family: var(--serif);
+    font-size: clamp(18px, 2.4vw, 21px);
+    color: var(--ink-soft);
+    margin: 0 0 1.6em;
+  }
+  .notfound__back {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+  }
+</style>
