@@ -21,3 +21,6 @@ pnpm-debug.log*
 .DS_Store
 .vscode/
 *.local
+
+# agent knowledge store (symlink to ~/.claude-memory, not tracked)
+/.knowledge
