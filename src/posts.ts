@@ -23,6 +23,14 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    slug: 'the-5-3-trillion-question',
+    title: 'The $5.3 Trillion Question',
+    dek: 'In 2024 the United States spent $5.3 trillion on health care — about 18% of its economy and nearly double what peer nations spend per person — yet it buys some of the shortest lives in the rich world. The gap isn’t how much care Americans use. It’s the price.',
+    kicker: 'U.S. Health Care',
+    date: '2026-05-31',
+    tags: ['data', 'health-care', 'economics', 'united-states'],
+  },
+  {
     slug: 'effectiveness-per-tax-dollar',
     title:
       'Effectiveness per Tax Dollar: Austin ISD vs. Texas’s Big Districts',

@@ -1,0 +1,152 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getPost } from '../../posts';
+import '../../styles/posts/the-5-3-trillion-question.css';
+const post = getPost('the-5-3-trillion-question');
+---
+<PostLayout post={post}>
+<div class="article">
+
+  <!-- ===================== MASTHEAD ===================== -->
+  <header class="mast reveal" data-screen-label="Masthead">
+    <div class="kicker">U.S. Health Care &middot; Cost, Value &amp; Scale</div>
+    <h1 class="headline">The <span class="figlead">$5.3&nbsp;Trillion</span> Question</h1>
+    <p class="dek">In 2024 the United States spent <b>$5.3&nbsp;trillion</b> on health care &mdash; 18% of its entire economy, and nearly double what comparable nations spend per person. It buys some of the shortest lives in the rich world. The difference isn't how much care Americans use. <b>It's the price.</b></p>
+    <div class="byline">An analysis &middot; National figures <b>FY 2024</b> &middot; State figures <b>2020</b> (latest vintage) &middot; May 2026</div>
+  </header>
+
+  <!-- ===================== STAT STRIP ===================== -->
+  <div class="full statstrip" data-screen-label="Headline stats">
+    <div class="stat">
+      <div class="num">$5.3T</div>
+      <div class="lab">national health spending, up 7.2% <span class="yr">2024</span></div>
+    </div>
+    <div class="stat">
+      <div class="num">18.0%</div>
+      <div class="lab">of GDP &mdash; projected to reach 20.3% by 2033 <span class="yr">CMS</span></div>
+    </div>
+    <div class="stat neutral">
+      <div class="num">$15,474</div>
+      <div class="lab">spent per person &mdash; nearly 2&times; the peer-nation average</div>
+    </div>
+    <div class="stat warn">
+      <div class="num">79.0</div>
+      <div class="lab">years of life expectancy &mdash; about 3.7 years below comparable countries <span class="yr">2024</span></div>
+    </div>
+  </div>
+
+  <!-- ===================== CHAPTER 01 ===================== -->
+  <section class="full chapter" data-screen-label="Chapter 01">
+    <div class="chap-bignum">01</div>
+    <div class="chap-inner">
+      <div class="chap-no">Chapter One</div>
+      <h2>It's the <em>prices</em>, not the volume</h2>
+      <p class="chap-dek">America pays far more per unit of care than any peer &mdash; while using about the same amount, or less. Two charts show the outlier, and what it buys.</p>
+    </div>
+  </section>
+
+  <p class="body gap-s reveal">For more than two decades, health economists have had a tidy explanation for why the United States spends so much: <span class="hl">it's the prices, stupid.</span> Americans don't see the doctor more often or stay in the hospital longer than people in other wealthy countries. They simply pay much more for every visit, every scan, every drug.</p>
+
+  <figure class="fig wide" data-screen-label="Chart 1 — the outlier">
+    <div class="fig-head">
+      <p class="take">The United States is in a league of its own.</p>
+      <span class="fig-tag">Chart 1 &middot; OECD basis, 2024</span>
+    </div>
+    <p class="fig-sub">Health spending per person. The U.S. spends far beyond even the next-highest country, Switzerland, and roughly double the comparable-country average.</p>
+    <div class="panel" id="chart1"></div>
+    <figcaption>OECD-basis per-capita spending, 2024 (U.S. estimated $14,775&ndash;$14,885). International per-person figures vary by source and definition. Source: OECD Health Statistics; Peterson-KFF Health System Tracker.</figcaption>
+  </figure>
+
+  <p class="body block reveal">More money has not bought more health. Plot what each system spends against how long its people live, and the U.S. sits alone in the bottom-right: <b>the most spending, among the shortest lives.</b></p>
+
+  <figure class="fig wide" data-screen-label="Chart 2 — pays more, lives less">
+    <div class="fig-head">
+      <p class="take">Pays the most. Lives the shortest.</p>
+      <span class="fig-tag">Chart 2 &middot; Peterson-KFF, 2023</span>
+    </div>
+    <p class="fig-sub">Health spending per person versus life expectancy at birth, U.S. against the average of 11 comparable high-income countries.</p>
+    <div class="panel" id="chart2"></div>
+    <div class="define reveal"><b>Two families, one grocery list.</b> Imagine two households that buy the same cart of food &mdash; but one pays double at the checkout, because its store charges more for every item and adds a fee for every aisle it walks down. That's the U.S. health system versus its peers: similar cart, much bigger bill.</div>
+    <figcaption>Spending and life-expectancy figures are 2023 (Peterson-KFF), the 11 peers being Australia, Austria, Belgium, Canada, France, Germany, Japan, the Netherlands, Sweden, Switzerland, and the UK. U.S. life expectancy rose to 79.0 years in 2024.</figcaption>
+  </figure>
+
+  <!-- ===================== CHAPTER 02 ===================== -->
+  <section class="full chapter" data-screen-label="Chapter 02">
+    <div class="chap-bignum">02</div>
+    <div class="chap-inner">
+      <div class="chap-no">Chapter Two</div>
+      <h2>Where the <em>$5.3 trillion</em> goes</h2>
+      <p class="chap-dek">Two ways to slice the same number: by what the money buys, and by who writes the check. Each column adds up to $5.3 trillion.</p>
+    </div>
+  </section>
+
+  <p class="body gap-s reveal">Hospitals and physicians together absorb more than half of all spending. On the other side of the ledger, the federal government &mdash; through Medicare and Medicaid &mdash; and private insurers are the dominant payers; out-of-pocket costs, the part patients feel most directly, are about a ninth of the total.</p>
+
+  <figure class="fig wide" data-screen-label="Chart 3 — goes and pays">
+    <div class="fig-head">
+      <p class="take">What it buys, and who pays for it.</p>
+      <span class="fig-tag">Chart 3 &middot; CMS NHE, 2024</span>
+    </div>
+    <p class="fig-sub">National health expenditure by category of service (left) and by source of funds (right). Bars sorted largest to smallest.</p>
+    <div class="panel" id="chart3"></div>
+    <figcaption>Administrative cost shown is the net cost of insurance plus government program administration (7.0% of spending in 2024); it excludes providers' own billing costs. &ldquo;Other categories&rdquo; and &ldquo;Other&rdquo; buckets gather the remaining smaller line items so each column totals $5.3T. Source: CMS National Health Expenditure Accounts, 2024.</figcaption>
+  </figure>
+
+  <!-- ===================== CHAPTER 03 ===================== -->
+  <section class="full chapter" data-screen-label="Chapter 03">
+    <div class="chap-bignum">03</div>
+    <div class="chap-inner">
+      <div class="chap-no">Chapter Three</div>
+      <h2>States the size of <em>nations</em></h2>
+      <p class="chap-dek">America's biggest state economies rival whole countries &mdash; yet they aren't the ones spending the most on health. The states that push the nation toward 18% are its smallest.</p>
+    </div>
+  </section>
+
+  <p class="body gap-s reveal">Scale is hard to feel at the national level, so shrink it to the states. California, on its own, is now the world's <span class="hl">fourth-largest economy</span> &mdash; bigger than Japan. Texas is larger than Italy; New York is comparable to Canada. These are not provinces; they are economic powers in their own right.</p>
+
+  <p class="body reveal">But turn those nation-sized economies toward health care and a surprise appears: <b>all three spend a smaller share of their output on health than the country as a whole.</b> The states actually pushing the U.S. toward 18% are its smallest and poorest &mdash; led by West Virginia, where health care absorbs <span class="hl">more than a quarter</span> of the entire state economy.</p>
+
+  <figure class="fig wide" data-screen-label="Chart 4 — health share of state GDP">
+    <div class="fig-head">
+      <p class="take">Big economies, smaller health shares.</p>
+      <span class="fig-tag">Chart 4 &middot; share of state GDP, 2020</span>
+    </div>
+    <p class="fig-sub">Health spending as a share of state GDP &mdash; the three highest-share states against the three largest state economies (each shown with its GDP and its national peer). Measured against the U.S. overall (18%) and the OECD average (~9%).</p>
+    <div class="legend">
+      <div class="li"><span class="sw" style="background:var(--clay)"></span>Directly published (CMS endpoint)</div>
+      <div class="li"><span class="sw est"></span>Computed estimate</div>
+    </div>
+    <div class="panel" id="chart4"></div>
+    <figcaption>West Virginia's 28.7% and Washington's 11.7% are the only state shares CMS publishes directly; the rest are <b>computed estimates</b> (CMS spending &divide; BEA state GDP) and shown hatched. 2020 shares are inflated by the pandemic, when GDP fell as health spending rose &mdash; the U.S. share spiked to 19.7% in 2020 from 17.6% in 2019. Per-capita figures are residence-basis. State GDP 2024 (BEA); country GDP 2024. Sources: CMS State Health Expenditure Accounts, 2020 (latest vintage); BEA; Peterson-KFF.</figcaption>
+  </figure>
+
+  <!-- ===================== CLOSER ===================== -->
+  <div class="block reveal">
+    <p class="closer">A similar cart, a much bigger bill &mdash; <b>and not obviously more health to show for it.</b> The $5.3 trillion question isn't whether America spends enough. It's what all that spending is buying.</p>
+  </div>
+
+  <!-- ===================== FOOTNOTES ===================== -->
+  <section class="notes reveal" data-screen-label="Footnotes">
+    <h3>Notes &amp; Sources</h3>
+    <ol>
+      <li><b>Vintage mismatch.</b> National spending figures are 2024 (released 2025); state-level spending figures are 2020 (latest available, released 2022, produced roughly every five years). Every figure is labeled with its year.</li>
+      <li><b>Per-state share-of-GDP figures are computed estimates</b> for California, New York, and Texas &mdash; provider-basis spending divided by 2020 state GDP &mdash; not directly published by CMS, which released only the 2020 high/low endpoints (WV 28.7%, WA 11.7%). The 2020 ratios are inflated by the pandemic-distorted denominator.</li>
+      <li><b>International per-capita figures vary by source and definition</b> &mdash; $13,432 in Peterson-KFF's 2023 peer analysis versus $14,775&ndash;$14,885 on a 2024 OECD basis. Charts cite the matching year and source.</li>
+      <li><b>Life expectancy.</b> U.S. life expectancy rose from 78.4 years (2023) to 79.0 years (2024); the comparable-country average was about 82.7 years. The Commonwealth Fund (2026) ranks the U.S. near the bottom of the OECD on life expectancy and at or near the top for avoidable mortality.</li>
+      <li><b>Sources.</b> CMS National Health Expenditure Accounts and State Health Expenditure Accounts; OECD Health Statistics; Peterson-KFF Health System Tracker; Commonwealth Fund, &ldquo;U.S. Health Care from a Global Perspective, 2026&rdquo;; Anderson &amp; Reinhardt et&nbsp;al., &ldquo;It's the Prices, Stupid&rdquo; (Health Affairs, 2003); U.S. Bureau of Economic Analysis; IMF World Economic Outlook.</li>
+    </ol>
+  </section>
+
+  <footer class="foot">The $5.3 Trillion Question &mdash; U.S. health care costs, value, and the scale of state economies.</footer>
+
+</div>
+
+<!-- ===================== RUNNING TOTAL ===================== -->
+<aside class="tab-counter" id="tabCounter" aria-live="polite">
+  <button class="tc-close" aria-label="Dismiss">&times;</button>
+  <div class="tc-k"><span class="dotpulse"></span>Spent since you opened this page</div>
+  <div class="tc-num">$0</div>
+  <div class="tc-sub">U.S. health care runs about <b style="color:#fff">$168,000 every second</b> &mdash; $5.3T a year.</div>
+</aside>
+  <script src="/posts/the-5-3-trillion-question/health-charts.js" is:inline></script>
+</PostLayout>
