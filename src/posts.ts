@@ -23,6 +23,20 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    slug: 'message-bus-for-my-agents',
+    title: 'I built a message bus so my AI agents could run my servers.',
+    dek: 'A custom WebSocket bus, leader election, and a Telegram voice bridge turn a five-machine homelab — Linux and macOS alike — into a fault-tolerant organization of AI agents that supervises itself, keeps the apps up, and pages me when it’s stuck.',
+    kicker: 'Homelab / Agent Infrastructure',
+    date: '2026-06-02',
+    tags: [
+      'homelab',
+      'agents',
+      'distributed-systems',
+      'infrastructure',
+      'llm',
+    ],
+  },
+  {
     slug: 'the-5-3-trillion-question',
     title: 'The $5.3 Trillion Question',
     dek: 'In 2024 the United States spent $5.3 trillion on health care — about 18% of its economy and nearly double what peer nations spend per person — yet it buys some of the shortest lives in the rich world. The gap isn’t how much care Americans use. It’s the price.',
