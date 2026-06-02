@@ -24,3 +24,7 @@ pnpm-debug.log*
 
 # agent knowledge store (symlink to ~/.claude-memory, not tracked)
 /.knowledge
+
+# design handoff bundle — kept locally for reference, never committed
+/_handoff_portfolio/
+/Portfolio.zip
