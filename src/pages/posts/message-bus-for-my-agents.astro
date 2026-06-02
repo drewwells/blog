@@ -1,0 +1,409 @@
+---
+// =============================================================================
+// "I built a message bus so my AI agents could run my servers."
+//
+// Integration approach (per the design handoff README + this blog's house
+// pattern): the blog is pure-static Astro with NO React. The two existing
+// posts ship their interactive charts as a dependency-free vanilla-JS island
+// loaded via `is:inline` <script> from /public/posts/<slug>/. This post
+// follows that exact convention rather than adding @astrojs/react: the eight
+// content sections are authored as static .astro markup with a page-scoped
+// stylesheet (portfolio.css tokens ported verbatim, OKLCH preserved), and the
+// three interactive figures (bridge control plane, Telegram sequence, MoE
+// bars) plus the progress bar / rail nav / scroll-reveal are rebuilt 1:1 in
+// vanilla JS in bus.js with the prototype's exact timing constants. This keeps
+// the build pure-static (no React/Babel shipped), matches the established
+// per-post JS-island pattern, and satisfies the README's "small client-side
+// components" guidance for static sites.
+// =============================================================================
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getPost } from '../../posts';
+import '../../styles/posts/message-bus-for-my-agents.css';
+
+const post = getPost('message-bus-for-my-agents');
+
+const shots = '/posts/message-bus-for-my-agents/shots';
+const apps = [
+  {
+    name: 'plex-host',
+    dom: 'dance.jayloves.us',
+    shot: `${shots}/plex-host.webp`,
+    pos: 'center 36%',
+    one: "Auth'd vault for managing my 900 dance videos — transcriptions, search, LLM chat, automated tagging, and A/B practice looping.",
+    chips: ['Go', 'SvelteKit', 'Whisper', 'Qwen3', 'FFmpeg QSV'],
+  },
+  {
+    name: 'swing-analytics',
+    dom: 'swingelo.com',
+    shot: `${shots}/swing-analytics.webp`,
+    pos: 'center top',
+    one: 'West Coast Swing results warehouse — 132,750 entries across ~175 events, 7-phase name normalization.',
+    chips: ['Python', 'DuckDB', 'Go API'],
+  },
+  {
+    name: 'swingschedule',
+    dom: 'schedule.swingelo.com',
+    shot: `${shots}/swingschedule.webp`,
+    pos: 'center top',
+    one: 'Event-schedule aggregator + webcal feed, with vision-LLM PDF→JSON ingestion.',
+    chips: ['Next.js 15', 'vision-LLM', 'Gemma'],
+  },
+  {
+    name: 'docs',
+    dom: 'docs.swingelo.com',
+    shot: `${shots}/docs.webp`,
+    pos: 'center top',
+    one: 'Public methodology docs — how strength scores, odds-to-finals, and the ranking models actually work.',
+    chips: ['docs', 'methodology'],
+  },
+  {
+    name: 'speed',
+    dom: 'speed.jayloves.us',
+    shot: `${shots}/speed.webp`,
+    pos: 'center top',
+    one: 'Hosting on T-Mobile Home Internet took heavy tuning — measurements surfaced issues with proxy_buffering, BBR congestion control, and per-chunk network flushing.',
+    chips: ['nginx', 'BBR', 'benchmark'],
+  },
+  {
+    name: 'gym',
+    dom: 'gym.jayloves.us',
+    shot: `${shots}/gym.webp`,
+    pos: 'center top',
+    // Finalized copy from the gym project owner (replaced the design's placeholder).
+    one: 'Open-floor finder for 4 gym brands — normalizes 2 JSON APIs and 2 HTML scrapes into “when is the dance studio actually free between classes?”',
+    chips: ['Node.js', 'Express', 'vanilla JS', 'Podman'],
+  },
+];
+
+const themes = [
+  {
+    t: 'Agents as operators, not chatbots',
+    d: 'The claim isn’t "I use an LLM." It’s a fleet of agents, with an elected leader, that runs my infrastructure and pages me when stuck.',
+  },
+  {
+    t: 'Distributed-systems fundamentals, hand-rolled',
+    d: 'Leader election, leases, heartbeats, identity arbitration, at-least-once messaging with acks — applied to a problem most people solve with hope.',
+  },
+  {
+    t: 'Sovereignty by default',
+    d: 'Own hardware, own LLMs, own message bus, own speech-to-text. The cloud droplet exists only because the ISP won’t hand out an IPv4.',
+  },
+  {
+    t: 'Operational maturity',
+    d: 'Watchdogs that respect human-attached sessions, memory with backups and seven-check validation, PASS/FAIL phone alerts — the work that separates a toy from a thing you trust.',
+  },
+];
+
+const sites = [
+  'swingelo.com',
+  'schedule.swingelo.com',
+  'docs.swingelo.com',
+  'dance.jayloves.us',
+  'speed.jayloves.us',
+  'gym.jayloves.us',
+];
+---
+
+<PostLayout post={post}>
+  <!-- fixed scroll-progress bar + right-edge rail nav -->
+  <div class="progress" id="progress"></div>
+  <nav class="railnav" id="railnav" aria-label="Section navigation">
+    <a href="#top" data-sec="top">●</a>
+    <a href="#s1" data-sec="s1">01</a>
+    <a href="#s2" data-sec="s2">02</a>
+    <a href="#s3" data-sec="s3">03</a>
+    <a href="#s4" data-sec="s4">04</a>
+    <a href="#s5" data-sec="s5">05</a>
+    <a href="#s6" data-sec="s6">06</a>
+  </nav>
+
+  <div class="article" id="top">
+    <!-- ===================== MASTHEAD ===================== -->
+    <header class="masthead reveal" data-screen-label="Masthead">
+      <div class="wrap">
+        <div class="mast-top">
+          <span>WELLSSTAR &middot; PORTFOLIO / 2026</span>
+          <span class="r"><span class="dot"></span>SYSTEM NOMINAL</span>
+        </div>
+        <div class="kicker">HOMELAB / AGENT INFRASTRUCTURE</div>
+        <h1 class="headline">I built a message bus so my AI agents could run my servers.<span class="cur"></span></h1>
+        <p class="dek">A custom WebSocket bus, leader election, and a Telegram voice bridge turn a five-machine homelab &mdash; <b>Linux and macOS alike</b> &mdash; into a <b>fault-tolerant organization of AI agents</b> that supervises itself, keeps the apps up, and pages me when it's stuck.</p>
+        <div class="byline"><b>Drew Wells</b> &nbsp;&middot;&nbsp; June 2026 &nbsp;&middot;&nbsp; wellsstar.dev</div>
+        <div class="strip">
+          <div class="stat"><div class="n">5<small>+2</small></div><div class="l">Machines on the fabric &middot; 2 VPS egress</div></div>
+          <div class="stat"><div class="n">6</div><div class="l">Production apps kept alive</div></div>
+          <div class="stat"><div class="n">8</div><div class="l">MCP tools every agent can call</div></div>
+          <div class="stat"><div class="n">2</div><div class="l">OS families &middot; one watchdog model</div></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== 01 · SUBSTRATE ===================== -->
+    <section class="section" id="s1">
+      <div class="wrap">
+        <div class="sec-head col">
+          <div class="sec-num">01</div>
+          <div class="sec-titles">
+            <div class="sub">The substrate</div>
+            <h2>Five machines, one logical fabric</h2>
+          </div>
+        </div>
+        <div class="prose col">
+          <p class="lead">Most homelabs are a pile of containers on one box. This one is a small fleet &mdash; every node joined into a single <b>Tailscale mesh</b> so an agent on one machine can address an agent on another as if they were local.</p>
+          <p>There's a catch the design has to absorb: the house runs on T-Mobile home internet with <b>no public IPv4</b> and blocked IPv6 ingress. So a pair of cheap cloud VPS exist for one reason &mdash; to be a stable IPv4 egress point in front of the LAN. Everything real still runs at home, on hardware I own.</p>
+        </div>
+
+        <div class="reveal col">
+          <figure class="figure">
+            <div class="fig-bar"><span class="tag">FIG. 01</span><span>NETWORK TOPOLOGY</span><span>TAILSCALE / IPv4-EGRESS</span></div>
+            <div class="fig-body">
+              <div class="col" style="max-width:none;padding:10px 8px">
+                <svg viewBox="0 0 860 300" style="width:100%;display:block" role="img" aria-label="Network topology: a no-public-IPv4 home LAN linked over a Tailscale WireGuard mesh to a cloud IPv4-egress pair">
+                  <!-- home boundary -->
+                  <rect x="20" y="16" width="430" height="268" rx="10" fill="oklch(0.20 0.014 250 / .5)" stroke="oklch(0.370 0.014 250)" stroke-dasharray="3 4"></rect>
+                  <text x="34" y="38" font-family="var(--mono)" font-size="11" font-weight="600" fill="oklch(0.805 0.135 78)">HOME &middot; no public IPv4</text>
+                  <text x="34" y="276" font-family="var(--mono)" font-size="9" fill="oklch(0.640 0.012 250)">fiber &rarr; switch &rarr; 2.5 Gbps copper to every machine</text>
+                  <!-- cloud boundary -->
+                  <rect x="560" y="60" width="280" height="160" rx="10" fill="oklch(0.20 0.014 250 / .5)" stroke="oklch(0.370 0.014 250)" stroke-dasharray="3 4"></rect>
+                  <text x="574" y="82" font-family="var(--mono)" font-size="11" font-weight="600" fill="oklch(0.805 0.135 78)">CLOUD &middot; IPv4 egress</text>
+                  <!-- switch -->
+                  <rect x="144" y="104" width="52" height="28" rx="5" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)"></rect>
+                  <text x="170" y="122" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="#bbb">2.5G sw</text>
+                  <!-- links switch->machines -->
+                  <line x1="170" y1="118" x2="194" y2="40" stroke="oklch(0.370 0.014 250)" stroke-width="1"></line>
+                  <line x1="170" y1="118" x2="194" y2="118" stroke="oklch(0.370 0.014 250)" stroke-width="1"></line>
+                  <line x1="170" y1="118" x2="194" y2="196" stroke="oklch(0.370 0.014 250)" stroke-width="1"></line>
+                  <line x1="170" y1="118" x2="4" y2="118" stroke="oklch(0.370 0.014 250)" stroke-width="1"></line>
+                  <!-- amazon -->
+                  <rect x="194" y="23" width="148" height="34" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.805 0.135 78)" stroke-width="1.4"></rect>
+                  <text x="268" y="38" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="600" fill="oklch(0.805 0.135 78)">amazon</text>
+                  <text x="268" y="51" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="oklch(0.640 0.012 250)">hub &middot; agents &middot; apps</text>
+                  <!-- beast -->
+                  <rect x="194" y="101" width="148" height="34" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)" stroke-width="1"></rect>
+                  <text x="268" y="116" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="600" fill="#ddd">beast</text>
+                  <text x="268" y="129" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="oklch(0.640 0.012 250)">oMLX &middot; Whisper</text>
+                  <!-- snow -->
+                  <rect x="194" y="179" width="148" height="34" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)" stroke-width="1"></rect>
+                  <text x="268" y="194" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="600" fill="#ddd">snow</text>
+                  <text x="268" y="207" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="oklch(0.640 0.012 250)">RTX 4070</text>
+                  <!-- opnsense -->
+                  <rect x="4" y="101" width="148" height="34" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)" stroke-width="1"></rect>
+                  <text x="78" y="116" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="600" fill="#ddd">opnsense</text>
+                  <text x="78" y="129" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="oklch(0.640 0.012 250)">router &middot; Protectli</text>
+                  <!-- VPS pair -->
+                  <rect x="600" y="105" width="200" height="30" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)"></rect>
+                  <text x="700" y="124" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="#ddd">vps &middot; ocean&rarr;vultr</text>
+                  <rect x="600" y="150" width="200" height="30" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)"></rect>
+                  <text x="700" y="169" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="oklch(0.640 0.012 250)">Dallas (low-latency)</text>
+                  <!-- tailscale tunnel -->
+                  <line x1="342" y1="118" x2="600" y2="130" stroke="oklch(0.805 0.135 78)" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.7"></line>
+                  <text x="470" y="108" text-anchor="middle" font-family="var(--mono)" font-size="9.5" fill="oklch(0.805 0.135 78)">Tailscale mesh &middot; WireGuard</text>
+                  <text x="700" y="208" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="oklch(0.640 0.012 250)">&uarr; public IPv4 &rarr; internet</text>
+                </svg>
+              </div>
+            </div>
+            <figcaption class="fig-cap"><b>TAKEAWAY</b><span>The cloud isn't where the work happens &mdash; it's a workaround for an ISP that won't hand out an IPv4. Compute, models, and storage stay on-prem.</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 02 · THE BRIDGE ===================== -->
+    <section class="section" id="s2">
+      <div class="wrap">
+        <div class="sec-head col">
+          <div class="sec-num">02</div>
+          <div class="sec-titles">
+            <div class="sub">The bridge &mdash; centerpiece</div>
+            <h2>A cross-machine message bus for agents</h2>
+          </div>
+        </div>
+        <div class="prose col">
+          <p class="lead">Claude Code agents are isolated processes with limited context. To behave like an <b>organization</b> &mdash; a COO delegating to PMs and coders across machines &mdash; they need to find each other, message each other reliably, and never collide on identity. The bridge is a two-layer Go system that gives them exactly that.</p>
+          <p>A single <b>hub</b> at <code>ws://amazon.home.arpa:8991</code> is the WebSocket router and registry of live sessions. Alongside each agent runs a <b>bridge MCP server</b> that exposes the hub as tools the model calls directly &mdash; <code>register</code>, <code>send</code>, <code>get_messages</code>, <code>ack</code>, <code>status</code>, <code>list_peers</code>, <code>hub_status</code>, <code>leader_status</code>. Every agent is addressed as <code>name@machine</code>; queues are machine-scoped; the namespace is human-readable over a distributed fabric.</p>
+        </div>
+
+        <div class="reveal" data-screen-label="Fig 02 — bridge">
+          <figure class="figure">
+            <div class="fig-bar"><span class="tag">FIG. 02</span><span>BRIDGE &mdash; LIVE CONTROL PLANE</span><span>INTERACTIVE</span></div>
+            <div class="fig-body">
+              <div style="background:oklch(0.172 0.012 250)">
+                <div id="fig-bridge"></div>
+              </div>
+            </div>
+            <figcaption class="fig-cap"><b>TAKEAWAY</b><span>Roles are leased, not assigned. The coo lease lasts 60s (2&times; the heartbeat); the hub sweeps expired leases every 5s. Expire the leader and it re-elects &mdash; but only on amazon, where the coo role is pinned in code.</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="prose col">
+          <ul class="bullets">
+            <li><b>Identity-collision detection.</b> Supervisors relaunch agents at will, so the hub refuses a duplicate identity while a <i>live</i> process holds it. "Live" means a heartbeat within 60s &mdash; after that the old registration is a corpse and a fresh claim takes over. The line between "restarted cleanly" and "split-brain."</li>
+            <li><b>Lease-based leader election.</b> A <code>claim_role</code> succeeds only if no live lease exists. Lease generations tell a renewal (same gen) apart from a true handover (<code>primary_changed</code>). Same shape as etcd / ZooKeeper, hand-rolled for an agent fleet.</li>
+            <li><b>Explicit acks.</b> A message store with <code>ack</code> / <code>status</code> semantics, so a sender can confirm a peer actually received a message &mdash; not just that it was sent.</li>
+          </ul>
+        </div>
+
+        <div class="pquote col">
+          <p>"The COO role is a lease, not a title. If the agent holding it stops sending heartbeats for sixty seconds, the lease expires and someone else can take over &mdash; but only on the one machine the code allows to hold it."</p>
+          <div class="who">&mdash; On leader election</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 03 · TELEGRAM RELAY ===================== -->
+    <section class="section" id="s3">
+      <div class="wrap">
+        <div class="sec-head col">
+          <div class="sec-num">03</div>
+          <div class="sec-titles">
+            <div class="sub">The Telegram relay</div>
+            <h2>A phone as the control plane</h2>
+          </div>
+        </div>
+        <div class="prose col">
+          <p class="lead">I'm not always at a terminal. The relay turns a Telegram chat into a first-class, secured interface to the fleet &mdash; <b>bidirectional</b>, so agents escalate to me and I command them back. The headline feature: I can leave my servers a <b>voice memo</b>.</p>
+          <p>Telegram voice notes (OGG/Opus) get piped through a <b>local Whisper</b> client &mdash; transcription runs on my own hardware, not a cloud STT vendor &mdash; and land as text in the right agent's queue. Real access control sits in front: an <code>open</code> / <code>pairing</code> / <code>closed</code> DM policy, an allowlist, a pairing handshake, and group&rarr;agent routing so different chats talk to different agents.</p>
+        </div>
+
+        <div class="reveal" data-screen-label="Fig 03 — telegram sequence">
+          <figure class="figure">
+            <div class="fig-bar"><span class="tag">FIG. 03</span><span>VOICE NOTE &rarr; AGENT &rarr; ACK</span><span>SEQUENCE &middot; INTERACTIVE</span></div>
+            <div class="fig-body">
+              <div style="background:oklch(0.172 0.012 250)">
+                <div id="fig-sequence"></div>
+              </div>
+            </div>
+            <figcaption class="fig-cap"><b>TAKEAWAY</b><span>Not fire-and-forget. A pending-ack tracker with timeouts detects when a relayed message wasn't picked up &mdash; and a degraded mode tells me it went unheard instead of failing silently. Toggle 'agent down' to see it.</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="prose col">
+          <p>Long agent replies get split to respect Telegram's 4096-char cap, and a typed-message convention keeps ops chatter separate from real input on the wire: <code>[OPS-PROBE]</code> for liveness, <code>[OPS]</code> for instructions, <code>[USER-RELAY]</code> for a forwarded human message.</p>
+        </div>
+
+        <div class="pquote col">
+          <p>"I can leave my servers a voice memo. Whisper turns it into text, the bridge routes it to the right agent, and the agent acks back &mdash; or the relay tells me it went unheard."</p>
+          <div class="who">&mdash; On the relay</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 04 · KEEPING IT ALIVE ===================== -->
+    <section class="section" id="s4">
+      <div class="wrap">
+        <div class="sec-head col">
+          <div class="sec-num">04</div>
+          <div class="sec-titles">
+            <div class="sub">Keeping it alive</div>
+            <h2>Supervision, local models, memory</h2>
+          </div>
+        </div>
+        <div class="prose col">
+          <p class="lead">The unglamorous third act &mdash; the parts that make it <b>stay up unattended</b>, across two operating systems whose service models barely resemble each other.</p>
+          <p><b>Cross-platform supervision.</b> Linux uses <code>systemd</code>; the Mac uses <code>launchd</code>. Per-agent supervisors restart crashed agents and wedged hubs under one shared model &mdash; with a hard-won rule baked in: a supervisor <b>must never evict a session I'm actively attached to</b>. It only kills and recreates a pane when the process is genuinely dead.</p>
+        </div>
+
+        <div class="reveal col" data-screen-label="Fig 04 — MoE bars">
+          <figure class="figure">
+            <div class="fig-bar"><span class="tag">FIG. 04</span><span>MoE vs DENSE &middot; LOCAL THROUGHPUT</span><span>oMLX / APPLE MLX</span></div>
+            <div class="fig-body">
+              <div style="background:oklch(0.205 0.014 250)">
+                <div id="fig-moe"></div>
+              </div>
+            </div>
+            <figcaption class="fig-cap"><b>TAKEAWAY</b><span>The benchmark that drives model choice. A mixture-of-experts model with 3B active params runs ~4&times; faster than a 27B dense model on the same machine &mdash; so on-prem inference is actually fast enough to depend on.</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="prose col">
+          <ul class="bullets">
+            <li><b>On-prem LLM serving.</b> OpenAI-compatible local inference via Apple MLX on <code>beast</code>, daemon-managed. Fallback chain local Qwen &rarr; local Gemma &rarr; cloud Claude, so no single machine is a hard dependency.</li>
+            <li><b>Persistent memory.</b> A 245-entry knowledge base synced across machines with Syncthing. Agents survive periodic context wipes by re-reading a <code>state.md</code> source-of-truth on every fresh boot.</li>
+            <li><b>"Dream" consolidation.</b> A nightly 04:30 timer mines recent transcripts for durable insights, runs a headless <code>claude -p</code> pass to merge duplicates, guards the result with seven validation checks, atomically swaps it in, and Telegrams me a one-line PASS/FAIL.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 05 · WHAT IT RUNS ===================== -->
+    <section class="section" id="s5">
+      <div class="wrap">
+        <div class="sec-head col">
+          <div class="sec-num">05</div>
+          <div class="sec-titles">
+            <div class="sub">What it runs</div>
+            <h2>The apps &mdash; supporting cast</h2>
+          </div>
+        </div>
+        <div class="prose col">
+          <p>Proof the infrastructure carries real load, not demos. Six production apps behind one nginx reverse proxy (10 domains, shared TLS), plus <b>reforge</b> &mdash; a Rust-native Renovate replacement (~35 modules, 167 tests) for self-hosted GitLab, framed as a learning project.</p>
+        </div>
+        <div class="reveal">
+          <div class="apps-grid">
+            {apps.map((a) => (
+              <div class="app-card">
+                <div class="shot">
+                  <img src={a.shot} alt={`${a.name} — ${a.dom}`} loading="lazy" style={`object-position:${a.pos}`} />
+                </div>
+                <div class="body">
+                  <div class="head">
+                    <span class="name">{a.name}</span>
+                    <span class="dom">{a.dom}</span>
+                  </div>
+                  <p class="one">{a.one}</p>
+                  <div class="chips">
+                    {a.chips.map((c) => <span class="chip">{c}</span>)}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 06 · THEMES ===================== -->
+    <section class="section" id="s6">
+      <div class="wrap">
+        <div class="sec-head col">
+          <div class="sec-num">06</div>
+          <div class="sec-titles">
+            <div class="sub">Cross-cutting themes</div>
+            <h2>Why this is the interesting part</h2>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="col themes-grid">
+            {themes.map((th, i) => (
+              <div class="cell">
+                <div class="idx">0{i + 1}</div>
+                <div class="t">{th.t}</div>
+                <div class="d">{th.d}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="foot">
+      <div class="wrap col">
+        <div class="kicker" style="margin-bottom:24px">END OF DISPATCH</div>
+        <div class="big">An addressable, fault-tolerant fabric &mdash; with a single elected leader, at-least-once messaging, and a phone for a console.</div>
+        <div class="sites">
+          {sites.map((s) => (
+            <a class="site" href={`https://${s}`} target="_blank" rel="noopener">{s}</a>
+          ))}
+        </div>
+        <div class="meta">
+          DREW WELLS &middot; WELLSSTAR.DEV &middot; JUNE 2026<br />
+          Figures are repo-derived approximations. Bridge &amp; relay are private LAN services &mdash; described, not linked.<br />
+          Hub: ws://amazon.home.arpa:8991 &middot; Transcription &amp; local LLMs run on-prem (beast).
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/posts/message-bus-for-my-agents/bus.js" is:inline></script>
+</PostLayout>
