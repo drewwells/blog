@@ -127,10 +127,10 @@ const sites = [
         </div>
         <div class="kicker">HOMELAB / AGENT INFRASTRUCTURE</div>
         <h1 class="headline">I built a message bus so my AI agents could run my servers.<span class="cur"></span></h1>
-        <p class="dek">A custom WebSocket bus, leader election, and a Telegram voice bridge turn a five-machine homelab &mdash; <b>Linux and macOS alike</b> &mdash; into a <b>fault-tolerant organization of AI agents</b> that supervises itself, keeps the apps up, and pages me when it's stuck.</p>
+        <p class="dek">A custom WebSocket bus, leader election, and a Telegram voice bridge turn a four-machine homelab &mdash; <b>Linux and macOS alike</b> &mdash; into a <b>fault-tolerant organization of AI agents</b> that supervises itself, keeps the apps up, and pages me when it's stuck.</p>
         <div class="byline"><b>Drew Wells</b> &nbsp;&middot;&nbsp; June 2026 &nbsp;&middot;&nbsp; wellsstar.dev</div>
         <div class="strip">
-          <div class="stat"><div class="n">5<small>+2</small></div><div class="l">Machines on the fabric &middot; 2 VPS egress</div></div>
+          <div class="stat"><div class="n">4<small>+2</small></div><div class="l">Machines on the fabric &middot; 2 VPS egress</div></div>
           <div class="stat"><div class="n">6</div><div class="l">Production apps kept alive</div></div>
           <div class="stat"><div class="n">8</div><div class="l">MCP tools every agent can call</div></div>
           <div class="stat"><div class="n">2</div><div class="l">OS families &middot; one watchdog model</div></div>
@@ -145,64 +145,61 @@ const sites = [
           <div class="sec-num">01</div>
           <div class="sec-titles">
             <div class="sub">The substrate</div>
-            <h2>Five machines, one logical fabric</h2>
+            <h2>Four machines, one logical fabric</h2>
           </div>
         </div>
         <div class="prose col">
           <p class="lead">Most homelabs are a pile of containers on one box. This one is a small fleet &mdash; every node joined into a single <b>Tailscale mesh</b> so an agent on one machine can address an agent on another as if they were local.</p>
-          <p>There's a catch the design has to absorb: the house runs on T-Mobile home internet with <b>no public IPv4</b> and blocked IPv6 ingress. So a pair of cheap cloud VPS exist for one reason &mdash; to be a stable IPv4 egress point in front of the LAN. Everything real still runs at home, on hardware I own.</p>
+          <p>The machines aren't interchangeable; each is matched to the work it's best at. <b>amazon</b> (16-core x86, 128&nbsp;GB) is the always-on spine &mdash; it hosts the message bus, the shared state, and the coordinating agents. <b>beast</b> (Mac Studio M4 Max, 128&nbsp;GB unified memory) does local LLM inference through Apple MLX, where that unified memory runs models a discrete GPU couldn't hold. <b>opnsense</b> is the router carrying the Tailscale fabric the others ride on. Right workload, right silicon &mdash; which is exactly why the agents need a bus to act as one.</p>
         </div>
 
         <div class="reveal col">
           <figure class="figure">
-            <div class="fig-bar"><span class="tag">FIG. 01</span><span>NETWORK TOPOLOGY</span><span>TAILSCALE / IPv4-EGRESS</span></div>
+            <div class="fig-bar"><span class="tag">FIG. 01</span><span>THE SHARED BRAIN</span><span>MEMORY &middot; SYNCTHING</span></div>
             <div class="fig-body">
               <div class="col" style="max-width:none;padding:10px 8px">
-                <svg viewBox="0 0 860 300" style="width:100%;display:block" role="img" aria-label="Network topology: a no-public-IPv4 home LAN linked over a Tailscale WireGuard mesh to a cloud IPv4-egress pair">
-                  <!-- home boundary -->
-                  <rect x="20" y="16" width="430" height="268" rx="10" fill="oklch(0.20 0.014 250 / .5)" stroke="oklch(0.370 0.014 250)" stroke-dasharray="3 4"></rect>
-                  <text x="34" y="38" font-family="var(--mono)" font-size="11" font-weight="600" fill="oklch(0.805 0.135 78)">HOME &middot; no public IPv4</text>
-                  <text x="34" y="276" font-family="var(--mono)" font-size="9" fill="oklch(0.640 0.012 250)">fiber &rarr; switch &rarr; 2.5 Gbps copper to every machine</text>
-                  <!-- cloud boundary -->
-                  <rect x="560" y="60" width="280" height="160" rx="10" fill="oklch(0.20 0.014 250 / .5)" stroke="oklch(0.370 0.014 250)" stroke-dasharray="3 4"></rect>
-                  <text x="574" y="82" font-family="var(--mono)" font-size="11" font-weight="600" fill="oklch(0.805 0.135 78)">CLOUD &middot; IPv4 egress</text>
-                  <!-- switch -->
-                  <rect x="144" y="104" width="52" height="28" rx="5" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)"></rect>
-                  <text x="170" y="122" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="#bbb">2.5G sw</text>
-                  <!-- links switch->machines -->
-                  <line x1="170" y1="118" x2="194" y2="40" stroke="oklch(0.370 0.014 250)" stroke-width="1"></line>
-                  <line x1="170" y1="118" x2="194" y2="118" stroke="oklch(0.370 0.014 250)" stroke-width="1"></line>
-                  <line x1="170" y1="118" x2="194" y2="196" stroke="oklch(0.370 0.014 250)" stroke-width="1"></line>
-                  <line x1="170" y1="118" x2="4" y2="118" stroke="oklch(0.370 0.014 250)" stroke-width="1"></line>
-                  <!-- amazon -->
-                  <rect x="194" y="23" width="148" height="34" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.805 0.135 78)" stroke-width="1.4"></rect>
-                  <text x="268" y="38" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="600" fill="oklch(0.805 0.135 78)">amazon</text>
-                  <text x="268" y="51" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="oklch(0.640 0.012 250)">hub &middot; agents &middot; apps</text>
-                  <!-- beast -->
-                  <rect x="194" y="101" width="148" height="34" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)" stroke-width="1"></rect>
-                  <text x="268" y="116" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="600" fill="#ddd">beast</text>
-                  <text x="268" y="129" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="oklch(0.640 0.012 250)">oMLX &middot; Whisper</text>
-                  <!-- snow -->
-                  <rect x="194" y="179" width="148" height="34" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)" stroke-width="1"></rect>
-                  <text x="268" y="194" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="600" fill="#ddd">snow</text>
-                  <text x="268" y="207" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="oklch(0.640 0.012 250)">RTX 4070</text>
-                  <!-- opnsense -->
-                  <rect x="4" y="101" width="148" height="34" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)" stroke-width="1"></rect>
-                  <text x="78" y="116" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="600" fill="#ddd">opnsense</text>
-                  <text x="78" y="129" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="oklch(0.640 0.012 250)">router &middot; Protectli</text>
-                  <!-- VPS pair -->
-                  <rect x="600" y="105" width="200" height="30" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)"></rect>
-                  <text x="700" y="124" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="#ddd">vps &middot; ocean&rarr;vultr</text>
-                  <rect x="600" y="150" width="200" height="30" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)"></rect>
-                  <text x="700" y="169" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="oklch(0.640 0.012 250)">Dallas (low-latency)</text>
-                  <!-- tailscale tunnel -->
-                  <line x1="342" y1="118" x2="600" y2="130" stroke="oklch(0.805 0.135 78)" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.7"></line>
-                  <text x="470" y="108" text-anchor="middle" font-family="var(--mono)" font-size="9.5" fill="oklch(0.805 0.135 78)">Tailscale mesh &middot; WireGuard</text>
-                  <text x="700" y="208" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="oklch(0.640 0.012 250)">&uarr; public IPv4 &rarr; internet</text>
+                <svg viewBox="0 0 860 340" style="width:100%;display:block" role="img" aria-label="Two memory layers: a transient WebSocket message bus on top, and below it a durable cross-machine memory store (the ~/.claude-memory knowledge base, replicated by Syncthing) into which this blog's own .knowledge directory is symlinked">
+                  <!-- TRANSIENT tier -->
+                  <rect x="20" y="16" width="820" height="96" rx="10" fill="oklch(0.20 0.014 250 / .5)" stroke="oklch(0.370 0.014 250)" stroke-dasharray="3 4"></rect>
+                  <text x="34" y="38" font-family="var(--mono)" font-size="11" font-weight="600" fill="oklch(0.640 0.012 250)">TRANSIENT &middot; the message bus</text>
+                  <rect x="118" y="52" width="138" height="34" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)"></rect>
+                  <text x="187" y="73" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="#ddd">coo@amazon</text>
+                  <rect x="361" y="52" width="138" height="34" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)"></rect>
+                  <text x="430" y="73" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="#ddd">coder@beast</text>
+                  <rect x="604" y="52" width="138" height="34" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)"></rect>
+                  <text x="673" y="73" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="#ddd">pm@amazon</text>
+                  <line x1="256" y1="69" x2="361" y2="69" stroke="oklch(0.370 0.014 250)" stroke-width="1" stroke-dasharray="5 4"></line>
+                  <line x1="499" y1="69" x2="604" y2="69" stroke="oklch(0.370 0.014 250)" stroke-width="1" stroke-dasharray="5 4"></line>
+                  <text x="308" y="64" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="oklch(0.640 0.012 250)">msg &rarr; ack</text>
+                  <text x="551" y="64" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="oklch(0.640 0.012 250)">msg &rarr; ack</text>
+                  <text x="826" y="104" text-anchor="end" font-family="var(--mono)" font-size="9" fill="oklch(0.640 0.012 250)">WebSocket &middot; at-least-once &middot; gone after delivery</text>
+                  <!-- DURABLE tier -->
+                  <rect x="20" y="128" width="820" height="196" rx="10" fill="oklch(0.20 0.014 250 / .5)" stroke="oklch(0.805 0.135 78 / .5)" stroke-dasharray="3 4"></rect>
+                  <text x="34" y="150" font-family="var(--mono)" font-size="11" font-weight="600" fill="oklch(0.805 0.135 78)">DURABLE &middot; the shared brain</text>
+                  <!-- three replicas -->
+                  <rect x="64" y="168" width="172" height="48" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)"></rect>
+                  <text x="150" y="188" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="600" fill="#ddd">amazon</text>
+                  <text x="150" y="203" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="oklch(0.640 0.012 250)">~/.claude-memory</text>
+                  <rect x="344" y="168" width="172" height="48" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)"></rect>
+                  <text x="430" y="188" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="600" fill="#ddd">beast</text>
+                  <text x="430" y="203" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="oklch(0.640 0.012 250)">~/.claude-memory</text>
+                  <rect x="624" y="168" width="172" height="48" rx="6" fill="oklch(0.238 0.016 250)" stroke="oklch(0.370 0.014 250)"></rect>
+                  <text x="710" y="188" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="600" fill="#ddd">opnsense</text>
+                  <text x="710" y="203" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="oklch(0.640 0.012 250)">~/.claude-memory</text>
+                  <!-- syncthing replication arrows -->
+                  <line x1="236" y1="192" x2="344" y2="192" stroke="oklch(0.805 0.135 78)" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.8"></line>
+                  <line x1="516" y1="192" x2="624" y2="192" stroke="oklch(0.805 0.135 78)" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.8"></line>
+                  <text x="290" y="186" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="oklch(0.805 0.135 78)">&harr; Syncthing</text>
+                  <text x="570" y="186" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="oklch(0.805 0.135 78)">&harr; Syncthing</text>
+                  <!-- blog symlink callout -->
+                  <rect x="64" y="256" width="732" height="50" rx="8" fill="oklch(0.805 0.135 78 / .08)" stroke="oklch(0.805 0.135 78 / .6)"></rect>
+                  <text x="80" y="277" font-family="var(--mono)" font-size="9.5" font-weight="600" fill="oklch(0.805 0.135 78)">this blog &middot; .knowledge/</text>
+                  <text x="80" y="293" font-family="var(--mono)" font-size="9" fill="oklch(0.640 0.012 250)">&rarr; symlink &rarr; ~/.claude-memory/github-com-drewwells-blog/knowledge</text>
+                  <text x="780" y="285" text-anchor="end" font-family="var(--mono)" font-size="9" fill="oklch(0.640 0.012 250)">same store the agents read</text>
                 </svg>
               </div>
             </div>
-            <figcaption class="fig-cap"><b>TAKEAWAY</b><span>The cloud isn't where the work happens &mdash; it's a workaround for an ISP that won't hand out an IPv4. Compute, models, and storage stay on-prem.</span></figcaption>
+            <figcaption class="fig-cap"><b>TAKEAWAY</b><span>The bus is memory that forgets &mdash; coordination that vanishes once a message is delivered. The other half persists: one knowledge base, Syncthing-replicated to every machine, that agents re-read after each context wipe. The tell &mdash; the post you're reading lives in it too. This page's <code>.knowledge/</code> is a symlink into the very store the agents think with.</span></figcaption>
           </figure>
         </div>
       </div>
@@ -382,6 +379,22 @@ const sites = [
               </div>
             ))}
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FOOTNOTE · CONNECTIVITY ===================== -->
+    <section class="section" id="s-note">
+      <div class="wrap">
+        <div class="sec-head col">
+          <div class="sec-num" style="opacity:.45">&sect;</div>
+          <div class="sec-titles">
+            <div class="sub">Footnote</div>
+            <h2>One boring necessity</h2>
+          </div>
+        </div>
+        <div class="prose col">
+          <p>The house runs on T-Mobile home internet with <b>no public IPv4</b> and blocked IPv6 ingress &mdash; so a pair of cheap cloud VPS exist for exactly one reason: to be a stable IPv4 egress point in front of the LAN. They route; they don't compute. Everything real still runs at home, on hardware I own.</p>
         </div>
       </div>
     </section>

@@ -25,7 +25,7 @@ export const posts: Post[] = [
   {
     slug: 'message-bus-for-my-agents',
     title: 'I built a message bus so my AI agents could run my servers.',
-    dek: 'A custom WebSocket bus, leader election, and a Telegram voice bridge turn a five-machine homelab — Linux and macOS alike — into a fault-tolerant organization of AI agents that supervises itself, keeps the apps up, and pages me when it’s stuck.',
+    dek: 'A custom WebSocket bus, leader election, and a Telegram voice bridge turn a four-machine homelab — Linux and macOS alike — into a fault-tolerant organization of AI agents that supervises itself, keeps the apps up, and pages me when it’s stuck.',
     kicker: 'Homelab / Agent Infrastructure',
     date: '2026-06-02',
     tags: [
