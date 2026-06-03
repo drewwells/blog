@@ -78,19 +78,19 @@ const apps = [
 const themes = [
   {
     t: 'Agents as operators, not chatbots',
-    d: 'The claim isn’t "I use an LLM." It’s a fleet of agents, with an elected leader, that runs my infrastructure and pages me when stuck.',
+    d: 'I’m not running LLM chatbots — I’m building autonomous workflows that only ping a human when past context can’t answer the operational question.',
   },
   {
-    t: 'Distributed-systems fundamentals, hand-rolled',
-    d: 'Leader election, leases, heartbeats, identity arbitration, at-least-once messaging with acks — applied to a problem most people solve with hope.',
+    t: 'Microservice architecture',
+    d: 'I leaned on my architecture experience to build tolerant systems that respond in reasonable time: identity arbitration, at-least-once messaging, leases and heartbeats — applied to real local projects, not slideware.',
   },
   {
-    t: 'Sovereignty by default',
-    d: 'Own hardware, own LLMs, own message bus, own speech-to-text. The cloud droplet exists only because the ISP won’t hand out an IPv4.',
+    t: 'Sovereign where it counts',
+    d: 'It all runs on my own hardware today, ISP limits aside. Inference still leans on the cloud, but local models are there to fall back to when a provider has an outage.',
   },
   {
-    t: 'Operational maturity',
-    d: 'Watchdogs that respect human-attached sessions, memory with backups and seven-check validation, PASS/FAIL phone alerts — the work that separates a toy from a thing you trust.',
+    t: 'It learns as it runs',
+    d: 'Watchdogs run continuously and still respect a session I’m attached to. Memory doesn’t start from scratch each session — it builds on a persistent store that’s optimized nightly in a “dream” pass, accruing real operational experience and learning from past mistakes.',
   },
 ];
 
@@ -127,10 +127,10 @@ const sites = [
         </div>
         <div class="kicker">HOMELAB / AGENT INFRASTRUCTURE</div>
         <h1 class="headline">I built a message bus so my AI agents could run my servers.<span class="cur"></span></h1>
-        <p class="dek">A custom WebSocket bus, leader election, and a Telegram voice bridge turn a four-machine homelab &mdash; <b>Linux and macOS alike</b> &mdash; into a <b>fault-tolerant organization of AI agents</b> that supervises itself, keeps the apps up, and pages me when it's stuck.</p>
+        <p class="dek">Agents talk to each other over a custom WebSocket bridge &mdash; with leader election and a Telegram voice bridge &mdash; so I can run every machine through one elected leader. It spans two architectures, <b>Linux and macOS</b>, with supervisors keeping it fault-tolerant, and it pages me when it hits something it can't resolve.</p>
         <div class="byline"><b>Drew Wells</b> &nbsp;&middot;&nbsp; June 2026 &nbsp;&middot;&nbsp; wellsstar.dev</div>
         <div class="strip">
-          <div class="stat"><div class="n">4<small>+2</small></div><div class="l">Machines on the fabric &middot; 2 VPS egress</div></div>
+          <div class="stat"><div class="n">4<small>+2</small></div><div class="l">Machines on the fabric &middot; 2 VPS ingress</div></div>
           <div class="stat"><div class="n">6</div><div class="l">Production apps kept alive</div></div>
           <div class="stat"><div class="n">8</div><div class="l">MCP tools every agent can call</div></div>
           <div class="stat"><div class="n">2</div><div class="l">OS families &middot; one watchdog model</div></div>
@@ -145,12 +145,13 @@ const sites = [
           <div class="sec-num">01</div>
           <div class="sec-titles">
             <div class="sub">The substrate</div>
-            <h2>Four machines, one logical fabric</h2>
+            <h2>One logical fabric, unlimited machines</h2>
           </div>
         </div>
         <div class="prose col">
-          <p class="lead">Most homelabs are a pile of containers on one box. This one is a small fleet &mdash; every node joined into a single <b>Tailscale mesh</b> so an agent on one machine can address an agent on another as if they were local.</p>
-          <p>The machines aren't interchangeable; each is matched to the work it's best at. <b>amazon</b> (16-core x86, 128&nbsp;GB) is the always-on spine &mdash; it hosts the message bus, the shared state, and the coordinating agents. <b>beast</b> (Mac Studio M4 Max, 128&nbsp;GB unified memory) does local LLM inference through Apple MLX, where that unified memory runs models a discrete GPU couldn't hold. <b>opnsense</b> is the router carrying the Tailscale fabric the others ride on. Right workload, right silicon &mdash; which is exactly why the agents need a bus to act as one.</p>
+          <p class="lead">My homelab used to be one server with a pile of containers on it. Now it's a small fleet &mdash; addressable units I can work on independently, moving workloads between them as a project's scope changes.</p>
+          <p>The fabric is tied together with a <b>Tailscale mesh</b> for end-to-end encryption between every node, and I drop into <code>tmux</code> when I need to focus on one part of the system. The machines range in size: small cloud VPS, a <b>16-core 128&nbsp;GB x86</b> Linux box, an <b>M4 Max with 128&nbsp;GB</b> for local inference, and hourly RunPod rentals when a job needs more muscle than I own.</p>
+          <p>Messages have queues, supervisors that hold response times to account, and leader election to resolve contention &mdash; all of it there to manage context across the variety of complex problems each project throws at it.</p>
         </div>
 
         <div class="reveal col">
@@ -199,7 +200,7 @@ const sites = [
                 </svg>
               </div>
             </div>
-            <figcaption class="fig-cap"><b>TAKEAWAY</b><span>The bus is memory that forgets &mdash; coordination that vanishes once a message is delivered. The other half persists: one knowledge base, Syncthing-replicated to every machine, that agents re-read after each context wipe. The tell &mdash; the post you're reading lives in it too. This page's <code>.knowledge/</code> is a symlink into the very store the agents think with.</span></figcaption>
+            <figcaption class="fig-cap"><b>TAKEAWAY</b><span>Three layers: an ephemeral message bus, a 30-day context cache, and a persistent memory agents can query anytime. Each project gets its own memory, populated as costly or important details surface and tuned daily. That memory is symlinked into the project &mdash; including this blog, whose <code>.knowledge/</code> points straight into the same store the agents read.</span></figcaption>
           </figure>
         </div>
       </div>
@@ -216,8 +217,8 @@ const sites = [
           </div>
         </div>
         <div class="prose col">
-          <p class="lead">Claude Code agents are isolated processes with limited context. To behave like an <b>organization</b> &mdash; a COO delegating to PMs and coders across machines &mdash; they need to find each other, message each other reliably, and never collide on identity. The bridge is a two-layer Go system that gives them exactly that.</p>
-          <p>A single <b>hub</b> at <code>ws://amazon.home.arpa:8991</code> is the WebSocket router and registry of live sessions. Alongside each agent runs a <b>bridge MCP server</b> that exposes the hub as tools the model calls directly &mdash; <code>register</code>, <code>send</code>, <code>get_messages</code>, <code>ack</code>, <code>status</code>, <code>list_peers</code>, <code>hub_status</code>, <code>leader_status</code>. Every agent is addressed as <code>name@machine</code>; queues are machine-scoped; the namespace is human-readable over a distributed fabric.</p>
+          <p class="lead">A Claude Code agent is an isolated process with a small context window. For a handful of them to act like one team &mdash; a lead delegating to PMs and coders across machines &mdash; they have to find each other, message reliably, and never step on each other's identity. The bridge is the two-layer Go system that makes that work.</p>
+          <p>There's one <b>hub</b>, a WebSocket router at <code>ws://amazon.home.arpa:8991</code> that also keeps the registry of live sessions. Next to each agent runs a small <b>bridge MCP server</b> that hands the model the hub as tools it calls directly &mdash; <code>register</code>, <code>send</code>, <code>get_messages</code>, <code>ack</code>, <code>status</code>, <code>list_peers</code>, <code>hub_status</code>, <code>leader_status</code>. Every agent is <code>name@machine</code> and queues are per-machine, so the namespace stays human-readable on top of a distributed fabric.</p>
         </div>
 
         <div class="reveal" data-screen-label="Fig 02 — bridge">
@@ -234,9 +235,9 @@ const sites = [
 
         <div class="prose col">
           <ul class="bullets">
-            <li><b>Identity-collision detection.</b> Supervisors relaunch agents at will, so the hub refuses a duplicate identity while a <i>live</i> process holds it. "Live" means a heartbeat within 60s &mdash; after that the old registration is a corpse and a fresh claim takes over. The line between "restarted cleanly" and "split-brain."</li>
-            <li><b>Lease-based leader election.</b> A <code>claim_role</code> succeeds only if no live lease exists. Lease generations tell a renewal (same gen) apart from a true handover (<code>primary_changed</code>). Same shape as etcd / ZooKeeper, hand-rolled for an agent fleet.</li>
-            <li><b>Explicit acks.</b> A message store with <code>ack</code> / <code>status</code> semantics, so a sender can confirm a peer actually received a message &mdash; not just that it was sent.</li>
+            <li><b>Identity-collision detection.</b> Supervisors relaunch agents whenever they feel like it, so the hub won't hand out an identity a live process already holds. "Live" means a heartbeat in the last 60s &mdash; after that the old registration is a corpse and a fresh claim takes it. That's the line between a clean restart and a split brain.</li>
+            <li><b>Lease-based leader election.</b> <code>claim_role</code> only succeeds if no live lease exists. Lease generations let me tell a renewal (same generation) from a real handover (<code>primary_changed</code>) &mdash; the same shape as etcd or ZooKeeper, just hand-rolled for a fleet of agents.</li>
+            <li><b>Explicit acks.</b> The message store has <code>ack</code> / <code>status</code> semantics, so a sender can confirm a peer actually got a message &mdash; not just that it left.</li>
           </ul>
         </div>
 
@@ -254,12 +255,12 @@ const sites = [
           <div class="sec-num">03</div>
           <div class="sec-titles">
             <div class="sub">The Telegram relay</div>
-            <h2>A phone as the control plane</h2>
+            <h2>Control plane extends to my phone</h2>
           </div>
         </div>
         <div class="prose col">
-          <p class="lead">I'm not always at a terminal. The relay turns a Telegram chat into a first-class, secured interface to the fleet &mdash; <b>bidirectional</b>, so agents escalate to me and I command them back. The headline feature: I can leave my servers a <b>voice memo</b>.</p>
-          <p>Telegram voice notes (OGG/Opus) get piped through a <b>local Whisper</b> client &mdash; transcription runs on my own hardware, not a cloud STT vendor &mdash; and land as text in the right agent's queue. Real access control sits in front: an <code>open</code> / <code>pairing</code> / <code>closed</code> DM policy, an allowlist, a pairing handshake, and group&rarr;agent routing so different chats talk to different agents.</p>
+          <p class="lead">I wanted to keep a project moving even when I'm away from my computer &mdash; commuting, or out at the gym taking a break. The relay is a persistently managed, bidirectional connection to Telegram: agents can reach me when they need to unblock work or diagnose an issue, and I can answer back.</p>
+          <p>When I can't type, I dictate. Voice notes run through a <b>local Whisper</b> service &mdash; no cloud STT vendor involved &mdash; and the transcribed text goes over the relay to the right agent. Access controls sit in front so nothing reaches the bridge that shouldn't.</p>
         </div>
 
         <div class="reveal" data-screen-label="Fig 03 — telegram sequence">
@@ -275,11 +276,11 @@ const sites = [
         </div>
 
         <div class="prose col">
-          <p>Long agent replies get split to respect Telegram's 4096-char cap, and a typed-message convention keeps ops chatter separate from real input on the wire: <code>[OPS-PROBE]</code> for liveness, <code>[OPS]</code> for instructions, <code>[USER-RELAY]</code> for a forwarded human message.</p>
+          <p>Every message over the bridge is watched for a response. An agent that doesn't answer is surfaced as an error in Telegram so I can act on it, common outages get escalated to me immediately, and automatic nudges try to clear the usual "stuck" behavior before it ever reaches me.</p>
         </div>
 
         <div class="pquote col">
-          <p>"I can leave my servers a voice memo. Whisper turns it into text, the bridge routes it to the right agent, and the agent acks back &mdash; or the relay tells me it went unheard."</p>
+          <p>"I don't just send a message &mdash; I expect a response, and the whole system is built around that."</p>
           <div class="who">&mdash; On the relay</div>
         </div>
       </div>
@@ -296,8 +297,8 @@ const sites = [
           </div>
         </div>
         <div class="prose col">
-          <p class="lead">The unglamorous third act &mdash; the parts that make it <b>stay up unattended</b>, across two operating systems whose service models barely resemble each other.</p>
-          <p><b>Cross-platform supervision.</b> Linux uses <code>systemd</code>; the Mac uses <code>launchd</code>. Per-agent supervisors restart crashed agents and wedged hubs under one shared model &mdash; with a hard-won rule baked in: a supervisor <b>must never evict a session I'm actively attached to</b>. It only kills and recreates a pane when the process is genuinely dead.</p>
+          <p class="lead">This is the least glamorous part, and the one that actually matters: keeping all of it up on its own, across two operating systems that don't agree on much.</p>
+          <p>Supervision has to work on both. Linux runs <code>systemd</code>, the Mac runs <code>launchd</code>, and a per-agent supervisor restarts crashed agents and wedged hubs under one shared model. The rule I learned the hard way: a supervisor <b>must never evict a session I'm actively attached to</b>. It only kills and recreates a pane when the process is genuinely dead &mdash; not when I'm sitting in it.</p>
         </div>
 
         <div class="reveal col" data-screen-label="Fig 04 — MoE bars">
@@ -314,9 +315,9 @@ const sites = [
 
         <div class="prose col">
           <ul class="bullets">
-            <li><b>On-prem LLM serving.</b> OpenAI-compatible local inference via Apple MLX on <code>beast</code>, daemon-managed. Fallback chain local Qwen &rarr; local Gemma &rarr; cloud Claude, so no single machine is a hard dependency.</li>
-            <li><b>Persistent memory.</b> A 245-entry knowledge base synced across machines with Syncthing. Agents survive periodic context wipes by re-reading a <code>state.md</code> source-of-truth on every fresh boot.</li>
-            <li><b>"Dream" consolidation.</b> A nightly 04:30 timer mines recent transcripts for durable insights, runs a headless <code>claude -p</code> pass to merge duplicates, guards the result with seven validation checks, atomically swaps it in, and Telegrams me a one-line PASS/FAIL.</li>
+            <li><b>On-prem LLM serving.</b> Local inference is OpenAI-compatible, served through Apple MLX on <code>beast</code> and daemon-managed. The fallback chain runs local Qwen &rarr; local Gemma &rarr; cloud Claude, so no single machine is a hard dependency and a provider outage doesn't stop me.</li>
+            <li><b>Persistent memory.</b> A 245-entry knowledge base syncs across every machine with Syncthing. Agents lose their context on a regular basis, so they survive by re-reading a <code>state.md</code> source-of-truth on every fresh boot &mdash; they don't start from zero.</li>
+            <li><b>"Dream" consolidation.</b> Every night at 04:30 a timer mines the day's transcripts for anything worth keeping, runs a headless <code>claude -p</code> pass to merge duplicates, checks the result against seven validations, swaps it in atomically, and Telegrams me a one-line PASS/FAIL so I know it ran.</li>
           </ul>
         </div>
       </div>
@@ -329,11 +330,11 @@ const sites = [
           <div class="sec-num">05</div>
           <div class="sec-titles">
             <div class="sub">What it runs</div>
-            <h2>The apps &mdash; supporting cast</h2>
+            <h2>Real running projects</h2>
           </div>
         </div>
         <div class="prose col">
-          <p>Proof the infrastructure carries real load, not demos. Six production apps behind one nginx reverse proxy (10 domains, shared TLS), plus <b>reforge</b> &mdash; a Rust-native Renovate replacement (~35 modules, 167 tests) for self-hosted GitLab, framed as a learning project.</p>
+          <p>These started as a handful of interests &mdash; data processing, scheduling, and hosting private video to support my dancing hobby. I use the sites every day, so I expect the infrastructure to keep them running 24/7: not clumsy hobby projects, but something that holds up as well as any SaaS service overlapping the same use cases. As more of the critical features have landed, I've started wiring in cross-dependencies &mdash; the dance uploader can reach out to <b>swing-analytics</b> to suggest possible instructors in a video.</p>
         </div>
         <div class="reveal">
           <div class="apps-grid">
@@ -390,11 +391,11 @@ const sites = [
           <div class="sec-num" style="opacity:.45">&sect;</div>
           <div class="sec-titles">
             <div class="sub">Footnote</div>
-            <h2>One boring necessity</h2>
+            <h2>Cloud for ingress</h2>
           </div>
         </div>
         <div class="prose col">
-          <p>The house runs on T-Mobile home internet with <b>no public IPv4</b> and blocked IPv6 ingress &mdash; so a pair of cheap cloud VPS exist for exactly one reason: to be a stable IPv4 egress point in front of the LAN. They route; they don't compute. Everything real still runs at home, on hardware I own.</p>
+          <p>One downside of where I live: no fiber. T-Mobile Home Internet puts me behind CGNAT, with <b>no public IPv4</b> and no stable IPv6 &mdash; so nothing on the internet can reach my LAN directly. A couple of cheap cloud VPS solve it: they give me public IP addresses that route inbound traffic to my services. They route; they don't compute. Everything real still runs at home.</p>
         </div>
       </div>
     </section>
@@ -403,7 +404,7 @@ const sites = [
     <footer class="foot">
       <div class="wrap col">
         <div class="kicker" style="margin-bottom:24px">END OF DISPATCH</div>
-        <div class="big">An addressable, fault-tolerant fabric &mdash; with a single elected leader, at-least-once messaging, and a phone for a console.</div>
+        <div class="big">A multi-architecture fabric that turns cloud and home machines alike into composable units for a fleet of personal projects &mdash; with the control plane reaching all the way out to a phone in my pocket.</div>
         <div class="sites">
           {sites.map((s) => (
             <a class="site" href={`https://${s}`} target="_blank" rel="noopener">{s}</a>

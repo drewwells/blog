@@ -28,3 +28,6 @@ pnpm-debug.log*
 # design handoff bundle — kept locally for reference, never committed
 /_handoff_portfolio/
 /Portfolio.zip
+
+# local drafting scratch pads (your-voice rewrites) — never committed
+/DRAFT-*.md

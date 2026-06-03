@@ -37,10 +37,10 @@ export const portfolio: PortfolioItem[] = [
     title: 'A message bus for my AI agents',
     kicker: 'Homelab · Distributed Systems',
     blurb:
-      'A custom WebSocket message bus with leader election and a Telegram voice bridge that turns a five-machine homelab — Linux and macOS alike — into a fault-tolerant organization of AI agents that supervises itself, keeps the apps running, and pages me when it gets stuck.',
+      'A custom WebSocket bridge with leader election and a Telegram voice bridge that turns a four-machine homelab — Linux and macOS alike — into a fault-tolerant fleet of agents I can run through one elected leader, and that pages me when it hits something it can’t resolve.',
     role: 'Design & implementation',
     stack: [
-      'WebSocket bus',
+      'WebSocket bridge',
       'Leader election',
       'Telegram bridge',
       'Linux + macOS',
