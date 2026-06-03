@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import { portfolio } from '../../portfolio';
+import { SITE_TITLE } from '../../consts';
+import '../../styles/site.css';
+import '../../styles/portfolio.css';
+
+const year = new Date().getUTCFullYear();
+---
+
+<BaseLayout
+  title="Portfolio"
+  description="Selected work by Drew Wells — infrastructure, distributed systems, and software built end to end."
+>
+  <SiteHeader />
+
+  <main class="portfolio">
+    <section class="portfolio__intro">
+      <p class="portfolio__eyebrow">Selected Work</p>
+      <p class="portfolio__lede">
+        A few things I've designed and built end to end — with the full
+        write-up behind each one.
+      </p>
+    </section>
+
+    <section class="portfolio__list" aria-label="Portfolio">
+      {
+        portfolio.map((item) => (
+          <article class="work-card">
+            <a
+              class="work-card__link"
+              href={item.href}
+              {...(item.external
+                ? { target: '_blank', rel: 'noopener noreferrer' }
+                : {})}
+            >
+              <div class="work-card__kicker">{item.kicker}</div>
+              <h2 class="work-card__title">{item.title}</h2>
+              <p class="work-card__blurb">{item.blurb}</p>
+              <ul class="work-card__stack" aria-label="Stack">
+                {item.stack.map((tech) => (
+                  <li class="work-card__chip">{tech}</li>
+                ))}
+              </ul>
+              <div class="work-card__meta">
+                <span class="work-card__role">{item.role}</span>
+                <span class="work-card__dot" aria-hidden="true">
+                  ·
+                </span>
+                <span class="work-card__year">{item.year}</span>
+                <span class="work-card__more">
+                  {item.external ? 'View ↗' : 'Read the write-up →'}
+                </span>
+              </div>
+            </a>
+          </article>
+        ))
+      }
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span>{SITE_TITLE} · {year}</span>
+      <a href="/rss.xml">RSS feed</a>
+    </div>
+  </footer>
+</BaseLayout>
