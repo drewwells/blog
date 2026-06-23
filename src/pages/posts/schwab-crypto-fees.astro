@@ -1,0 +1,151 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getPost } from '../../posts';
+import '../../styles/posts/schwab-crypto-fees.css';
+const post = getPost('schwab-crypto-fees');
+---
+<PostLayout post={post}>
+<div class="article">
+
+  <!-- ===================== MASTHEAD ===================== -->
+  <header class="mast reveal">
+    <div class="kicker">Crypto &middot; Cost of Ownership</div>
+    <h1 class="headline">The <span class="figlead">0.75%</span> Round Trip</h1>
+    <p class="dek">Schwab now sells bitcoin and ether two ways: wrapped in an <b>ETF</b> that skims a small fee every year you hold, or bought <b>direct</b>, where you pay a toll going in and another coming out. One is a slow leak. The other is a cover charge. Which is cheaper depends entirely on <b>how long you stay.</b></p>
+    <div class="byline">An analysis &middot; Fees verified <b>June 2026</b> &middot; <span style="color:var(--clay-ink)">Not investment advice</span></div>
+  </header>
+
+  <!-- ===================== STAT STRIP ===================== -->
+  <div class="full statstrip reveal">
+    <div class="stat sch">
+      <div class="num">0.75%</div>
+      <div class="lab">Schwab&rsquo;s direct-crypto fee &mdash; charged on the buy <b>and</b> the sell <span class="yr">per trade</span></div>
+    </div>
+    <div class="stat sch">
+      <div class="num">1.5%</div>
+      <div class="lab">the full round trip if you ever sell &mdash; paid once, up front and at exit</div>
+    </div>
+    <div class="stat etf">
+      <div class="num">0.25%</div>
+      <div class="lab">a typical spot-bitcoin ETF&rsquo;s annual expense ratio &mdash; FBTC, BTCO <span class="yr">every year</span></div>
+    </div>
+    <div class="stat">
+      <div class="num">6 yrs</div>
+      <div class="lab">how long you&rsquo;d hold before that ETF&rsquo;s drag catches Schwab&rsquo;s round trip <span class="yr">0% growth</span></div>
+    </div>
+  </div>
+
+  <!-- ===================== THE DISTINCTION ===================== -->
+  <p class="body gap-s reveal">There are two fundamentally different ways to put $10,000 into bitcoin at Schwab, and they fail you on opposite timelines. A <span class="etf">spot-bitcoin ETF</span> &mdash; a fund like VanEck&rsquo;s HODL, Fidelity&rsquo;s FBTC, or Invesco&rsquo;s BTCO &mdash; trades commission-free, but the fund skims an annual <b>expense ratio</b> off your whole balance for as long as you own it. <span class="sch">Schwab&rsquo;s new direct crypto</span> has no annual fee at all &mdash; you hold the coin in custody &mdash; but it charges <b>0.75% on every trade</b>, once when you buy and again when you sell.</p>
+
+  <div class="define reveal"><b>Two tollbooths, two kinds of bill.</b> The <span class="etf">ETF</span> is a subscription: a small charge that recurs every year, forever, whether the price goes up or down. <span class="sch">Schwab direct</span> is a cover charge: a bigger hit, but you only pay it on the way in and the way out. So the real question isn&rsquo;t &ldquo;which fee is lower&rdquo; &mdash; it&rsquo;s <b>recurring drag versus a one-time round trip</b>, and that turns entirely on your holding period.</div>
+
+  <!-- ===================== CHAPTER 01 ===================== -->
+  <section class="full chapter reveal">
+    <div class="chap-bignum">01</div>
+    <div class="chap-inner">
+      <div class="chap-no">The Model</div>
+      <h2>Move the dials, watch them <em>cross</em></h2>
+      <p class="chap-dek">Set your stake, your horizon, and whether you ever sell. The chart plots cumulative cost for each vehicle; the marker is the year Schwab&rsquo;s round trip stops being the cheaper bet.</p>
+    </div>
+  </section>
+
+  <!-- ===================== CALCULATOR ===================== -->
+  <figure class="fig wide reveal">
+    <div class="fig-head">
+      <p class="take">What $10,000 actually costs to hold.</p>
+      <span class="fig-tag">Interactive &middot; fees only</span>
+    </div>
+    <p class="fig-sub">Total cost of ownership over time &mdash; the annual ETF expense ratio (a rising line) against Schwab&rsquo;s buy-plus-sell toll (flat, unless your position grows). Where the lines cross is your break-even.</p>
+
+    <div class="calc" id="calc">
+      <div class="calc-controls">
+        <div class="ctrl">
+          <div class="cl"><span>Principal</span></div>
+          <div class="pinput"><span>$</span><input id="cPrincipal" type="text" inputmode="numeric" value="10,000" aria-label="Principal in dollars"></div>
+        </div>
+        <div class="ctrl">
+          <div class="cl"><span>Holding period</span><span class="cv" id="cYearsV">7 yrs</span></div>
+          <input id="cYears" type="range" min="1" max="15" step="1" value="7" aria-label="Holding period in years">
+        </div>
+        <div class="ctrl">
+          <div class="cl"><span>Annual price growth</span><span class="cv" id="cGrowthV">0%</span></div>
+          <input id="cGrowth" type="range" min="0" max="40" step="1" value="0" aria-label="Assumed annual price growth percent">
+        </div>
+      </div>
+      <div class="calc-controls" style="grid-template-columns:1fr">
+        <div class="ctrl" style="border-left:0">
+          <div class="cl"><span>Do you ever sell?</span></div>
+          <div class="seg" id="cSell" role="group" aria-label="Exit assumption">
+            <button data-v="1" class="on">Eventually sell (round trip)</button>
+            <button data-v="0">Hold forever (never sell)</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-body">
+        <p class="verdict" id="cVerdict">&nbsp;</p>
+        <div class="legend">
+          <div class="li"><span class="sw lineS-sw" style="background:var(--schwab)"></span>Schwab direct (0.75% &times; trades)</div>
+          <div class="li"><span class="sw" style="background:var(--etf)"></span>HODL &middot; VanEck (0.20%)</div>
+          <div class="li"><span class="sw" style="background:var(--etf);background:repeating-linear-gradient(90deg,var(--etf) 0 2px,transparent 2px 6px)"></span>FBTC / BTCO (0.25%)</div>
+          <div class="li"><span class="sw dot" style="background:var(--clay)"></span>break-even</div>
+        </div>
+        <div class="chartwrap"><svg id="cChart" viewBox="0 0 720 380" role="img" aria-label="Cumulative cost over time"></svg></div>
+
+        <table class="ctable" id="cTable">
+          <thead><tr><th class="veh">Vehicle</th><th>Year 1</th><th>Year 3</th><th>Year 5</th><th>Year 10</th><th id="cTableNow">At 7 yrs</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <figcaption><b>How the math works.</b> ETF cost accrues the expense ratio on the running balance; Schwab cost is 0.75% of the buy plus, if you sell, 0.75% of the exit value. With price growth above zero the sell-side toll grows with the position, so a winning trade makes Schwab <b>more</b> expensive to leave. HODL&rsquo;s fee is waived to 0.00% through <b>July&nbsp;31,&nbsp;2026</b> (first $2.5B AUM); the model prorates that brief remaining window, after which 0.20% applies. Fees only &mdash; excludes bid/ask spread, tracking error, and taxes.</figcaption>
+  </figure>
+
+  <!-- ===================== CHAPTER 02 ===================== -->
+  <section class="full chapter reveal">
+    <div class="chap-bignum">02</div>
+    <div class="chap-inner">
+      <div class="chap-no">The Crossover</div>
+      <h2>How long until the drag <em>catches up</em></h2>
+      <p class="chap-dek">At zero growth the arithmetic is clean: Schwab&rsquo;s round trip is a fixed 1.5%, so an ETF only costs more once its annual ratio, stacked up year over year, clears that bar.</p>
+    </div>
+  </section>
+
+  <p class="body gap-s reveal">Divide Schwab&rsquo;s 1.5% round trip by an ETF&rsquo;s annual ratio and you get the break-even in years &mdash; the point where staying in the fund has quietly cost you as much as the round-trip toll would have. Below it, the ETF is cheaper. Above it, you&rsquo;d have been better off buying the coin direct and sitting still.</p>
+
+  <figure class="fig wide reveal">
+    <div class="fig-head">
+      <p class="take">Break-even, if you eventually sell.</p>
+      <span class="fig-tag">0% growth &middot; vs Schwab 1.5%</span>
+    </div>
+    <p class="fig-sub">Years you&rsquo;d have to hold each ETF before its cumulative expense ratio equals Schwab&rsquo;s 1.5% round-trip cost. Longer bar = the ETF stays cheaper for longer.</p>
+    <div class="panel">
+      <div class="bebars" id="beBars"></div>
+    </div>
+    <figcaption>At 0% assumed growth. Higher expense ratios hit break-even sooner. HODL&rsquo;s <b>waived</b> period makes it effectively free to hold right now, so its break-even runs out past a decade; after the July&nbsp;2026 waiver it behaves like a 0.20% fund (7.5 years).</figcaption>
+  </figure>
+
+  <!-- ===================== CLOSER ===================== -->
+  <p class="closer reveal">If you&rsquo;re trading, the ETF&rsquo;s recurring drag never has time to bite &mdash; Schwab&rsquo;s toll is the worse deal. If you&rsquo;re a <b>buy-and-hold-for-a-decade</b> believer, the round trip you pay once beats a fee you pay every year. The fee structure is telling you what kind of investor it&rsquo;s built for.</p>
+
+  <!-- ===================== CAVEATS ===================== -->
+  <div class="define reveal" style="border-left-color:var(--clay);margin-top:clamp(40px,6vw,64px)"><b>Before you read too much into the number.</b> This compares <b>fees only</b>. It ignores the bid/ask spread on every trade, ETF tracking error, and the tax bill from selling whatever you hold today. And the vehicles aren&rsquo;t equivalent in kind: Schwab&rsquo;s direct crypto is <b>not SIPC- or FDIC-protected</b>, and at launch you <b>cannot transfer it to self-custody</b> &mdash; no moving coins to your own wallet. An ETF is a security in a brokerage account; direct crypto is a custodied asset with different protections and constraints.</div>
+
+  <!-- ===================== NOTES ===================== -->
+  <section class="notes reveal">
+    <h3>Notes &amp; Sources</h3>
+    <ol>
+      <li><b>Schwab direct crypto.</b> 0.75% per-trade fee on notional for BTC/USD and ETH/USD, charged on buy and sell; no annual or custody fee. Phased retail rollout began May&nbsp;13,&nbsp;2026 (announced April&nbsp;16). Bitcoin and ether only; not SIPC/FDIC protected; no self-custody transfers at launch. Source: <a href="https://pressroom.aboutschwab.com/press-releases/press-release/2026/Charles-Schwab-Announces-Details-of-Spot-Crypto-Trading-Launch/default.aspx">Schwab press release</a>.</li>
+      <li><b>HODL &middot; VanEck Bitcoin ETF.</b> Standard 0.20% sponsor fee, waived to 0.00% on the first $2.5B of assets through July&nbsp;31,&nbsp;2026. Still in effect June 2026 (AUM under the cap). Source: <a href="https://www.vaneck.com/us/en/investments/bitcoin-etf-hodl/">VanEck</a>.</li>
+      <li><b>FBTC (Fidelity)</b> 0.25% and <b>BTCO (Invesco Galaxy)</b> 0.25% &mdash; standard expense ratios; both launch waivers have expired. Spot-bitcoin ETFs trade commission-free at Schwab and Fidelity; the expense ratio is the recurring cost.</li>
+      <li><b>The model.</b> ETF cost = expense ratio accrued on the running balance (compounding when growth &gt; 0). Schwab cost = 0.75% of principal on the buy, plus 0.75% of exit value on the sell (only if you sell). Break-even is solved numerically where cumulative ETF cost meets Schwab&rsquo;s. All rates, the waiver date, principal, horizon, and growth are parameters.</li>
+      <li><b>Not investment advice.</b> Fees are one input among many. Verify current rates with each provider before acting.</li>
+    </ol>
+  </section>
+
+  <footer class="foot">The 0.75% Round Trip &mdash; comparing the cost of holding crypto as an ETF vs. direct at Schwab.</footer>
+
+</div>
+  <script src="/posts/schwab-crypto-fees/calculator.js" is:inline></script>
+</PostLayout>
