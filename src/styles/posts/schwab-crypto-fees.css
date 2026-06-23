@@ -133,10 +133,6 @@ figcaption b{color:var(--ink-soft);font-weight:600}
 .seg button{flex:1;border:0;background:var(--card);font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;cursor:pointer;padding:0 6px}
 .seg button.on{background:var(--ink);color:#fff}
 .seg button+button{border-left:1px solid var(--rule)}
-.csel{margin-top:14px;width:100%;min-height:44px;border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink);font-family:var(--mono);font-size:13.5px;font-weight:600;padding:0 34px 0 12px;cursor:pointer;outline:none;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%238b8475' stroke-width='1.6'/></svg>");background-repeat:no-repeat;background-position:right 12px center}
-.csel:focus{border-color:var(--ink)}
-.calc-controls.row2{grid-template-columns:1fr 1fr}
-@media (max-width:560px){.calc-controls.row2{grid-template-columns:1fr}.calc-controls.row2 .ctrl:nth-child(2){border-left:0;border-top:1px solid var(--rule)}}
 @media (max-width:760px){.calc-controls{grid-template-columns:1fr 1fr}.ctrl:nth-child(3){grid-column:1/-1;border-left:0;border-top:1px solid var(--rule)}}
 @media (max-width:480px){.calc-controls{grid-template-columns:1fr}.ctrl{border-left:0;border-top:1px solid var(--rule)}.ctrl:first-child{border-top:0}}
 
@@ -151,11 +147,10 @@ figcaption b{color:var(--ink-soft);font-weight:600}
 .chartwrap .axline{stroke:var(--rule);stroke-width:1}
 .chartwrap .axlab{font-family:var(--mono);font-size:10.5px;fill:var(--ink-faint)}
 .chartwrap .axtitle{font-family:var(--mono);font-size:10px;fill:var(--ink-soft);letter-spacing:.05em;text-transform:uppercase}
-.chartwrap .lineF{fill:none;stroke:var(--etf);stroke-width:1.6;opacity:.5}
-.chartwrap .lineA{fill:none;stroke:var(--etf);stroke-width:2.6}
+.chartwrap .lineE{fill:none;stroke:var(--etf);stroke-width:1.9;opacity:.85}
 .chartwrap .lineS{fill:none;stroke:var(--schwab);stroke-width:2.6}
 .chartwrap .bx{fill:var(--clay);stroke:#fff;stroke-width:2}
-.chartwrap .bxsm{fill:var(--clay);opacity:.5}
+.chartwrap .bxsm{fill:var(--clay);stroke:#fff;stroke-width:1.5}
 .chartwrap .bxlab{font-family:var(--mono);font-size:11px;font-weight:600;fill:var(--clay-ink)}
 .chartwrap .endlab{font-family:var(--mono);font-size:11.5px;font-weight:600}
 .chartwrap .endlabF{font-family:var(--mono);font-size:11px;font-weight:600;opacity:.65}
@@ -171,7 +166,10 @@ figcaption b{color:var(--ink-soft);font-weight:600}
 .ctable tr.best td{background:var(--etf-wash)}
 .ctable tbody tr{cursor:pointer}
 .ctable tbody tr:hover td{background:var(--paper-2)}
-.ctable tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--etf)}
+.ctable tbody tr.static{cursor:default}
+.ctable tbody tr.static:hover td{background:none}
+.ctable tr.hidden td{opacity:.42}
+.ctable td.veh .tag.off{background:transparent!important;box-shadow:inset 0 0 0 1.5px var(--etf)}
 .ctable td.now{color:var(--ink);font-weight:600}
 .ctable td.muted{color:var(--ink-faint)}
 .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
