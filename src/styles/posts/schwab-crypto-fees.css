@@ -133,6 +133,10 @@ figcaption b{color:var(--ink-soft);font-weight:600}
 .seg button{flex:1;border:0;background:var(--card);font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;cursor:pointer;padding:0 6px}
 .seg button.on{background:var(--ink);color:#fff}
 .seg button+button{border-left:1px solid var(--rule)}
+.csel{margin-top:14px;width:100%;min-height:44px;border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink);font-family:var(--mono);font-size:13.5px;font-weight:600;padding:0 34px 0 12px;cursor:pointer;outline:none;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%238b8475' stroke-width='1.6'/></svg>");background-repeat:no-repeat;background-position:right 12px center}
+.csel:focus{border-color:var(--ink)}
+.calc-controls.row2{grid-template-columns:1fr 1fr}
+@media (max-width:560px){.calc-controls.row2{grid-template-columns:1fr}.calc-controls.row2 .ctrl:nth-child(2){border-left:0;border-top:1px solid var(--rule)}}
 @media (max-width:760px){.calc-controls{grid-template-columns:1fr 1fr}.ctrl:nth-child(3){grid-column:1/-1;border-left:0;border-top:1px solid var(--rule)}}
 @media (max-width:480px){.calc-controls{grid-template-columns:1fr}.ctrl{border-left:0;border-top:1px solid var(--rule)}.ctrl:first-child{border-top:0}}
 
@@ -161,9 +165,15 @@ figcaption b{color:var(--ink-soft);font-weight:600}
 .ctable th.veh,.ctable td.veh{text-align:left;font-family:var(--sans);font-size:14px;font-weight:500;color:var(--ink)}
 .ctable td.veh .tag{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:8px;vertical-align:middle}
 .ctable td.veh small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);font-weight:400;margin-left:17px}
+.ctable{min-width:520px}
 .ctable tr.best td{background:var(--etf-wash)}
+.ctable tbody tr{cursor:pointer}
+.ctable tbody tr:hover td{background:var(--paper-2)}
+.ctable tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--etf)}
 .ctable td.now{color:var(--ink);font-weight:600}
 .ctable td.muted{color:var(--ink-faint)}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.thint{font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin:10px 0 0;letter-spacing:.02em}
 
 /* ---------- break-even bars ---------- */
 .bebars{display:flex;flex-direction:column;gap:18px}

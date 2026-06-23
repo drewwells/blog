@@ -2,11 +2,20 @@
   'use strict';
   /* ---------- CONFIG (verified June 2026 — edit here to update) ---------- */
   var CFG = {
-    schwabRate: 0.0075,            // per-trade, BTC/USD & ETH/USD
+    schwabRate: 0.0075,            // per-trade fee, BTC/USD
     waiverExpiryMs: Date.parse('2026-07-31T00:00:00Z'),
+    // Top 10 U.S. spot-bitcoin ETFs by AUM (June 2026). std = annual expense ratio.
     etfs: [
-      { key:'hodl', label:'HODL · VanEck',        std:0.0020, waiver:0.0000, color:'var(--etf)',  dash:false },
-      { key:'fbtc', label:'FBTC / BTCO',          std:0.0025, waiver:null,   color:'var(--etf)',  dash:true  }
+      { t:'IBIT', issuer:'BlackRock iShares',   std:0.0025, waiver:null   },
+      { t:'GBTC', issuer:'Grayscale',           std:0.0150, waiver:null   },
+      { t:'FBTC', issuer:'Fidelity',            std:0.0025, waiver:null   },
+      { t:'ARKB', issuer:'ARK 21Shares',        std:0.0021, waiver:null   },
+      { t:'BITB', issuer:'Bitwise',             std:0.0020, waiver:null   },
+      { t:'BTC',  issuer:'Grayscale Mini',      std:0.0015, waiver:null   },
+      { t:'HODL', issuer:'VanEck',              std:0.0020, waiver:0.0000 },
+      { t:'BTCO', issuer:'Invesco Galaxy',      std:0.0025, waiver:null   },
+      { t:'EZBC', issuer:'Franklin Templeton',  std:0.0019, waiver:null   },
+      { t:'BRRR', issuer:'CoinShares Valkyrie', std:0.0025, waiver:null   }
     ]
   };
   var YEAR_MS = 365.25*24*3600*1000;
@@ -54,109 +63,99 @@
     return '$'+v.toLocaleString('en-US',{maximumFractionDigits:2});
   }
   function num(v){ return v.toLocaleString('en-US',{maximumFractionDigits:0}); }
+  // expense-ratio label, e.g. "0.25%", "1.50%", or "0% waived" while a waiver is live
+  function erLabel(e){ if(e.waiver!=null) return '0% waived'; var p=e.std*100; return (p%1===0?p.toFixed(0):p.toFixed(2))+'%'; }
 
   /* ---------- state ---------- */
-  var S = { P:10000, years:7, g:0, sell:true };
+  var S = { P:10000, years:7, g:0, sell:true, sel:0 };  // sel = index into CFG.etfs (default IBIT)
 
-  /* ---------- chart ---------- */
+  /* ---------- chart: Schwab vs the selected ETF ---------- */
   function drawChart(){
-    var W=720,H=380,m={l:58,r:96,t:18,b:46};
-    var X0=m.l, X1=W-m.r, Y0=H-m.b, Y1=m.t;
-    var tMax=S.years;
-    var lines = CFG.etfs.map(function(e){
-      var pts=[]; for(var k=0;k<=60;k++){ var t=tMax*k/60; pts.push([t, etfCost(e,S.P,t,S.g)]); }
-      return { e:e, pts:pts };
-    });
-    var schPts=[]; for(var k=0;k<=60;k++){ var t=tMax*k/60; schPts.push([t, schwabCost(S.P,t,S.g,S.sell)]); }
-    var maxCost = 0;
-    lines.forEach(function(L){ L.pts.forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; }); });
-    schPts.forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; });
-    maxCost = maxCost*1.12 || 1;
-    function X(t){ return X0 + (t/tMax)*(X1-X0); }
-    function Y(c){ return Y0 - (c/maxCost)*(Y0-Y1); }
+    var W=720,H=380,m={l:58,r:104,t:18,b:46};
+    var X0=m.l, X1=W-m.r, Y0=H-m.b, Y1=m.t, tMax=S.years;
+    var e=CFG.etfs[S.sel];
+    var etfPts=[],schPts=[];
+    for(var k=0;k<=60;k++){ var t=tMax*k/60; etfPts.push([t,etfCost(e,S.P,t,S.g)]); schPts.push([t,schwabCost(S.P,t,S.g,S.sell)]); }
+    var maxCost=0; etfPts.concat(schPts).forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; });
+    maxCost = maxCost*1.14 || 1;
+    function X(t){ return X0+(t/tMax)*(X1-X0); }
+    function Y(c){ return Y0-(c/maxCost)*(Y0-Y1); }
     function path(pts){ return pts.map(function(p,i){ return (i?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1); }).join(' '); }
 
     var svg='';
-    // y gridlines
-    var yt=niceTicks(maxCost,4);
-    yt.forEach(function(v){ svg+='<line class="gridl" x1="'+X0+'" y1="'+Y(v)+'" x2="'+X1+'" y2="'+Y(v)+'"/>'
+    niceTicks(maxCost,4).forEach(function(v){ svg+='<line class="gridl" x1="'+X0+'" y1="'+Y(v)+'" x2="'+X1+'" y2="'+Y(v)+'"/>'
       + '<text class="axlab" x="'+(X0-8)+'" y="'+(Y(v)+3.5)+'" text-anchor="end">'+money(v)+'</text>'; });
-    // x axis
     svg+='<line class="axline" x1="'+X0+'" y1="'+Y0+'" x2="'+X1+'" y2="'+Y0+'"/>';
     var xstep = tMax<=6?1:(tMax<=12?2:3);
     for(var xt=0;xt<=tMax;xt+=xstep){ svg+='<text class="axlab" x="'+X(xt)+'" y="'+(Y0+18)+'" text-anchor="middle">'+xt+(xt===0?'':'y')+'</text>'; }
     svg+='<text class="axtitle" x="'+X1+'" y="'+(Y0+34)+'" text-anchor="end">years held</text>';
 
-    // ETF lines
-    lines.forEach(function(L){ svg+='<path class="'+(L.e.dash?'lineB':'lineA')+'" d="'+path(L.pts)+'"/>'; });
-    // Schwab line
+    svg+='<path class="lineA" d="'+path(etfPts)+'"/>';
     svg+='<path class="lineS" d="'+path(schPts)+'"/>';
 
-    // break-even markers (within horizon)
-    CFG.etfs.forEach(function(e){
-      var t=breakEven(e,S.P,S.g,S.sell);
-      if(t!=null && t<=tMax){ var c=etfCost(e,S.P,t,S.g);
-        svg+='<circle class="bx" cx="'+X(t).toFixed(1)+'" cy="'+Y(c).toFixed(1)+'" r="5"/>';
-        svg+='<text class="bxlab" x="'+X(t).toFixed(1)+'" y="'+(Y(c)-12).toFixed(1)+'" text-anchor="middle">'+t.toFixed(1)+'y</text>';
-      }
-    });
-    // end labels
+    var tbe=breakEven(e,S.P,S.g,S.sell);
+    if(tbe!=null && tbe<=tMax){ var c=etfCost(e,S.P,tbe,S.g);
+      svg+='<circle class="bx" cx="'+X(tbe).toFixed(1)+'" cy="'+Y(c).toFixed(1)+'" r="5"/>';
+      svg+='<text class="bxlab" x="'+X(tbe).toFixed(1)+'" y="'+(Y(c)-12).toFixed(1)+'" text-anchor="middle">'+tbe.toFixed(1)+'y</text>';
+    }
     function endLab(pts,color,txt){ var p=pts[pts.length-1]; return '<text class="endlab" x="'+(X1+8)+'" y="'+(Y(p[1])+3.5)+'" fill="'+color+'">'+txt+'</text>'; }
-    svg+=endLab(schPts,'var(--schwab-ink)','Schwab');
-    svg+=endLab(lines[0].pts,'var(--etf-ink)','HODL');
-
+    svg+=endLab(schPts,'var(--schwab-ink)','Schwab')+endLab(etfPts,'var(--etf-ink)',e.t);
     document.getElementById('cChart').innerHTML=svg;
   }
   function niceTicks(max,n){ var step=max/n, mag=Math.pow(10,Math.floor(Math.log10(step))), norm=step/mag; var s=norm<1.5?1:norm<3?2:norm<7?5:10; step=s*mag; var out=[]; for(var v=step;v<=max*1.001;v+=step)out.push(v); return out; }
 
-  /* ---------- table ---------- */
+  /* ---------- table: Schwab + all 10 ETFs, ranked by cost at the horizon ---------- */
   function drawTable(){
     var cols=[1,3,5,10], nowY=S.years;
-    var rows=[
-      { label:'Schwab direct', sub:S.sell?'0.75% buy + 0.75% sell':'0.75% buy only (held)', color:'var(--schwab)', cost:function(t){return schwabCost(S.P,t,S.g,S.sell);}, etf:null }
-    ].concat(CFG.etfs.map(function(e){ return { label:e.label.split(' · ')[0], sub:(e.std*100).toFixed(2)+'% / yr'+(e.waiver!=null?' (waived now)':''), color:e.color, cost:function(t){return etfCost(e,S.P,t,S.g);}, etf:e }; }));
-    // determine cheapest at nowY for highlight
-    var bestIdx=0,best=Infinity; rows.forEach(function(r,i){ var c=r.cost(nowY); if(c<best){best=c;bestIdx=i;} });
+    var rows=[{ k:'schwab', label:'Schwab direct', sub:S.sell?'0.75% buy + 0.75% sell':'0.75% buy only (held)', color:'var(--schwab)', cost:function(t){return schwabCost(S.P,t,S.g,S.sell);} }];
+    CFG.etfs.forEach(function(e,i){ rows.push({ k:i, label:e.t, sub:e.issuer+' · '+erLabel(e), color:'var(--etf)', cost:function(t){return etfCost(e,S.P,t,S.g);} }); });
+    rows.sort(function(a,b){ return a.cost(nowY)-b.cost(nowY); });
+    var best=rows[0].cost(nowY);
     var html='';
-    rows.forEach(function(r,i){
-      html+='<tr'+(i===bestIdx?' class="best"':'')+'>'
+    rows.forEach(function(r){
+      var isSel=(r.k===S.sel);
+      html+='<tr class="'+(r.cost(nowY)===best?'best ':'')+(isSel?'sel ':'')+'" data-k="'+r.k+'">'
         +'<td class="veh"><span class="tag" style="background:'+r.color+'"></span>'+r.label+'<small>'+r.sub+'</small></td>';
       cols.forEach(function(t){ html+='<td'+(t>nowY?' class="muted"':'')+'>'+money(r.cost(t))+'</td>'; });
       html+='<td class="now">'+money(r.cost(nowY))+'</td></tr>';
     });
     document.querySelector('#cTable tbody').innerHTML=html;
     document.getElementById('cTableNow').textContent='At '+nowY+' yrs';
+    document.querySelectorAll('#cTable tbody tr').forEach(function(tr){
+      tr.addEventListener('click',function(){ var k=tr.getAttribute('data-k'); if(k!=='schwab'){ S.sel=+k; syncSel(); render(); } });
+    });
   }
 
-  /* ---------- verdict ---------- */
+  /* ---------- verdict: Schwab vs the cheapest of the 10 ETFs ---------- */
   function drawVerdict(){
-    var nowY=S.years;
-    var sch=schwabCost(S.P,nowY,S.g,S.sell);
-    var cheapEtf=null,cheapCost=Infinity;
-    CFG.etfs.forEach(function(e){ var c=etfCost(e,S.P,nowY,S.g); if(c<cheapCost){cheapCost=c;cheapEtf=e;} });
+    var nowY=S.years, sch=schwabCost(S.P,nowY,S.g,S.sell);
+    var cheapE=null, cheapCost=Infinity;
+    CFG.etfs.forEach(function(e){ var c=etfCost(e,S.P,nowY,S.g); if(c<cheapCost){cheapCost=c;cheapE=e;} });
     var diff=Math.abs(sch-cheapCost), el=document.getElementById('cVerdict');
-    var etfName=cheapEtf.label.split(' · ')[0];
+    var horizon='<b>'+nowY+' year'+(nowY>1?'s':'')+'</b>', trip=S.sell?'round trip':'buy';
     if(cheapCost < sch){
-      el.innerHTML='Holding '+money(S.P)+' for <b>'+nowY+' year'+(nowY>1?'s':'')+'</b>, the <b class="win-etf">'+etfName+' ETF</b> is cheaper &mdash; '+money(cheapCost)+' in fees vs '+money(sch)+' for Schwab&rsquo;s '+(S.sell?'round trip':'buy')+', a '+money(diff)+' difference.';
+      el.innerHTML='Holding '+money(S.P)+' for '+horizon+', the cheapest of the ten ETFs &mdash; <b class="win-etf">'+cheapE.t+'</b> at '+erLabel(cheapE)+' &mdash; costs '+money(cheapCost)+' vs '+money(sch)+' for Schwab&rsquo;s '+trip+', a '+money(diff)+' saving.';
     } else {
-      el.innerHTML='Holding '+money(S.P)+' for <b>'+nowY+' year'+(nowY>1?'s':'')+'</b>, <b class="win-sch">Schwab direct</b> is cheaper &mdash; '+money(sch)+' for the '+(S.sell?'round trip':'buy')+' vs '+money(cheapCost)+' for the '+etfName+' ETF, a '+money(diff)+' difference.';
+      el.innerHTML='Holding '+money(S.P)+' for '+horizon+', <b class="win-sch">Schwab direct</b> beats all ten ETFs &mdash; '+money(sch)+' for the '+trip+' vs '+money(cheapCost)+' for the cheapest ('+cheapE.t+'), a '+money(diff)+' difference.';
     }
   }
 
-  /* ---------- break-even bars (chapter 02, 0% growth, sell) ---------- */
+  /* ---------- break-even bars: all 10 ETFs, ranked (0% growth, sell) ---------- */
   function drawBE(){
+    var host=document.getElementById('beBars'); if(!host) return;  // absent in the standalone calculator card
     var maxScale=12;
+    var items=CFG.etfs.map(function(e){ return { e:e, be:breakEven(e,10000,0,true) }; });
+    items.sort(function(a,b){ return (a.be==null?999:a.be)-(b.be==null?999:b.be); });
     var html='';
-    CFG.etfs.forEach(function(e){
-      var t=breakEven(e,10000,0,true);
-      var capped = t==null || t>maxScale;
-      var w = capped?100:(t/maxScale*100);
-      var val = t==null?'10+ yrs':(t>maxScale?'10+ yrs':t.toFixed(1)+' yrs');
-      var note = e.waiver!=null
-        ? 'Free while the waiver lasts; <b>7.5 yrs</b> once 0.20% kicks in after July 2026.'
-        : 'After '+val+', Schwab&rsquo;s 1.5% round trip would have cost less.';
+    items.forEach(function(it){
+      var e=it.e, t=it.be, capped=(t==null||t>maxScale), w=capped?100:(t/maxScale*100);
+      var val=(t==null||t>maxScale)?'12+ yrs':t.toFixed(1)+' yrs';
+      var note;
+      if(e.waiver!=null) note='Free while the waiver lasts; ~7.5 yrs once the 0.20% fee resumes after July 2026.';
+      else if(t!=null && t<=maxScale) note='After '+t.toFixed(1)+' yrs, Schwab&rsquo;s 1.5% round trip would have cost less.';
+      else note='Stays cheaper than Schwab&rsquo;s round trip for well over a decade.';
       html+='<div class="be-row">'
-        +'<div class="be-top"><span class="be-name">'+e.label+'<span class="sub">'+(e.std*100).toFixed(2)+'%/yr'+(e.waiver!=null?' · waived':'')+'</span></span><span class="be-val">'+val+'</span></div>'
+        +'<div class="be-top"><span class="be-name">'+e.t+'<span class="sub">'+e.issuer+' · '+erLabel(e)+'</span></span><span class="be-val">'+val+'</span></div>'
         +'<div class="be-track"><div class="be-fill'+(capped?' never':'')+'" style="width:'+w+'%"></div></div>'
         +'<div class="be-sub">'+note+'</div></div>';
     });
@@ -165,18 +164,21 @@
 
   /* ---------- wire up ---------- */
   function parsePrincipal(){ var v=parseFloat(document.getElementById('cPrincipal').value.replace(/[^0-9.]/g,'')); return isFinite(v)&&v>0?v:10000; }
+  function buildSelect(){ document.getElementById('cEtf').innerHTML=CFG.etfs.map(function(e,i){ return '<option value="'+i+'">'+e.t+' · '+e.issuer+' · '+erLabel(e)+'</option>'; }).join(''); }
+  function syncSel(){ document.getElementById('cEtf').value=String(S.sel); var le=document.getElementById('cLegEtf'); if(le) le.textContent=CFG.etfs[S.sel].t; }
   function render(){ drawChart(); drawTable(); drawVerdict(); }
   var P=document.getElementById('cPrincipal'),Y=document.getElementById('cYears'),G=document.getElementById('cGrowth');
   P.addEventListener('input',function(){ S.P=parsePrincipal(); render(); });
   P.addEventListener('blur',function(){ S.P=parsePrincipal(); P.value=num(S.P); render(); });
   Y.addEventListener('input',function(){ S.years=+Y.value; document.getElementById('cYearsV').textContent=S.years+' yrs'; render(); });
   G.addEventListener('input',function(){ S.g=+G.value/100; document.getElementById('cGrowthV').textContent=(+G.value)+'%'; render(); });
+  document.getElementById('cEtf').addEventListener('change',function(){ S.sel=+this.value; syncSel(); render(); });
   document.querySelectorAll('#cSell button').forEach(function(b){ b.addEventListener('click',function(){
     document.querySelectorAll('#cSell button').forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
     S.sell=b.getAttribute('data-v')==='1'; render();
   }); });
 
-  S.P=parsePrincipal(); render(); drawBE();
+  buildSelect(); syncSel(); S.P=parsePrincipal(); render(); drawBE();
 
   /* reveal on scroll */
   if('IntersectionObserver' in window){
