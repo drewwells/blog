@@ -67,14 +67,16 @@
   function erLabel(e){ if(e.waiver!=null) return '0% waived'; var p=e.std*100; return (p%1===0?p.toFixed(0):p.toFixed(2))+'%'; }
 
   /* ---------- state ---------- */
-  var S = { P:10000, years:7, g:0, sell:true, sel:0 };  // sel = index into CFG.etfs (default IBIT)
+  // vis[i] = is CFG.etfs[i] drawn on the chart? Default: all on except GBTC (its 1.50% fee
+  // dwarfs the field and compresses everyone else — toggle it on from the table to see it tower).
+  var S = { P:10000, years:7, g:0, sell:true, vis: CFG.etfs.map(function(e){ return e.t!=='GBTC'; }) };
 
-  /* ---------- chart: all ten ETF lines + Schwab; selected fund emphasized ---------- */
+  /* ---------- chart: every ETF toggled on in the table, + Schwab reference ---------- */
   function drawChart(){
     var W=720,H=380,m={l:58,r:104,t:18,b:46};
     var X0=m.l, X1=W-m.r, Y0=H-m.b, Y1=m.t, tMax=S.years;
-    var sel=CFG.etfs[S.sel];
-    var lines=CFG.etfs.map(function(e){ var pts=[]; for(var k=0;k<=60;k++){ var t=tMax*k/60; pts.push([t,etfCost(e,S.P,t,S.g)]); } return {e:e,pts:pts}; });
+    var shown=CFG.etfs.map(function(e,i){ return S.vis[i]?e:null; }).filter(Boolean);
+    var lines=shown.map(function(e){ var pts=[]; for(var k=0;k<=60;k++){ var t=tMax*k/60; pts.push([t,etfCost(e,S.P,t,S.g)]); } return {e:e,pts:pts}; });
     var schPts=[]; for(var k=0;k<=60;k++){ var t=tMax*k/60; schPts.push([t,schwabCost(S.P,t,S.g,S.sell)]); }
     var maxCost=0; lines.forEach(function(L){ L.pts.forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; }); }); schPts.forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; });
     maxCost = maxCost*1.10 || 1;
@@ -90,64 +92,62 @@
     for(var xt=0;xt<=tMax;xt+=xstep){ svg+='<text class="axlab" x="'+X(xt)+'" y="'+(Y0+18)+'" text-anchor="middle">'+xt+(xt===0?'':'y')+'</text>'; }
     svg+='<text class="axtitle" x="'+X1+'" y="'+(Y0+34)+'" text-anchor="end">years held</text>';
 
-    // all non-selected ETF lines (faint), with a small dot where each crosses Schwab
-    lines.forEach(function(L){ if(L.e===sel) return; svg+='<path class="lineF" d="'+path(L.pts)+'"/>'; });
-    CFG.etfs.forEach(function(e){ if(e===sel) return; var t=breakEven(e,S.P,S.g,S.sell); if(t!=null&&t<=tMax){ var c=etfCost(e,S.P,t,S.g); svg+='<circle class="bxsm" cx="'+X(t).toFixed(1)+'" cy="'+Y(c).toFixed(1)+'" r="2.6"/>'; } });
-
-    // Schwab reference (flat unless the position grows)
+    // shown ETF lines
+    lines.forEach(function(L){ svg+='<path class="lineE" d="'+path(L.pts)+'"/>'; });
+    // Schwab reference on top of the bunch (flat unless the position grows)
     svg+='<path class="lineS" d="'+path(schPts)+'"/>';
-
-    // selected ETF on top, with its labelled break-even marker
-    var selPts=null; lines.forEach(function(L){ if(L.e===sel) selPts=L.pts; });
-    svg+='<path class="lineA" d="'+path(selPts)+'"/>';
-    var tbe=breakEven(sel,S.P,S.g,S.sell);
-    if(tbe!=null && tbe<=tMax){ var sc=etfCost(sel,S.P,tbe,S.g);
-      svg+='<circle class="bx" cx="'+X(tbe).toFixed(1)+'" cy="'+Y(sc).toFixed(1)+'" r="5"/>';
-      svg+='<text class="bxlab" x="'+X(tbe).toFixed(1)+'" y="'+(Y(sc)-12).toFixed(1)+'" text-anchor="middle">'+tbe.toFixed(1)+'y</text>';
-    }
-    // end labels: just the two extremes — Schwab (flat) and GBTC (the towering outlier).
-    // The selected fund is identified by the bold line + marker, the legend, and the table row.
-    function endLab(pts,cls,color,txt){ var p=pts[pts.length-1]; return '<text class="'+cls+'" x="'+(X1+8)+'" y="'+(Y(p[1])+3.5)+'" fill="'+color+'">'+txt+'</text>'; }
+    // a dot where each shown ETF crosses Schwab within the horizon
+    var single=(lines.length===1), singleHasMarker=false;
+    lines.forEach(function(L){ var t=breakEven(L.e,S.P,S.g,S.sell); if(t!=null && t<=tMax){ var c=etfCost(L.e,S.P,t,S.g);
+      svg+='<circle class="'+(single?'bx':'bxsm')+'" cx="'+X(t).toFixed(1)+'" cy="'+Y(c).toFixed(1)+'" r="'+(single?5:2.8)+'"/>';
+      if(single){ singleHasMarker=true; svg+='<text class="bxlab" x="'+X(t).toFixed(1)+'" y="'+(Y(c)-12).toFixed(1)+'" text-anchor="middle">'+L.e.t+' &middot; '+t.toFixed(1)+'y</text>'; }
+    } });
+    // end labels: Schwab always; GBTC when shown in the crowd; the lone fund when only one is shown
+    function endLab(y,cls,color,txt){ return '<text class="'+cls+'" x="'+(X1+8)+'" y="'+(y+3.5)+'" fill="'+color+'">'+txt+'</text>'; }
+    var sy=Y(schPts[schPts.length-1][1]);
     var gbtc=null; lines.forEach(function(L){ if(L.e.t==='GBTC') gbtc=L.pts; });
-    svg+=endLab(gbtc,(sel.t==='GBTC'?'endlab':'endlabF'),'var(--etf-ink)','GBTC');
-    svg+=endLab(schPts,'endlab','var(--schwab-ink)','Schwab');
+    if(gbtc && !single) svg+=endLab(Y(gbtc[gbtc.length-1][1]),'endlabF','var(--etf-ink)','GBTC');
+    if(single && !singleHasMarker){ var fy=Y(lines[0].pts[lines[0].pts.length-1][1]); var dy=(Math.abs(fy-sy)<13)?(fy<=sy?-11:11):0; svg+=endLab(fy+dy,'endlab','var(--etf-ink)',lines[0].e.t); }
+    svg+=endLab(sy,'endlab','var(--schwab-ink)','Schwab');
     document.getElementById('cChart').innerHTML=svg;
   }
   function niceTicks(max,n){ var step=max/n, mag=Math.pow(10,Math.floor(Math.log10(step))), norm=step/mag; var s=norm<1.5?1:norm<3?2:norm<7?5:10; step=s*mag; var out=[]; for(var v=step;v<=max*1.001;v+=step)out.push(v); return out; }
 
-  /* ---------- table: Schwab + all 10 ETFs, ranked by cost at the horizon ---------- */
+  /* ---------- table: Schwab + all 10 ETFs, ranked by cost; ETF rows toggle the chart ---------- */
   function drawTable(){
     var cols=[1,3,5,10], nowY=S.years;
-    var rows=[{ k:'schwab', label:'Schwab direct', sub:S.sell?'0.75% buy + 0.75% sell':'0.75% buy only (held)', color:'var(--schwab)', cost:function(t){return schwabCost(S.P,t,S.g,S.sell);} }];
-    CFG.etfs.forEach(function(e,i){ rows.push({ k:i, label:e.t, sub:e.issuer+' · '+erLabel(e), color:'var(--etf)', cost:function(t){return etfCost(e,S.P,t,S.g);} }); });
+    var rows=[{ k:'schwab', label:'Schwab direct', sub:S.sell?'0.75% buy + 0.75% sell':'0.75% buy only (held)', color:'var(--schwab)', on:true, cost:function(t){return schwabCost(S.P,t,S.g,S.sell);} }];
+    CFG.etfs.forEach(function(e,i){ rows.push({ k:i, label:e.t, sub:e.issuer+' · '+erLabel(e), color:'var(--etf)', on:S.vis[i], cost:function(t){return etfCost(e,S.P,t,S.g);} }); });
     rows.sort(function(a,b){ return a.cost(nowY)-b.cost(nowY); });
-    var best=rows[0].cost(nowY);
+    // cheapest among the options actually on the table/chart (Schwab + shown ETFs)
+    var best=Infinity; rows.forEach(function(r){ if(r.on){ var c=r.cost(nowY); if(c<best)best=c; } });
     var html='';
     rows.forEach(function(r){
-      var isSel=(r.k===S.sel);
-      html+='<tr class="'+(r.cost(nowY)===best?'best ':'')+(isSel?'sel ':'')+'" data-k="'+r.k+'">'
-        +'<td class="veh"><span class="tag" style="background:'+r.color+'"></span>'+r.label+'<small>'+r.sub+'</small></td>';
+      var cls=(r.on && r.cost(nowY)===best?'best ':'')+(!r.on?'hidden ':'')+(r.k==='schwab'?'static':'');
+      html+='<tr class="'+cls+'" data-k="'+r.k+'"'+(r.k!=='schwab'?' role="button" aria-pressed="'+r.on+'" title="'+(r.on?'Hide':'Show')+' on chart"':'')+'>'
+        +'<td class="veh"><span class="tag'+(r.on?'':' off')+'" style="background:'+r.color+'"></span>'+r.label+'<small>'+r.sub+'</small></td>';
       cols.forEach(function(t){ html+='<td'+(t>nowY?' class="muted"':'')+'>'+money(r.cost(t))+'</td>'; });
       html+='<td class="now">'+money(r.cost(nowY))+'</td></tr>';
     });
     document.querySelector('#cTable tbody').innerHTML=html;
     document.getElementById('cTableNow').textContent='At '+nowY+' yrs';
     document.querySelectorAll('#cTable tbody tr').forEach(function(tr){
-      tr.addEventListener('click',function(){ var k=tr.getAttribute('data-k'); if(k!=='schwab'){ S.sel=+k; syncSel(); render(); } });
+      tr.addEventListener('click',function(){ var k=tr.getAttribute('data-k'); if(k!=='schwab'){ S.vis[+k]=!S.vis[+k]; render(); } });
     });
   }
 
-  /* ---------- verdict: Schwab vs the cheapest of the 10 ETFs ---------- */
+  /* ---------- verdict: Schwab vs the cheapest ETF currently shown ---------- */
   function drawVerdict(){
-    var nowY=S.years, sch=schwabCost(S.P,nowY,S.g,S.sell);
-    var cheapE=null, cheapCost=Infinity;
-    CFG.etfs.forEach(function(e){ var c=etfCost(e,S.P,nowY,S.g); if(c<cheapCost){cheapCost=c;cheapE=e;} });
-    var diff=Math.abs(sch-cheapCost), el=document.getElementById('cVerdict');
+    var nowY=S.years, sch=schwabCost(S.P,nowY,S.g,S.sell), el=document.getElementById('cVerdict');
+    var cheapE=null, cheapCost=Infinity, shownN=0;
+    CFG.etfs.forEach(function(e,i){ if(!S.vis[i]) return; shownN++; var c=etfCost(e,S.P,nowY,S.g); if(c<cheapCost){cheapCost=c;cheapE=e;} });
     var horizon='<b>'+nowY+' year'+(nowY>1?'s':'')+'</b>', trip=S.sell?'round trip':'buy';
+    if(!cheapE){ el.innerHTML='No ETFs shown &mdash; tap a row below to plot one against Schwab&rsquo;s '+money(sch)+' '+trip+'.'; return; }
+    var diff=Math.abs(sch-cheapCost), scope=(shownN===CFG.etfs.length?'the ten ETFs':'the ETFs shown');
     if(cheapCost < sch){
-      el.innerHTML='Holding '+money(S.P)+' for '+horizon+', the cheapest of the ten ETFs &mdash; <b class="win-etf">'+cheapE.t+'</b> at '+erLabel(cheapE)+' &mdash; costs '+money(cheapCost)+' vs '+money(sch)+' for Schwab&rsquo;s '+trip+', a '+money(diff)+' saving.';
+      el.innerHTML='Holding '+money(S.P)+' for '+horizon+', the cheapest of '+scope+' &mdash; <b class="win-etf">'+cheapE.t+'</b> at '+erLabel(cheapE)+' &mdash; costs '+money(cheapCost)+' vs '+money(sch)+' for Schwab&rsquo;s '+trip+', a '+money(diff)+' saving.';
     } else {
-      el.innerHTML='Holding '+money(S.P)+' for '+horizon+', <b class="win-sch">Schwab direct</b> beats all ten ETFs &mdash; '+money(sch)+' for the '+trip+' vs '+money(cheapCost)+' for the cheapest ('+cheapE.t+'), a '+money(diff)+' difference.';
+      el.innerHTML='Holding '+money(S.P)+' for '+horizon+', <b class="win-sch">Schwab direct</b> beats every ETF shown &mdash; '+money(sch)+' for the '+trip+' vs '+money(cheapCost)+' for the cheapest ('+cheapE.t+'), a '+money(diff)+' difference.';
     }
   }
 
@@ -175,21 +175,18 @@
 
   /* ---------- wire up ---------- */
   function parsePrincipal(){ var v=parseFloat(document.getElementById('cPrincipal').value.replace(/[^0-9.]/g,'')); return isFinite(v)&&v>0?v:10000; }
-  function buildSelect(){ document.getElementById('cEtf').innerHTML=CFG.etfs.map(function(e,i){ return '<option value="'+i+'">'+e.t+' · '+e.issuer+' · '+erLabel(e)+'</option>'; }).join(''); }
-  function syncSel(){ document.getElementById('cEtf').value=String(S.sel); var le=document.getElementById('cLegEtf'); if(le) le.textContent=CFG.etfs[S.sel].t; }
   function render(){ drawChart(); drawTable(); drawVerdict(); }
   var P=document.getElementById('cPrincipal'),Y=document.getElementById('cYears'),G=document.getElementById('cGrowth');
   P.addEventListener('input',function(){ S.P=parsePrincipal(); render(); });
   P.addEventListener('blur',function(){ S.P=parsePrincipal(); P.value=num(S.P); render(); });
   Y.addEventListener('input',function(){ S.years=+Y.value; document.getElementById('cYearsV').textContent=S.years+' yrs'; render(); });
   G.addEventListener('input',function(){ S.g=+G.value/100; document.getElementById('cGrowthV').textContent=(+G.value)+'%'; render(); });
-  document.getElementById('cEtf').addEventListener('change',function(){ S.sel=+this.value; syncSel(); render(); });
   document.querySelectorAll('#cSell button').forEach(function(b){ b.addEventListener('click',function(){
     document.querySelectorAll('#cSell button').forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
     S.sell=b.getAttribute('data-v')==='1'; render();
   }); });
 
-  buildSelect(); syncSel(); S.P=parsePrincipal(); render(); drawBE();
+  S.P=parsePrincipal(); render(); drawBE();
 
   /* reveal on scroll */
   if('IntersectionObserver' in window){
