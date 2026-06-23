@@ -23,6 +23,14 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    slug: 'schwab-crypto-fees',
+    title: 'The 0.75% Round Trip',
+    dek: 'Schwab now sells bitcoin two ways: wrapped in an ETF that skims a small fee every year you hold, or bought direct, where you pay 0.75% going in and 0.75% coming out. One is a slow leak, the other a cover charge — and which is cheaper turns entirely on how long you stay. An interactive break-even, fees verified June 2026.',
+    kicker: 'Crypto / Cost of Ownership',
+    date: '2026-06-23',
+    tags: ['data', 'crypto', 'investing', 'fees', 'schwab'],
+  },
+  {
     slug: 'message-bus-for-my-agents',
     title: 'I built a message bus so my AI agents could run my servers.',
     dek: 'Agents talk to each other over a custom WebSocket bridge — with leader election and a Telegram voice bridge — so I can run every machine through one elected leader. Supervisors keep it fault-tolerant across Linux and macOS, and it pages me when it hits something it can’t resolve.',
