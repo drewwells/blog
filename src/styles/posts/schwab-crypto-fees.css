@@ -151,12 +151,14 @@ figcaption b{color:var(--ink-soft);font-weight:600}
 .chartwrap .axline{stroke:var(--rule);stroke-width:1}
 .chartwrap .axlab{font-family:var(--mono);font-size:10.5px;fill:var(--ink-faint)}
 .chartwrap .axtitle{font-family:var(--mono);font-size:10px;fill:var(--ink-soft);letter-spacing:.05em;text-transform:uppercase}
-.chartwrap .lineA{fill:none;stroke:var(--etf);stroke-width:2.5}
-.chartwrap .lineB{fill:none;stroke:var(--etf);stroke-width:2.5;stroke-dasharray:1 5;stroke-linecap:round;opacity:.85}
-.chartwrap .lineS{fill:none;stroke:var(--schwab);stroke-width:2.5}
+.chartwrap .lineF{fill:none;stroke:var(--etf);stroke-width:1.6;opacity:.5}
+.chartwrap .lineA{fill:none;stroke:var(--etf);stroke-width:2.6}
+.chartwrap .lineS{fill:none;stroke:var(--schwab);stroke-width:2.6}
 .chartwrap .bx{fill:var(--clay);stroke:#fff;stroke-width:2}
+.chartwrap .bxsm{fill:var(--clay);opacity:.5}
 .chartwrap .bxlab{font-family:var(--mono);font-size:11px;font-weight:600;fill:var(--clay-ink)}
 .chartwrap .endlab{font-family:var(--mono);font-size:11.5px;font-weight:600}
+.chartwrap .endlabF{font-family:var(--mono);font-size:11px;font-weight:600;opacity:.65}
 
 /* cost table */
 .ctable{width:100%;border-collapse:collapse;margin-top:26px;font-variant-numeric:tabular-nums}
