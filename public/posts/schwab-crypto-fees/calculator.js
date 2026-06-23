@@ -69,15 +69,15 @@
   /* ---------- state ---------- */
   var S = { P:10000, years:7, g:0, sell:true, sel:0 };  // sel = index into CFG.etfs (default IBIT)
 
-  /* ---------- chart: Schwab vs the selected ETF ---------- */
+  /* ---------- chart: all ten ETF lines + Schwab; selected fund emphasized ---------- */
   function drawChart(){
     var W=720,H=380,m={l:58,r:104,t:18,b:46};
     var X0=m.l, X1=W-m.r, Y0=H-m.b, Y1=m.t, tMax=S.years;
-    var e=CFG.etfs[S.sel];
-    var etfPts=[],schPts=[];
-    for(var k=0;k<=60;k++){ var t=tMax*k/60; etfPts.push([t,etfCost(e,S.P,t,S.g)]); schPts.push([t,schwabCost(S.P,t,S.g,S.sell)]); }
-    var maxCost=0; etfPts.concat(schPts).forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; });
-    maxCost = maxCost*1.14 || 1;
+    var sel=CFG.etfs[S.sel];
+    var lines=CFG.etfs.map(function(e){ var pts=[]; for(var k=0;k<=60;k++){ var t=tMax*k/60; pts.push([t,etfCost(e,S.P,t,S.g)]); } return {e:e,pts:pts}; });
+    var schPts=[]; for(var k=0;k<=60;k++){ var t=tMax*k/60; schPts.push([t,schwabCost(S.P,t,S.g,S.sell)]); }
+    var maxCost=0; lines.forEach(function(L){ L.pts.forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; }); }); schPts.forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; });
+    maxCost = maxCost*1.10 || 1;
     function X(t){ return X0+(t/tMax)*(X1-X0); }
     function Y(c){ return Y0-(c/maxCost)*(Y0-Y1); }
     function path(pts){ return pts.map(function(p,i){ return (i?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1); }).join(' '); }
@@ -90,16 +90,27 @@
     for(var xt=0;xt<=tMax;xt+=xstep){ svg+='<text class="axlab" x="'+X(xt)+'" y="'+(Y0+18)+'" text-anchor="middle">'+xt+(xt===0?'':'y')+'</text>'; }
     svg+='<text class="axtitle" x="'+X1+'" y="'+(Y0+34)+'" text-anchor="end">years held</text>';
 
-    svg+='<path class="lineA" d="'+path(etfPts)+'"/>';
+    // all non-selected ETF lines (faint), with a small dot where each crosses Schwab
+    lines.forEach(function(L){ if(L.e===sel) return; svg+='<path class="lineF" d="'+path(L.pts)+'"/>'; });
+    CFG.etfs.forEach(function(e){ if(e===sel) return; var t=breakEven(e,S.P,S.g,S.sell); if(t!=null&&t<=tMax){ var c=etfCost(e,S.P,t,S.g); svg+='<circle class="bxsm" cx="'+X(t).toFixed(1)+'" cy="'+Y(c).toFixed(1)+'" r="2.6"/>'; } });
+
+    // Schwab reference (flat unless the position grows)
     svg+='<path class="lineS" d="'+path(schPts)+'"/>';
 
-    var tbe=breakEven(e,S.P,S.g,S.sell);
-    if(tbe!=null && tbe<=tMax){ var c=etfCost(e,S.P,tbe,S.g);
-      svg+='<circle class="bx" cx="'+X(tbe).toFixed(1)+'" cy="'+Y(c).toFixed(1)+'" r="5"/>';
-      svg+='<text class="bxlab" x="'+X(tbe).toFixed(1)+'" y="'+(Y(c)-12).toFixed(1)+'" text-anchor="middle">'+tbe.toFixed(1)+'y</text>';
+    // selected ETF on top, with its labelled break-even marker
+    var selPts=null; lines.forEach(function(L){ if(L.e===sel) selPts=L.pts; });
+    svg+='<path class="lineA" d="'+path(selPts)+'"/>';
+    var tbe=breakEven(sel,S.P,S.g,S.sell);
+    if(tbe!=null && tbe<=tMax){ var sc=etfCost(sel,S.P,tbe,S.g);
+      svg+='<circle class="bx" cx="'+X(tbe).toFixed(1)+'" cy="'+Y(sc).toFixed(1)+'" r="5"/>';
+      svg+='<text class="bxlab" x="'+X(tbe).toFixed(1)+'" y="'+(Y(sc)-12).toFixed(1)+'" text-anchor="middle">'+tbe.toFixed(1)+'y</text>';
     }
-    function endLab(pts,color,txt){ var p=pts[pts.length-1]; return '<text class="endlab" x="'+(X1+8)+'" y="'+(Y(p[1])+3.5)+'" fill="'+color+'">'+txt+'</text>'; }
-    svg+=endLab(schPts,'var(--schwab-ink)','Schwab')+endLab(etfPts,'var(--etf-ink)',e.t);
+    // end labels: just the two extremes — Schwab (flat) and GBTC (the towering outlier).
+    // The selected fund is identified by the bold line + marker, the legend, and the table row.
+    function endLab(pts,cls,color,txt){ var p=pts[pts.length-1]; return '<text class="'+cls+'" x="'+(X1+8)+'" y="'+(Y(p[1])+3.5)+'" fill="'+color+'">'+txt+'</text>'; }
+    var gbtc=null; lines.forEach(function(L){ if(L.e.t==='GBTC') gbtc=L.pts; });
+    svg+=endLab(gbtc,(sel.t==='GBTC'?'endlab':'endlabF'),'var(--etf-ink)','GBTC');
+    svg+=endLab(schPts,'endlab','var(--schwab-ink)','Schwab');
     document.getElementById('cChart').innerHTML=svg;
   }
   function niceTicks(max,n){ var step=max/n, mag=Math.pow(10,Math.floor(Math.log10(step))), norm=step/mag; var s=norm<1.5?1:norm<3?2:norm<7?5:10; step=s*mag; var out=[]; for(var v=step;v<=max*1.001;v+=step)out.push(v); return out; }

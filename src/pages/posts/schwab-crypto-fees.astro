@@ -56,7 +56,7 @@ const post = getPost('schwab-crypto-fees');
       <p class="take">What $10,000 actually costs to hold.</p>
       <span class="fig-tag">Interactive &middot; fees only</span>
     </div>
-    <p class="fig-sub">Pick any of the ten largest spot-bitcoin ETFs to plot its rising expense-ratio drag against Schwab&rsquo;s flat buy-plus-sell toll. Where the lines cross is your break-even; the table below ranks all ten at your chosen horizon.</p>
+    <p class="fig-sub">All ten of the largest spot-bitcoin ETFs are plotted as rising expense-ratio lines against Schwab&rsquo;s flat buy-plus-sell toll &mdash; GBTC&rsquo;s 1.50% fee runs away at the top while the rest bunch low. Pick a fund (or click its row) to trace where it crosses; the table ranks all ten at your chosen horizon.</p>
 
     <div class="calc" id="calc">
       <div class="calc-controls">
@@ -91,7 +91,8 @@ const post = getPost('schwab-crypto-fees');
         <p class="verdict" id="cVerdict">&nbsp;</p>
         <div class="legend">
           <div class="li"><span class="sw" style="background:var(--schwab)"></span>Schwab direct (0.75% &times; trades)</div>
-          <div class="li"><span class="sw" style="background:var(--etf)"></span><span id="cLegEtf">IBIT</span> &mdash; selected ETF</div>
+          <div class="li"><span class="sw" style="background:var(--etf);opacity:.5"></span>all ten ETFs</div>
+          <div class="li"><span class="sw" style="background:var(--etf)"></span><span id="cLegEtf">IBIT</span> &mdash; selected</div>
           <div class="li"><span class="sw dot" style="background:var(--clay)"></span>break-even</div>
         </div>
         <div class="chartwrap"><svg id="cChart" viewBox="0 0 720 380" role="img" aria-label="Cumulative cost over time"></svg></div>
@@ -102,7 +103,7 @@ const post = getPost('schwab-crypto-fees');
             <tbody></tbody>
           </table>
         </div>
-        <p class="thint">Ranked by cost at your horizon &middot; click any ETF row to plot it against Schwab.</p>
+        <p class="thint">Ranked by cost at your horizon &middot; click any ETF row to highlight its line above.</p>
       </div>
     </div>
     <figcaption><b>How the math works.</b> ETF cost accrues the expense ratio on the running balance; Schwab cost is 0.75% of the buy plus, if you sell, 0.75% of the exit value. With price growth above zero the sell-side toll grows with the position, so a winning trade makes Schwab <b>more</b> expensive to leave. HODL&rsquo;s fee is waived to 0.00% through <b>July&nbsp;31,&nbsp;2026</b> (first $2.5B AUM); the model prorates that brief remaining window, after which 0.20% applies. Fees only &mdash; excludes bid/ask spread, tracking error, and taxes.</figcaption>
