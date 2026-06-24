@@ -16,6 +16,8 @@
   --schwab:#c47f12; --schwab-ink:#8f5d09; --schwab-wash:#f6ecd4;
   /* protagonist C — Coinbase Advanced Tier 1: the same per-trade toll, at a lower rate */
   --coinbase:#0d8a7a; --coinbase-ink:#0a6c5f; --coinbase-wash:#dcf1ec;
+  /* the trap — Coinbase Simple buy: the default in-app path, sneaky-expensive (alarm red) */
+  --simple:#c62828; --simple-ink:#9e1f1f; --simple-wash:#f7dcdb;
   /* break-even / caution marker */
   --clay:#bf5a3f; --clay-ink:#9d4830;
 
@@ -152,6 +154,7 @@ figcaption b{color:var(--ink-soft);font-weight:600}
 .chartwrap .lineE{fill:none;stroke:var(--etf);stroke-width:1.9;opacity:.85}
 .chartwrap .lineS{fill:none;stroke:var(--schwab);stroke-width:2.6}
 .chartwrap .lineC{fill:none;stroke:var(--coinbase);stroke-width:2.4;stroke-dasharray:7 5}
+.chartwrap .lineSB{fill:none;stroke:var(--simple);stroke-width:2.6;stroke-dasharray:2 5;stroke-linecap:round}
 .chartwrap .bx{fill:var(--clay);stroke:#fff;stroke-width:2}
 .chartwrap .bxsm{fill:var(--clay);stroke:#fff;stroke-width:1.5}
 .chartwrap .bxlab{font-family:var(--mono);font-size:11px;font-weight:600;fill:var(--clay-ink)}

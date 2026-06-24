@@ -7,6 +7,11 @@
     // We plot the taker rate: market orders fill immediately as taker, which is what most retail pays.
     coinbaseMaker: 0.0040,
     coinbaseTaker: 0.0060,
+    // Coinbase Simple buy/sell — the DEFAULT in-app path (tap "Buy"), which most retail uses
+    // without noticing. Documented model: a spread baked into the quoted price PLUS a separate fee.
+    // Anchor: a real $1,000 BTC buy showed "incl. 1.00% spread + $18.40 fee" = $28.40 ≈ 2.84% all-in.
+    coinbaseSimpleSpread: 0.0100,   // ~1% spread in the quoted price
+    coinbaseSimpleFee:    0.0184,   // separate Coinbase fee — $18.40 on the $1,000 buy
     waiverExpiryMs: Date.parse('2026-07-31T00:00:00Z'),
     // Top 10 U.S. spot-bitcoin ETFs by AUM (June 2026). std = annual expense ratio.
     etfs: [
@@ -50,6 +55,7 @@
   }
   function schwabCost(P, t, g, sell){ return tollCost(CFG.schwabRate, P, t, g, sell); }
   function coinbaseCost(P, t, g, sell){ return tollCost(CFG.coinbaseTaker, P, t, g, sell); }
+  function coinbaseSimpleCost(P, t, g, sell){ return tollCost(CFG.coinbaseSimpleSpread+CFG.coinbaseSimpleFee, P, t, g, sell); }
   // Break-even: smallest t where cumulative ETF cost >= Schwab cost (both as functions of t).
   function breakEven(etf, P, g, sell){
     var prev = schwabCost(P,0,g,sell) - etfCost(etf,P,0,g); // >0: schwab dearer
@@ -86,7 +92,8 @@
     var lines=shown.map(function(e){ var pts=[]; for(var k=0;k<=60;k++){ var t=tMax*k/60; pts.push([t,etfCost(e,S.P,t,S.g)]); } return {e:e,pts:pts}; });
     var schPts=[]; for(var k=0;k<=60;k++){ var t=tMax*k/60; schPts.push([t,schwabCost(S.P,t,S.g,S.sell)]); }
     var cbPts=[]; for(var k=0;k<=60;k++){ var t=tMax*k/60; cbPts.push([t,coinbaseCost(S.P,t,S.g,S.sell)]); }
-    var maxCost=0; lines.forEach(function(L){ L.pts.forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; }); }); schPts.forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; }); cbPts.forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; });
+    var sbPts=[]; for(var k=0;k<=60;k++){ var t=tMax*k/60; sbPts.push([t,coinbaseSimpleCost(S.P,t,S.g,S.sell)]); }
+    var maxCost=0; lines.forEach(function(L){ L.pts.forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; }); }); schPts.forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; }); cbPts.forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; }); sbPts.forEach(function(p){ if(p[1]>maxCost)maxCost=p[1]; });
     maxCost = maxCost*1.10 || 1;
     function X(t){ return X0+(t/tMax)*(X1-X0); }
     function Y(c){ return Y0-(c/maxCost)*(Y0-Y1); }
@@ -102,7 +109,8 @@
 
     // shown ETF lines
     lines.forEach(function(L){ svg+='<path class="lineE" d="'+path(L.pts)+'"/>'; });
-    // Coinbase + Schwab reference tolls on top of the bunch (flat unless the position grows)
+    // Per-trade toll references on top of the bunch (flat unless the position grows): Simple buy, Coinbase Advanced, Schwab
+    svg+='<path class="lineSB" d="'+path(sbPts)+'"/>';
     svg+='<path class="lineC" d="'+path(cbPts)+'"/>';
     svg+='<path class="lineS" d="'+path(schPts)+'"/>';
     // a dot where each shown ETF crosses Schwab within the horizon
@@ -117,9 +125,12 @@
     var gbtc=null; lines.forEach(function(L){ if(L.e.t==='GBTC') gbtc=L.pts; });
     if(gbtc && !single) svg+=endLab(Y(gbtc[gbtc.length-1][1]),'endlabF','var(--etf-ink)','GBTC');
     if(single && !singleHasMarker){ var fy=Y(lines[0].pts[lines[0].pts.length-1][1]); var dy=(Math.abs(fy-sy)<13)?(fy<=sy?-11:11):0; svg+=endLab(fy+dy,'endlab','var(--etf-ink)',lines[0].e.t); }
-    var cy=Y(cbPts[cbPts.length-1][1]);            // Coinbase sits below Schwab (lower rate); nudge if labels collide
-    if(Math.abs(cy-sy)<13) cy=sy+13;
-    svg+=endLab(cy,'endlab','var(--coinbase-ink)','Coinbase');
+    var sby=Y(sbPts[sbPts.length-1][1]);           // Simple buy is priciest (top); Schwab mid; Advanced lowest
+    var cy=Y(cbPts[cbPts.length-1][1]);
+    if(Math.abs(cy-sy)<13) cy=sy+13;               // nudge Advanced clear of Schwab if they crowd
+    if(Math.abs(sby-sy)<13) sby=sy-13;             // nudge Simple clear of Schwab (only at tiny principals)
+    svg+=endLab(sby,'endlab','var(--simple-ink)','CB Simple');
+    svg+=endLab(cy,'endlab','var(--coinbase-ink)','CB Advanced');
     svg+=endLab(sy,'endlab','var(--schwab-ink)','Schwab');
     document.getElementById('cChart').innerHTML=svg;
   }
@@ -130,7 +141,8 @@
     var cols=[1,3,5,10], nowY=S.years;
     var rows=[
       { k:'schwab',   label:'Schwab direct',              sub:S.sell?'0.75% buy + 0.75% sell':'0.75% buy only (held)',    color:'var(--schwab)',   on:true, cost:function(t){return schwabCost(S.P,t,S.g,S.sell);} },
-      { k:'coinbase', label:'Coinbase Advanced · Tier 1', sub:S.sell?'0.60% buy + 0.60% sell · taker':'0.60% buy only · taker', color:'var(--coinbase)', on:true, cost:function(t){return coinbaseCost(S.P,t,S.g,S.sell);} }
+      { k:'coinbase', label:'Coinbase Advanced · Tier 1', sub:S.sell?'0.60% buy + 0.60% sell · taker':'0.60% buy only · taker', color:'var(--coinbase)', on:true, cost:function(t){return coinbaseCost(S.P,t,S.g,S.sell);} },
+      { k:'simple',   label:'Coinbase · Simple buy',      sub:S.sell?'2.84% buy + 2.84% sell · spread+fee':'2.84% buy only · spread+fee', color:'var(--simple)', on:true, cost:function(t){return coinbaseSimpleCost(S.P,t,S.g,S.sell);} }
     ];
     CFG.etfs.forEach(function(e,i){ rows.push({ k:i, label:e.t, sub:e.issuer+' · '+erLabel(e), color:'var(--etf)', on:S.vis[i], cost:function(t){return etfCost(e,S.P,t,S.g);} }); });
     rows.sort(function(a,b){ return a.cost(nowY)-b.cost(nowY); });
@@ -138,7 +150,7 @@
     var best=Infinity; rows.forEach(function(r){ if(r.on){ var c=r.cost(nowY); if(c<best)best=c; } });
     var html='';
     rows.forEach(function(r){
-      var isToll=(r.k==='schwab'||r.k==='coinbase');   // tolls are always-on reference rows, not toggleable
+      var isToll=(r.k==='schwab'||r.k==='coinbase'||r.k==='simple');   // tolls are always-on reference rows, not toggleable
       var cls=(r.on && r.cost(nowY)===best?'best ':'')+(!r.on?'hidden ':'')+(isToll?'static':'');
       html+='<tr class="'+cls+'" data-k="'+r.k+'"'+(!isToll?' role="button" aria-pressed="'+r.on+'" title="'+(r.on?'Hide':'Show')+' on chart"':'')+'>'
         +'<td class="veh"><span class="tag'+(r.on?'':' off')+'" style="background:'+r.color+'"></span>'+r.label+'<small>'+r.sub+'</small></td>';
@@ -148,7 +160,7 @@
     document.querySelector('#cTable tbody').innerHTML=html;
     document.getElementById('cTableNow').textContent='At '+nowY+' yrs';
     document.querySelectorAll('#cTable tbody tr').forEach(function(tr){
-      tr.addEventListener('click',function(){ var k=tr.getAttribute('data-k'); if(k!=='schwab'&&k!=='coinbase'){ S.vis[+k]=!S.vis[+k]; render(); } });
+      tr.addEventListener('click',function(){ var k=tr.getAttribute('data-k'); if(k!=='schwab'&&k!=='coinbase'&&k!=='simple'){ S.vis[+k]=!S.vis[+k]; render(); } });
     });
   }
 
