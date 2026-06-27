@@ -1,0 +1,32 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getPost } from '../../posts';
+import '../../styles/posts/the-rotation.css';
+const post = getPost('the-rotation');
+---
+<PostLayout post={post}>
+<div class="article">
+
+  <!-- Interactive gym checklist — built in JS from the program data.
+       See public/posts/the-rotation/rotation.js (ported from the
+       Claude Design prototype "Rotating Workout.dc.html"). -->
+  <div id="rotation" class="rotation-app"></div>
+
+  <p class="rot-closer">Pick a program. Run it until it&rsquo;s boring. <b>Then rotate.</b></p>
+
+  <section class="rot-notes">
+    <h3 class="rot-notes__h">Notes</h3>
+    <ol class="rot-notes__list">
+      <li><b>Nothing invented.</b> Every exercise, set, rep and cue is lifted straight from the
+        synthesized program built from 349 reels by Jaden Levin.</li>
+      <li><b>Videos.</b> The YouTube button runs a search for that exercise&rsquo;s form;
+        &ldquo;Form reels&rdquo; link the original Instagram clips for that day &mdash; they cover
+        the whole session, not one move.</li>
+      <li><b>Not medical advice.</b> Adjust weight to hit the failure / burnout cues with strict
+        form. Warm up first.</li>
+    </ol>
+  </section>
+
+  <script src="/posts/the-rotation/rotation.js" is:inline></script>
+</div>
+</PostLayout>
