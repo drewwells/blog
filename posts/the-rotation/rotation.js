@@ -130,7 +130,8 @@
 
   /* ---------------- state ---------------- */
   var state = { program: 'A', day: 'Push', layout: 'expanded', week: 1,
-                checks: {}, expanded: null, howToOpen: false, reelsOpen: false, menuOpen: false };
+                checks: {}, expanded: null, howToOpen: false, reelsOpen: false,
+                menuOpen: false, stuck: false };
 
   try {
     var raw = localStorage.getItem(LS_KEY);
@@ -282,21 +283,33 @@
     return tabs;
   }
 
-  function buildDayHeader() {
-    var dh = h('div', 'rot-dayhead');
-    var box = h('div');
+  // Sticky day header: a 1px sentinel followed by a position:sticky wrapper.
+  // The wrapper shows the full header at rest and a compact pinned bar when stuck.
+  function buildStickyRegion(frag) {
+    var sentinel = h('div', 'rot-sentinel');
+    sentinel.setAttribute('data-rotation-sentinel', '1');
+    frag.appendChild(sentinel);
+
+    var wrap = h('div', 'rot-sticky' + (state.stuck ? ' is-stuck' : ''));
+    wrap.appendChild(state.stuck ? buildDayHeaderStuck() : buildDayHeaderFull());
+    frag.appendChild(wrap);
+  }
+
+  function buildDayHeaderFull() {
+    var box = h('div', 'rot-dayhead-full');
+
+    var top = h('div', 'rot-dayhead');
+    var info = h('div');
     var num = h('div', 'rot-dayhead__num');
     num.innerHTML = 'Program ' + state.program + '&nbsp;&nbsp;&middot;&nbsp;&nbsp;Day ' + (DAYKEYS.indexOf(state.day) + 1);
     var title = h('div', 'rot-dayhead__title'); title.textContent = state.day;
     var sub = h('div', 'rot-dayhead__sub'); sub.textContent = DAYMETA[state.day].sub;
-    box.appendChild(num); box.appendChild(title); box.appendChild(sub);
-    var reset = h('button', 'rot-reset'); reset.type = 'button'; reset.textContent = 'Reset day';
+    info.appendChild(num); info.appendChild(title); info.appendChild(sub);
+    var reset = h('button', 'rot-reset'); reset.type = 'button'; reset.textContent = 'Reset';
     reset.addEventListener('click', function () { resetDay(); });
-    dh.appendChild(box); dh.appendChild(reset);
-    return dh;
-  }
+    top.appendChild(info); top.appendChild(reset);
+    box.appendChild(top);
 
-  function buildProgress() {
     var c = countDone(state.program, state.day);
     var pct = c.total ? Math.round(c.done / c.total * 100) : 0;
     var allDone = c.total > 0 && c.done === c.total;
@@ -307,7 +320,41 @@
     var label = h('div', 'rot-progress__label');
     label.textContent = allDone ? ('All ' + c.total + ' done') : (c.done + ' of ' + c.total + ' done');
     pr.appendChild(track); pr.appendChild(label);
-    return pr;
+    box.appendChild(pr);
+    return box;
+  }
+
+  function buildDayHeaderStuck() {
+    var c = countDone(state.program, state.day);
+    var pct = c.total ? Math.round(c.done / c.total * 100) : 0;
+    var allDone = c.total > 0 && c.done === c.total;
+
+    var box = h('div');
+    var row = h('div', 'rot-stuck__row');
+    var left = h('div', 'rot-stuck__left');
+    var label = h('span', 'rot-stuck__label'); label.textContent = 'Program ' + state.program + ' · ' + state.day;
+    var count = h('span', 'rot-stuck__count'); count.textContent = c.done + '/' + c.total;
+    left.appendChild(label); left.appendChild(count);
+    var right = h('div', 'rot-stuck__right');
+    var reset = h('button', 'rot-stuck__reset'); reset.type = 'button'; reset.textContent = 'Reset';
+    reset.addEventListener('click', function () { resetDay(); });
+    var menu = h('button', 'rot-stuck__menu'); menu.type = 'button';
+    menu.setAttribute('aria-label', 'Program menu');
+    menu.textContent = state.menuOpen ? '✕' : '☰';
+    // The program menu is anchored at the very top, so scroll up first, then open it.
+    menu.addEventListener('click', function () {
+      try { window.scrollTo(0, 0); } catch (e) {}
+      state.menuOpen = true; render();
+    });
+    right.appendChild(reset); right.appendChild(menu);
+    row.appendChild(left); row.appendChild(right);
+
+    var track = h('div', 'rot-stuck__track');
+    var fill = h('div', 'rot-progress__fill' + (allDone ? ' is-done' : '')); fill.style.width = pct + '%';
+    track.appendChild(fill);
+
+    box.appendChild(row); box.appendChild(track);
+    return box;
   }
 
   function buildLayoutToggle() {
@@ -404,8 +451,7 @@
     var frag = document.createDocumentFragment();
     frag.appendChild(buildHeader());
     frag.appendChild(buildDayTabs());
-    frag.appendChild(buildDayHeader());
-    frag.appendChild(buildProgress());
+    buildStickyRegion(frag);
     frag.appendChild(buildLayoutToggle());
     frag.appendChild(buildList());
     buildReels(frag);
@@ -413,5 +459,17 @@
     mount.appendChild(frag);
   }
 
+  // Flip `stuck` when the sentinel scrolls to the top of the viewport.
+  // Passive scroll listener; only re-render on an actual change.
+  function onScroll() {
+    if (!mount) return;
+    var el = mount.querySelector('[data-rotation-sentinel]');
+    if (!el) return;
+    var stuck = el.getBoundingClientRect().top <= 0;
+    if (stuck !== state.stuck) { state.stuck = stuck; render(); }
+  }
+
   render();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 })();
