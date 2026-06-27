@@ -23,6 +23,14 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    slug: 'the-rotation',
+    title: 'The Rotation',
+    dek: 'Three interchangeable four-day programs — A, B, C — built from one exercise pool. A tap-through gym card that remembers where you stopped.',
+    kicker: 'Training · Rotating Split',
+    date: '2026-06-27',
+    tags: ['training', 'reference'],
+  },
+  {
     slug: 'schwab-crypto-fees',
     title: 'The 0.75% Round Trip',
     dek: 'Schwab now sells bitcoin two ways: wrapped in an ETF that skims a small fee every year you hold, or bought direct, where you pay 0.75% going in and 0.75% coming out. One is a slow leak, the other a cover charge — and which is cheaper turns entirely on how long you stay. An interactive break-even, fees verified June 2026.',
