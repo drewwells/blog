@@ -1,13 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap');
 
 /* ============================================================
    WST Blog editorial theme — "The Rotation"
-   Fraunces / IBM Plex Sans / IBM Plex Mono · warm paper
+   "Coach" type: Bricolage Grotesque (display) + Schibsted
+   Grotesk (text). No monospace — the "label" role (--mono) is
+   Schibsted set UPPERCASE with tracking. Warm paper
    Phone-first interactive gym checklist. Two semantic accents:
      --move = a set still to do, --done = completed.
    (per-article theme; structural grammar is shared — see DS)
+
+   NOTE: tokens are scoped to .article, NOT :root. site.css is
+   inlined into the page <head> AFTER this stylesheet, so its
+   :root tokens would win the cascade. Setting the overrides on
+   the .article element (an ancestor of all post content) beats
+   the inherited :root values regardless of source order — and
+   keeps the post from restyling the shared header/footer.
    ============================================================ */
-:root{
+.article{
   --paper:#f7f4ec; --paper-2:#efe9dc; --card:#fffdf7;
   --ink:#1b1813; --ink-soft:#4d473c; --ink-faint:#8b8475;
   --rule:#e4ddcd; --rule-soft:#efe9dc;
@@ -18,9 +27,12 @@
   /* dark control-center band */
   --dark:#15171e; --dark-2:#1c1f29; --dark-ink:#cdd0d8; --gold:#e0a23a;
   --maxw:640px; --col:640px;
-  --serif:'Fraunces',Georgia,serif;
-  --sans:'IBM Plex Sans',system-ui,sans-serif;
-  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  /* "Coach" type — no monospace anywhere. Token names kept to match
+     the prototype, but --mono is a deliberate misnomer: it is the
+     "label" role (UPPERCASE + letter-spacing), still Schibsted Grotesk. */
+  --serif:'Bricolage Grotesque',Georgia,sans-serif; /* display: day title / closer */
+  --sans:'Schibsted Grotesk',system-ui,sans-serif;  /* body + exercise names */
+  --mono:'Schibsted Grotesk',system-ui,sans-serif;  /* tracked-caps label role */
 }
 *{box-sizing:border-box}
 
@@ -130,34 +142,74 @@
 .rot-day__badge.is-complete{color:var(--done-ink)}
 .rot-day.is-active .rot-day__badge.is-complete{color:var(--gold)}
 
-/* ---------------- day header ---------------- */
-.rot-dayhead{
-  display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
-  border-top:2px solid var(--ink);padding-top:14px;
+/* ---------------- day header — sticky; collapses on scroll ---------------- */
+.rot-sentinel{height:1px}
+.rot-sticky{
+  position:sticky;top:0;z-index:40;background:var(--paper);
+  border-bottom:1px solid transparent;
+  transition:box-shadow .2s ease, border-color .2s ease;
 }
+.rot-sticky.is-stuck{
+  border-bottom-color:var(--rule);
+  box-shadow:0 8px 20px -16px rgba(27,24,19,.55);
+  padding-top:7px;padding-bottom:7px;
+}
+
+/* expanded (at rest) */
+.rot-dayhead-full{border-top:2px solid var(--ink);padding-top:14px}
+.rot-dayhead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
 .rot-dayhead__num{
-  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
   color:var(--move-ink);font-weight:600;
 }
 .rot-dayhead__title{
-  font-family:var(--serif);font-weight:600;font-size:27px;line-height:1.05;
-  letter-spacing:-.01em;margin-top:2px;
+  font-family:var(--serif);font-weight:700;font-size:28px;line-height:1.04;
+  letter-spacing:-.015em;margin-top:3px;
 }
-.rot-dayhead__sub{font-family:var(--mono);font-size:12px;color:var(--ink-faint);margin-top:3px}
+.rot-dayhead__sub{
+  font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--ink-faint);margin-top:4px;
+}
 .rot-reset{
-  font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--ink-soft);background:transparent;border:1px solid var(--rule);border-radius:8px;
   padding:9px 12px;min-height:40px;cursor:pointer;white-space:nowrap;
 }
 
-/* ---------------- progress ---------------- */
-.rot-progress{display:flex;align-items:center;gap:12px;margin-top:14px}
+/* progress — expanded variant, inside the day header */
+.rot-progress{display:flex;align-items:center;gap:12px;margin-top:13px}
 .rot-progress__track{flex:1;height:7px;background:var(--rule-soft);border-radius:5px;overflow:hidden}
 .rot-progress__fill{height:100%;background:var(--move);border-radius:5px;transition:width .25s ease}
 .rot-progress__fill.is-done{background:var(--done)}
 .rot-progress__label{
-  font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink-soft);white-space:nowrap;
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-soft);white-space:nowrap;
 }
+
+/* pinned (stuck) — compact one-line bar + slim progress */
+.rot-stuck__row{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 0 8px;
+}
+.rot-stuck__left{display:flex;align-items:baseline;gap:10px;min-width:0}
+.rot-stuck__label{
+  font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--move-ink);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.rot-stuck__count{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.04em;
+  color:var(--ink-faint);white-space:nowrap;
+}
+.rot-stuck__right{display:flex;align-items:center;gap:8px;flex:none}
+.rot-stuck__reset{
+  font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-soft);background:transparent;border:1px solid var(--rule);border-radius:7px;
+  padding:7px 9px;min-height:34px;cursor:pointer;
+}
+.rot-stuck__menu{
+  width:36px;height:34px;border-radius:7px;border:1px solid var(--rule);background:var(--card);
+  color:var(--ink);font-size:15px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.rot-stuck__track{height:4px;background:var(--rule-soft);border-radius:3px;overflow:hidden}
 
 /* ---------------- layout toggle ---------------- */
 .rot-layout{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
