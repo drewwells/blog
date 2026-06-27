@@ -2,7 +2,16 @@
 import PostLayout from '../../layouts/PostLayout.astro';
 import { getPost } from '../../posts';
 import '../../styles/posts/the-rotation.css';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 const post = getPost('the-rotation');
+
+// rotation.js is served verbatim from public/ (Astro doesn't fingerprint it),
+// so append a build-time content hash as ?v= for cache-busting. The hash
+// changes only when the file changes, so returning browsers fetch fresh JS on
+// every edit without a manual hard-refresh, and keep the cached copy otherwise.
+const rotationJs = readFileSync('public/posts/the-rotation/rotation.js');
+const jsVersion = createHash('sha256').update(rotationJs).digest('hex').slice(0, 12);
 ---
 <PostLayout post={post}>
 <div class="article">
@@ -27,6 +36,6 @@ const post = getPost('the-rotation');
     </ol>
   </section>
 
-  <script src="/posts/the-rotation/rotation.js" is:inline></script>
+  <script src={`/posts/the-rotation/rotation.js?v=${jsVersion}`} is:inline></script>
 </div>
 </PostLayout>
