@@ -45,11 +45,11 @@
         ['Tricep Pushdown (Straight Bar)', '3', null, 'Superset with rope pushdowns; practically no rest between']],
       Pull: [
         ['Lat Pulldown', '4', '8-15', 'Use straps or a mag-grip attachment to reduce forearm grip fatigue'],
-        ['Pull-Up', '4', null, 'To failure on the last two sets (last set at 50% of max pull-ups)'],
         ['Kneeling Face Pull', '3-4', '8-12', 'Targets upper back and rear delts. Alternate knees as needed.'],
         ['Cable Rear Delt Pull-Through', null, null, 'Credit to Seabum; test different angles to isolate the rear delt'],
         ['Standing Cable Curls', '3-4', '10-12, then partials', 'Burnout; clean form, avoid whole-body momentum'],
-        ['21s', '3-4', '21 (11 half + 11 top)', null]],
+        ['21s', '3-4', '21 (11 half + 11 top)', null],
+        ['Pull-Up', '4', null, 'To failure on the last two sets (last set at 50% of max pull-ups)']],
       Legs: [
         ['Bulgarian Split Squat', '4', '8', 'Drop set; pause 8s at quarter-way up (isometric) between sets, no rest. Use dumbbells and a stable surface.'],
         ['Leg Press', '3-4', '20/12-15/8', 'Optional 4th set of 8 reps'],
