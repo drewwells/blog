@@ -255,6 +255,18 @@
   flex:none;width:34px;height:34px;border-radius:8px;border:1px solid var(--rule);
   background:var(--paper-2);color:var(--ink-soft);font-size:15px;line-height:1;cursor:pointer;
 }
+/* per-exercise source-reel link — quiet card/rule chip (the IG-reel pill family,
+   distinct from the warm --move-wash YouTube pill), play glyph in --move-ink */
+.rot-ex__reel{
+  flex:none;align-self:flex-start;
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-soft);background:var(--card);border:1px solid var(--rule);border-radius:8px;
+  padding:0 11px;min-height:38px;text-decoration:none;white-space:nowrap;
+}
+.rot-ex__reel-ic{color:var(--move-ink);font-size:9px;line-height:1}
+.rot-ex.is-done .rot-ex__reel{border-color:var(--done);color:var(--done-ink)}
+.rot-ex.is-done .rot-ex__reel-ic{color:var(--done-ink)}
 .rot-ex__details{margin-left:38px;margin-top:10px;display:flex;flex-direction:column;gap:9px}
 .rot-ex__note{font-size:13.5px;line-height:1.5;color:var(--ink-soft);text-wrap:pretty}
 .rot-yt{

@@ -105,15 +105,15 @@
         ['Push-Up', '3', null, '80-90% to failure (sets 1-2), 100% to failure (set 3)'],
         ['Incline Shoulder Press', '3-4', '15/12/8', 'Set the bench to 75 degrees to relieve rotator-cuff pressure'],
         ['Lateral Raises', '4', '8-15', 'Lightest weight, burnout (1 warm-up, 2 working, 1 burnout)'],
-        ['Cable Lateral Raise', '4', '15/12/8', 'High volume side delts; end with a 0-weight burnout, 30-50 reps'],
         ['Rope & Straight-Bar Tricep Pushdown superset', '3', '15/12/8', 'Short rest (20-30s). Pushing intensity.'],
-        ['Dips', '3', null, '80% / 90% / 100% to failure (slow eccentric)']],
+        ['Dips', '3', null, '80% / 90% / 100% to failure (slow eccentric)'],
+        ['Cable Lateral Raise', '4', '15/12/8', 'High volume side delts; end with a 0-weight burnout, 30-50 reps']],
       Pull: [
         ['Straight-Bar Lat Pulldown', '4', '8-15', 'Form over weight; spread the lats, squeeze at the bottom'],
         ['Reverse Single-Arm Fly', null, null, 'Chest facing forward; sweep poker chips off a table'],
-        ['Bicep Finisher (Hammer Curls)', null, '5/5 per arm, then to failure', 'Keep one arm stagnant, rinse/repeat; both arms for the final reps'],
         ['Standing Curls', '3', '12-15', 'Clean form, pinky twist at the top'],
-        ['Peak Builder Bicep Curls', null, '6-8', 'Heavy; advanced only, requires good mind-muscle connection']],
+        ['Peak Builder Bicep Curls', null, '6-8', 'Heavy; advanced only, requires good mind-muscle connection'],
+        ['Bicep Finisher (Hammer Curls)', null, '5/5 per arm, then to failure', 'Keep one arm stagnant, rinse/repeat; both arms for the final reps']],
       Legs: [
         ['Hack Squat', '3', '20/12/6-8', null],
         ['Leg Extensions & Hamstring Curls', '3 + 1 drop set', '15/12/8', 'Superset. Drop set: weight 10 notches down, 11 reps, then drop one notch until zero.'],
@@ -127,6 +127,90 @@
         ['Triceps Rope Pushdown', null, null, 'Targets the lateral head'],
         ['Triceps Straight-Bar Pushdown', null, null, 'Targets the medial head']]
     }
+  };
+
+  // Per-exercise Instagram source reel, keyed by `program|day|name` (the same
+  // key scheme as `checks`). Generated from fitscrape/rotations_mapping.json:
+  // 75/75 exercises mapped (74 high-confidence, 1 medium — C/Legs "Weighted
+  // Hanging Leg Raises", flagged for Drew's review). These are the *specific*
+  // source clips per move (distinct from the day-level DAYMETA reels and the
+  // generic per-exercise YouTube search).
+  var REELS = {
+    'A|Push|Incline Press': 'https://www.instagram.com/p/DF6M9z0xJCR/',
+    'A|Push|Cable Fly': 'https://www.instagram.com/p/DF6M9z0xJCR/',
+    'A|Push|Seated Pec Deck Fly': 'https://www.instagram.com/p/DIHbKS8x2dn/',
+    'A|Push|Front Delt Raises': 'https://www.instagram.com/p/DRPx7n-EY-B/',
+    'A|Push|Side Lateral Raises': 'https://www.instagram.com/p/DRPx7n-EY-B/',
+    'A|Push|Front Raise + Lateral Raise superset': 'https://www.instagram.com/p/DHXKliCxLbQ/',
+    'A|Push|Cable Rope Pushdown': 'https://www.instagram.com/reel/DHHa8QBx6Nn/',
+    'A|Push|Tricep Pushdown (Straight Bar)': 'https://www.instagram.com/reel/DHHa8QBx6Nn/',
+    'A|Pull|Lat Pulldown': 'https://www.instagram.com/p/DGa5HZuRQ1Q/',
+    'A|Pull|Kneeling Face Pull': 'https://www.instagram.com/p/DQ95xYhEZCS/',
+    'A|Pull|Cable Rear Delt Pull-Through': 'https://www.instagram.com/reel/DP1_QoMkYMq/',
+    'A|Pull|Standing Cable Curls': 'https://www.instagram.com/p/DS24nMGEd-2/',
+    'A|Pull|21s': 'https://www.instagram.com/reel/DQZe30FkXuu/',
+    'A|Pull|Pull-Up': 'https://www.instagram.com/p/DGa5HZuRQ1Q/',
+    'A|Legs|Bulgarian Split Squat': 'https://www.instagram.com/reel/DGBXeFQRoXM/',
+    'A|Legs|Leg Press': 'https://www.instagram.com/reel/DLU5gOQMClw/',
+    'A|Legs|Leg Extension Machine': 'https://www.instagram.com/reel/DLU5gOQMClw/',
+    'A|Legs|Leg Raises': 'https://www.instagram.com/reel/DMqBT_9xNJX/',
+    'A|Legs|Weighted Decline Crunch': 'https://www.instagram.com/reel/DOb9iPQEbhG/',
+    'A|Arms|Seated Front Delt Raise': 'https://www.instagram.com/reel/DGMjpUWxcdP/',
+    'A|Arms|Semi Lateral Raise': 'https://www.instagram.com/reel/DGMjpUWxcdP/',
+    'A|Arms|Cable Front Raise': 'https://www.instagram.com/reel/DKpZtD5xYpe/',
+    'A|Arms|Standing Barbell Curls': 'https://www.instagram.com/p/DS-9W6CEbnN/',
+    'A|Arms|Rope Curls': 'https://www.instagram.com/p/DS-9W6CEbnN/',
+    'A|Arms|Cable Triceps Kickback': 'https://www.instagram.com/reel/DJPE8mMRlMB/',
+    'A|Arms|Plate 90 Holds': 'https://www.instagram.com/p/DXc3n7VkSdR/',
+    'B|Push|Incline Dumbbell Press': 'https://www.instagram.com/p/DF6M9z0xJCR/',
+    'B|Push|Incline Dumbbell Fly': 'https://www.instagram.com/p/DF6M9z0xJCR/',
+    'B|Push|High to Low Cable Fly': 'https://www.instagram.com/p/DIHbKS8x2dn/',
+    'B|Push|Shoulder Press Machine': 'https://www.instagram.com/p/DRPx7n-EY-B/',
+    'B|Push|Chest-Supported Superman Lateral Raises': 'https://www.instagram.com/p/DRPx7n-EY-B/',
+    'B|Push|Cable Reverse Fly': 'https://www.instagram.com/p/DHXKliCxLbQ/',
+    'B|Push|Single-Arm Tricep Kickback': 'https://www.instagram.com/reel/DHHa8QBx6Nn/',
+    'B|Push|Cable Tricep Kickbacks': 'https://www.instagram.com/reel/DPe0WoIEUbh/',
+    'B|Pull|Close-Grip Mag-Grip Pulldown': 'https://www.instagram.com/p/DGa5HZuRQ1Q/',
+    'B|Pull|Cable Lat Pullover': 'https://www.instagram.com/p/DQ95xYhEZCS/',
+    'B|Pull|Bent-Over Rear Delt Fly': 'https://www.instagram.com/reel/DJzlavgx86w/',
+    'B|Pull|Reverse Cable Fly': 'https://www.instagram.com/reel/DP1_QoMkYMq/',
+    'B|Pull|Single-Arm Peak Builder Bicep Curls': 'https://www.instagram.com/p/DS24nMGEd-2/',
+    'B|Pull|Preacher Curls': 'https://www.instagram.com/reel/DQZe30FkXuu/',
+    'B|Legs|Bulgarian Split Squats': 'https://www.instagram.com/reel/DLU5gOQMClw/',
+    'B|Legs|Leg Press': 'https://www.instagram.com/p/DQ14JHwEcff/',
+    'B|Legs|Leg Extension Machine (Drop Set)': 'https://www.instagram.com/reel/DLU5gOQMClw/',
+    'B|Legs|High Leg Raises': 'https://www.instagram.com/reel/DMqBT_9xNJX/',
+    'B|Legs|Weighted Sit-Ups': 'https://www.instagram.com/reel/DOb9iPQEbhG/',
+    'B|Arms|Full Lateral Raise': 'https://www.instagram.com/reel/DGMjpUWxcdP/',
+    'B|Arms|Rear Delt Raise': 'https://www.instagram.com/reel/DGMjpUWxcdP/',
+    'B|Arms|Rope Curls (Forearm Emphasis)': 'https://www.instagram.com/p/DS-9W6CEbnN/',
+    'B|Arms|Reverse Wrist Rotations': 'https://www.instagram.com/p/DS-9W6CEbnN/',
+    'B|Arms|Cable Overhand Wrist Rotations': 'https://www.instagram.com/p/DXc3n7VkSdR/',
+    'B|Arms|Rope Pushdown': 'https://www.instagram.com/reel/DJh6r0exmpA/',
+    'B|Arms|Straight-Bar Pushdown': 'https://www.instagram.com/reel/DJh6r0exmpA/',
+    'C|Push|Flat Bench Press': 'https://www.instagram.com/p/DIHbKS8x2dn/',
+    'C|Push|Pullover': 'https://www.instagram.com/p/DF6M9z0xJCR/',
+    'C|Push|Push-Up': 'https://www.instagram.com/p/DIHbKS8x2dn/',
+    'C|Push|Incline Shoulder Press': 'https://www.instagram.com/p/DHXKliCxLbQ/',
+    'C|Push|Lateral Raises': 'https://www.instagram.com/p/DRPx7n-EY-B/',
+    'C|Push|Rope & Straight-Bar Tricep Pushdown superset': 'https://www.instagram.com/reel/DPe0WoIEUbh/',
+    'C|Push|Dips': 'https://www.instagram.com/reel/DPe0WoIEUbh/',
+    'C|Push|Cable Lateral Raise': 'https://www.instagram.com/p/DHXKliCxLbQ/',
+    'C|Pull|Straight-Bar Lat Pulldown': 'https://www.instagram.com/p/DGa5HZuRQ1Q/',
+    'C|Pull|Reverse Single-Arm Fly': 'https://www.instagram.com/reel/DP1_QoMkYMq/',
+    'C|Pull|Standing Curls': 'https://www.instagram.com/reel/DQZe30FkXuu/',
+    'C|Pull|Peak Builder Bicep Curls': 'https://www.instagram.com/reel/DQZe30FkXuu/',
+    'C|Pull|Bicep Finisher (Hammer Curls)': 'https://www.instagram.com/p/DS24nMGEd-2/',
+    'C|Legs|Hack Squat': 'https://www.instagram.com/reel/DLU5gOQMClw/',
+    'C|Legs|Leg Extensions & Hamstring Curls': 'https://www.instagram.com/p/DQ14JHwEcff/',
+    'C|Legs|Leg Raises with a Twist': 'https://www.instagram.com/reel/DMqBT_9xNJX/',
+    'C|Legs|Weighted Hanging Leg Raises': 'https://www.instagram.com/p/DXke6d5ET55/',
+    'C|Arms|Cable Face Pull': 'https://www.instagram.com/reel/DKpZtD5xYpe/',
+    'C|Arms|Cable Lateral Raise': 'https://www.instagram.com/reel/DKpZtD5xYpe/',
+    'C|Arms|Cable Reverse Curls': 'https://www.instagram.com/p/DXc3n7VkSdR/',
+    'C|Arms|Cable Underhand Wrist Rotations': 'https://www.instagram.com/p/DXc3n7VkSdR/',
+    'C|Arms|Triceps Rope Pushdown': 'https://www.instagram.com/reel/DJPE8mMRlMB/',
+    'C|Arms|Triceps Straight-Bar Pushdown': 'https://www.instagram.com/reel/DJPE8mMRlMB/'
   };
 
   /* ---------------- state ---------------- */
@@ -421,6 +505,19 @@
       var pe = h('div', 'rot-ex__presc'); pe.textContent = fmtPresc(sets, reps);
       body.appendChild(nm); body.appendChild(pe);
       top.appendChild(check); top.appendChild(body);
+
+      // Per-exercise source-reel link — small, always visible in both layouts,
+      // opens the specific IG clip this move was pulled from. stopPropagation so
+      // it doesn't tick the card.
+      var reelUrl = REELS[key];
+      if (reelUrl) {
+        var reel = h('a', 'rot-ex__reel');
+        reel.href = reelUrl; reel.target = '_blank'; reel.rel = 'noopener';
+        reel.setAttribute('aria-label', 'Watch the source reel for ' + name);
+        reel.innerHTML = '<span class="rot-ex__reel-ic" aria-hidden="true">&#9654;</span>Reel';
+        reel.addEventListener('click', function (e) { e.stopPropagation(); });
+        top.appendChild(reel);
+      }
 
       if (state.layout === 'compact') {
         var chev = h('button', 'rot-ex__chev'); chev.type = 'button';
