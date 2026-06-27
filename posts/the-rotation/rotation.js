@@ -9,7 +9,8 @@
 (function () {
   'use strict';
 
-  var LS_KEY = 'wst-rotation-v1';
+  var LS_KEY = 'wst-rotation-v2';
+  var LS_KEY_OLD = 'wst-rotation-v1';
 
   var DAYKEYS = ['Push', 'Pull', 'Legs', 'Arms'];
 
@@ -133,6 +134,7 @@
                 checks: {}, expanded: null, howToOpen: false, reelsOpen: false,
                 menuOpen: false, stuck: false };
 
+  var migrated = false;
   try {
     var raw = localStorage.getItem(LS_KEY);
     if (raw) {
@@ -144,8 +146,32 @@
         if (s.week) state.week = s.week;
         if (s.checks && typeof s.checks === 'object') state.checks = s.checks;
       }
+    } else {
+      // Migrate from v1. Its `checks` were keyed by ARRAY INDEX
+      // (program|day|i), which the Pull-day reorder invalidated — index 1
+      // is no longer the same exercise. Remapping them would land marks on
+      // the wrong rows, so carry only the stable prefs (program/day/layout/
+      // week) and drop the checks: a clean reset. v2 keys checks by exercise
+      // NAME, which survives future reorders.
+      var oldRaw = localStorage.getItem(LS_KEY_OLD);
+      if (oldRaw) {
+        var o = JSON.parse(oldRaw);
+        if (o && typeof o === 'object') {
+          if (o.program) state.program = o.program;
+          if (o.day) state.day = o.day;
+          if (o.layout) state.layout = o.layout;
+          if (o.week) state.week = o.week;
+        }
+        try { localStorage.removeItem(LS_KEY_OLD); } catch (e) {}
+        migrated = true;
+      }
     }
   } catch (e) {}
+
+  // If we carried prefs forward from v1, write v2 now so the migration is
+  // durable even if the user never interacts this session (persist() is
+  // hoisted, so calling it before its definition is fine).
+  if (migrated) persist();
 
   function persist() {
     try {
@@ -174,9 +200,14 @@
     var parts = [sl, rl].filter(Boolean);
     return parts.length ? parts.join('   ·   ') : 'As prescribed';
   }
+  // Checks are keyed by exercise NAME (stable across reorders), not index.
+  // Names are unique within a single program/day, so program|day|name is a
+  // safe key; '|' never appears in an exercise name.
+  function checkKey(p, d, name) { return p + '|' + d + '|' + name; }
+
   function countDone(p, d) {
     var list = PROGRAMS[p][d] || [], done = 0;
-    for (var i = 0; i < list.length; i++) { if (state.checks[p + '|' + d + '|' + i]) done++; }
+    for (var i = 0; i < list.length; i++) { if (state.checks[checkKey(p, d, list[i][0])]) done++; }
     return { done: done, total: list.length };
   }
 
@@ -376,7 +407,7 @@
     var wrap = h('div', 'rot-list');
     list.forEach(function (row, i) {
       var name = row[0], sets = row[1], reps = row[2], note = row[3];
-      var key = state.program + '|' + state.day + '|' + i;
+      var key = checkKey(state.program, state.day, name);
       var done = !!state.checks[key];
       var showDetails = (state.layout === 'expanded') || (state.expanded === key);
 
