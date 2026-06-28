@@ -88,11 +88,13 @@
 
 /* ---------------- program menu (hamburger dropdown) ---------------- */
 .rot-menu{
-  position:absolute;top:48px;right:0;z-index:30;
+  position:absolute;top:48px;right:0;z-index:50; /* above the sticky day header (40) */
   width:min(284px,calc(100vw - 36px));
   background:var(--card);border:1px solid var(--rule);border-radius:12px;
   box-shadow:0 20px 44px -22px rgba(27,24,19,.5);padding:15px 16px;
 }
+/* on a phone the dropdown spans the column so it reads as a panel, not a clip */
+@media (max-width:600px){.rot-menu{left:0;right:0;width:auto}}
 .rot-menu__label{
   font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;
   color:var(--ink-faint);font-weight:600;margin-bottom:9px;
@@ -104,6 +106,9 @@
   font-family:var(--mono);font-size:14px;font-weight:600;letter-spacing:.04em;cursor:pointer;
 }
 .rot-prog__btn.is-active{border-color:var(--ink);background:var(--ink);color:#fff;font-weight:700}
+.rot-menu__note{
+  font-size:12.5px;line-height:1.45;color:var(--ink-soft);margin-top:10px;text-wrap:pretty;
+}
 .rot-week{
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   margin-top:14px;border-top:1px solid var(--rule-soft);padding-top:13px;
@@ -242,33 +247,37 @@
 }
 .rot-ex.is-done .rot-ex__check{border-color:var(--done);background:var(--done)}
 .rot-ex__body{flex:1;min-width:0}
+.rot-ex__namerow{display:flex;align-items:baseline;gap:7px}
 .rot-ex__name{
+  flex:1;min-width:0;
   font-family:var(--sans);font-size:16px;font-weight:600;line-height:1.25;color:var(--ink);
 }
 .rot-ex.is-done .rot-ex__name{text-decoration:line-through;text-decoration-color:var(--done-ink)}
+/* role badge — emoji glyph (⭐ main / 🔚 finisher), tiny and subordinate */
+.rot-ex__role{font-size:12px;line-height:1;flex:none;transform:translateY(1px)}
+/* the main barbell lift of the day gets a heavier left rail */
+.rot-ex.is-main{border-left-width:5px}
 .rot-ex__presc{
   font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--move-ink);
   margin-top:3px;letter-spacing:.01em;
 }
 .rot-ex.is-done .rot-ex__presc{color:var(--ink-faint)}
+/* intensity / load cue — quieter line under the prescription */
+.rot-ex__intensity{
+  font-size:12.5px;line-height:1.4;color:var(--ink-faint);margin-top:3px;text-wrap:pretty;
+}
 .rot-ex__chev{
   flex:none;width:34px;height:34px;border-radius:8px;border:1px solid var(--rule);
   background:var(--paper-2);color:var(--ink-soft);font-size:15px;line-height:1;cursor:pointer;
 }
-/* per-exercise source-reel link — quiet card/rule chip (the IG-reel pill family,
-   distinct from the warm --move-wash YouTube pill), play glyph in --move-ink */
-.rot-ex__reel{
-  flex:none;align-self:flex-start;
-  display:inline-flex;align-items:center;gap:6px;
-  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--ink-soft);background:var(--card);border:1px solid var(--rule);border-radius:8px;
-  padding:0 11px;min-height:38px;text-decoration:none;white-space:nowrap;
-}
-.rot-ex__reel-ic{color:var(--move-ink);font-size:9px;line-height:1}
-.rot-ex.is-done .rot-ex__reel{border-color:var(--done);color:var(--done-ink)}
-.rot-ex.is-done .rot-ex__reel-ic{color:var(--done-ink)}
 .rot-ex__details{margin-left:38px;margin-top:10px;display:flex;flex-direction:column;gap:9px}
 .rot-ex__note{font-size:13.5px;line-height:1.5;color:var(--ink-soft);text-wrap:pretty}
+/* progression rule — "Progress" label + the per-exercise advancement cue */
+.rot-ex__prog{font-size:13px;line-height:1.5;color:var(--ink-soft);text-wrap:pretty}
+.rot-ex__prog-k{
+  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--done-ink);margin-right:5px;
+}
 .rot-yt{
   display:inline-flex;align-items:center;gap:7px;
   font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;
@@ -276,25 +285,17 @@
   padding:9px 13px;min-height:40px;text-decoration:none;
 }
 
-/* ---------------- form reels ---------------- */
-.rot-reels-btn{
-  width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;
-  background:transparent;border:1px dashed var(--rule);border-radius:11px;
-  padding:13px 15px;min-height:48px;cursor:pointer;color:var(--ink-soft);margin-top:18px;text-align:left;
+/* ---------------- role legend ---------------- */
+.rot-legend{
+  display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:18px;
+  padding:13px 15px;border:1px dashed var(--rule);border-radius:11px;
 }
-.rot-reels-btn__label{
-  font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-weight:600;
-}
-.rot-reels-btn__chev{font-family:var(--mono);font-size:15px;color:var(--ink-faint)}
-.rot-reels{margin-top:10px}
-.rot-reels__note{font-size:12.5px;line-height:1.5;color:var(--ink-faint);margin-bottom:10px}
-.rot-reels__list{display:flex;flex-wrap:wrap;gap:8px}
-.rot-reel{
+.rot-legend__item{
   display:inline-flex;align-items:center;gap:7px;
-  font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--ink-soft);
-  background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:9px 12px;min-height:40px;
-  text-decoration:none;
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--ink-soft);
 }
+.rot-legend__sym{font-size:13px;line-height:1}
 
 /* ---------------- closer ---------------- */
 .rot-closer{

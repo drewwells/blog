@@ -1,265 +1,823 @@
 /* ============================================================
-   The Rotation — interactive gym checklist (WST Blog)
-   Dependency-free vanilla JS. Ported from the Claude Design
-   prototype (Rotating Workout.dc.html). Renders into #rotation.
-
-   Data is verbatim from the source program — see handoff §5.
-   State persists to localStorage key "wst-rotation-v1".
+   The Barbell Rotation — interactive strength card (WST Blog)
+   Auto-generated from fitscrape program.json by gen_blog_data.py.
+   Dependency-free vanilla JS. Renders into #rotation.
+   State persists to localStorage key "wst-rotation-v3".
    ============================================================ */
 (function () {
   'use strict';
 
-  var LS_KEY = 'wst-rotation-v2';
-  var LS_KEY_OLD = 'wst-rotation-v1';
-
-  var DAYKEYS = ['Push', 'Pull', 'Legs', 'Arms'];
-
-  var DAYMETA = {
-    Push: { sub: 'Chest · Shoulders · Triceps', reels: [
-      'https://www.instagram.com/p/DF6M9z0xJCR/', 'https://www.instagram.com/p/DIHbKS8x2dn/',
-      'https://www.instagram.com/p/DRPx7n-EY-B/', 'https://www.instagram.com/p/DHXKliCxLbQ/',
-      'https://www.instagram.com/reel/DHHa8QBx6Nn/', 'https://www.instagram.com/reel/DPe0WoIEUbh/'] },
-    Pull: { sub: 'Back · Rear Delts · Biceps', reels: [
-      'https://www.instagram.com/p/DGa5HZuRQ1Q/', 'https://www.instagram.com/p/DQ95xYhEZCS/',
-      'https://www.instagram.com/reel/DJzlavgx86w/', 'https://www.instagram.com/reel/DP1_QoMkYMq/',
-      'https://www.instagram.com/p/DS24nMGEd-2/', 'https://www.instagram.com/reel/DQZe30FkXuu/'] },
-    Legs: { sub: 'Quads · Hams · Glutes · Core', reels: [
-      'https://www.instagram.com/reel/DGBXeFQRoXM/', 'https://www.instagram.com/reel/DLU5gOQMClw/',
-      'https://www.instagram.com/p/DQ14JHwEcff/', 'https://www.instagram.com/reel/DMqBT_9xNJX/',
-      'https://www.instagram.com/reel/DOb9iPQEbhG/'] },
-    Arms: { sub: 'Arms · Shoulders · Isolation', reels: [
-      'https://www.instagram.com/reel/DGMjpUWxcdP/', 'https://www.instagram.com/reel/DKpZtD5xYpe/',
-      'https://www.instagram.com/p/DS-9W6CEbnN/', 'https://www.instagram.com/p/DXc3n7VkSdR/',
-      'https://www.instagram.com/reel/DJPE8mMRlMB/', 'https://www.instagram.com/reel/DJh6r0exmpA/'] }
-  };
-
-  var PROGRAMS = {
-    A: {
-      Push: [
-        ['Incline Press', '5', null, null],
-        ['Cable Fly', null, '75', null],
-        ['Seated Pec Deck Fly', null, null, 'Maximize time under tension during the eccentric phase'],
-        ['Front Delt Raises', null, '12-15', 'Superset with side lateral raises'],
-        ['Side Lateral Raises', null, '12-15', 'Arch elbows slightly, lead with the elbows'],
-        ['Front Raise + Lateral Raise superset', null, '18/15/12 front / 18/15/12 side', 'Lock DBs together for the front raise; drop weight for the descending reps'],
-        ['Cable Rope Pushdown', '3', null, 'Part of a superset; controlled reps, high volume, burnout'],
-        ['Tricep Pushdown (Straight Bar)', '3', null, 'Superset with rope pushdowns; practically no rest between']],
-      Pull: [
-        ['Lat Pulldown', '4', '8-15', 'Use straps or a mag-grip attachment to reduce forearm grip fatigue'],
-        ['Kneeling Face Pull', '3-4', '8-12', 'Targets upper back and rear delts. Alternate knees as needed.'],
-        ['Cable Rear Delt Pull-Through', null, null, 'Credit to Seabum; test different angles to isolate the rear delt'],
-        ['Standing Cable Curls', '3-4', '10-12, then partials', 'Burnout; clean form, avoid whole-body momentum'],
-        ['21s', '3-4', '21 (11 half + 11 top)', null],
-        ['Pull-Up', '4', null, 'To failure on the last two sets (last set at 50% of max pull-ups)']],
-      Legs: [
-        ['Bulgarian Split Squat', '4', '8', 'Drop set; pause 8s at quarter-way up (isometric) between sets, no rest. Use dumbbells and a stable surface.'],
-        ['Leg Press', '3-4', '20/12-15/8', 'Optional 4th set of 8 reps'],
-        ['Leg Extension Machine', '3', '20/12/8', 'Superset with hamstring curls'],
-        ['Leg Raises', null, '8-12', null],
-        ['Weighted Decline Crunch', null, null, 'Isolates the lower abs even more']],
-      Arms: [
-        ['Seated Front Delt Raise', '3-4', '10', 'Seated'],
-        ['Semi Lateral Raise', '3-4', '10', 'Semi angle'],
-        ['Cable Front Raise', null, null, 'Cable at bottom height, rope attachment; target front delts'],
-        ['Standing Barbell Curls', null, '8-12', 'Controlled form. Superset with rope curls.'],
-        ['Rope Curls', null, '6-8', 'Immediately after the standing curls (superset); twist inwards at the top'],
-        ['Cable Triceps Kickback', null, null, 'Targets the long head'],
-        ['Plate 90 Holds', '2-3', '20-30 sec', 'Focuses on the entire forearm and grip strength']]
+  var CONFIG = {
+  "mountId": "rotation",
+  "lsKey": "wst-rotation-v3",
+  "kicker": "Training &middot; Barbell Rotation",
+  "howtoLabel": "How to read the card",
+  "menuLabel": "Currently running",
+  "weekLabel": "Week of block",
+  "programs": [
+    {
+      "key": "A",
+      "label": "A",
+      "note": "Foundation — the competition lifts, moderate volume, technique + base strength."
     },
-    B: {
-      Push: [
-        ['Incline Dumbbell Press', '5', null, null],
-        ['Incline Dumbbell Fly', '5', null, null],
-        ['High to Low Cable Fly', null, null, 'High intensity; push hard for the last couple of sets'],
-        ['Shoulder Press Machine', '3', '12/8/6', 'Slow eccentric, fast concentric (tempo focus)'],
-        ['Chest-Supported Superman Lateral Raises', '4', '12-15', 'High volume, targets side delts'],
-        ['Cable Reverse Fly', '3', '12/10/8', 'Isolates the rear delt'],
-        ['Single-Arm Tricep Kickback', '1', null, 'Form breakdown acceptable on the last set'],
-        ['Cable Tricep Kickbacks', null, null, 'Target the medial head. Lightweight, high volume, mind-muscle connection.']],
-      Pull: [
-        ['Close-Grip Mag-Grip Pulldown', null, 'high volume', 'Focus on upper traps and rhomboids; prioritize mind-muscle connection'],
-        ['Cable Lat Pullover', null, null, 'Athletic stance, pull through with arms straight. Avoid a push-down motion.'],
-        ['Bent-Over Rear Delt Fly', null, null, 'Imagine sweeping chips off the entire poker table'],
-        ['Reverse Cable Fly', null, null, 'Test different angles to isolate the rear delt'],
-        ['Single-Arm Peak Builder Bicep Curls', '3-4', '10-15', 'Slight lean; twist the pinky inward at the top'],
-        ['Preacher Curls', '3-4', '8-12', 'Neutral grip = both heads, close = outer, wide = inner. Slow eccentric.']],
-      Legs: [
-        ['Bulgarian Split Squats', '3', '12/10/8', null],
-        ['Leg Press', '4', '6-12', 'Low foot = quads, high = glutes, wide stance = inner thighs'],
-        ['Leg Extension Machine (Drop Set)', '10', null, 'Drop set: drop 10 lbs per set'],
-        ['High Leg Raises', null, '6-8', null],
-        ['Weighted Sit-Ups', null, null, 'Targets the whole abs, mainly mid and upper']],
-      Arms: [
-        ['Full Lateral Raise', '3-4', '10', 'Full range'],
-        ['Rear Delt Raise', '3-4', '10', 'Back'],
-        ['Rope Curls (Forearm Emphasis)', null, '6-8', 'Emphasis on the forearm'],
-        ['Reverse Wrist Rotations', null, null, 'Isolate the forearm'],
-        ['Cable Overhand Wrist Rotations', '2-3', '8-12', 'Cable set to top, overhand grip'],
-        ['Rope Pushdown', '3-4', '15-18', 'Superset with straight-bar pushdown; same weight; under 20s rest'],
-        ['Straight-Bar Pushdown', '3-4', '15-18', 'Superset with rope pushdown; same weight; under 20s rest']]
+    {
+      "key": "B",
+      "label": "B",
+      "note": "Accumulation — lift variants + accessory volume pushed toward MRV for hypertrophy."
     },
-    C: {
-      Push: [
-        ['Flat Bench Press', null, null, 'Controlled tempo; avoid ego lifting / excessive back arch'],
-        ['Pullover', null, null, null],
-        ['Push-Up', '3', null, '80-90% to failure (sets 1-2), 100% to failure (set 3)'],
-        ['Incline Shoulder Press', '3-4', '15/12/8', 'Set the bench to 75 degrees to relieve rotator-cuff pressure'],
-        ['Lateral Raises', '4', '8-15', 'Lightest weight, burnout (1 warm-up, 2 working, 1 burnout)'],
-        ['Rope & Straight-Bar Tricep Pushdown superset', '3', '15/12/8', 'Short rest (20-30s). Pushing intensity.'],
-        ['Dips', '3', null, '80% / 90% / 100% to failure (slow eccentric)'],
-        ['Cable Lateral Raise', '4', '15/12/8', 'High volume side delts; end with a 0-weight burnout, 30-50 reps']],
-      Pull: [
-        ['Straight-Bar Lat Pulldown', '4', '8-15', 'Form over weight; spread the lats, squeeze at the bottom'],
-        ['Reverse Single-Arm Fly', null, null, 'Chest facing forward; sweep poker chips off a table'],
-        ['Standing Curls', '3', '12-15', 'Clean form, pinky twist at the top'],
-        ['Peak Builder Bicep Curls', null, '6-8', 'Heavy; advanced only, requires good mind-muscle connection'],
-        ['Bicep Finisher (Hammer Curls)', null, '5/5 per arm, then to failure', 'Keep one arm stagnant, rinse/repeat; both arms for the final reps']],
-      Legs: [
-        ['Hack Squat', '3', '20/12/6-8', null],
-        ['Leg Extensions & Hamstring Curls', '3 + 1 drop set', '15/12/8', 'Superset. Drop set: weight 10 notches down, 11 reps, then drop one notch until zero.'],
-        ['Leg Raises with a Twist', null, '6-8', null],
-        ['Weighted Hanging Leg Raises', null, null, 'Use cables for resistance']],
-      Arms: [
-        ['Cable Face Pull', null, null, 'Cable at top height, rope attachment, pull to the face; rear delts'],
-        ['Cable Lateral Raise', null, null, 'Cable at knee height, rope attachment, pull straight up leading with the elbows; side delts'],
-        ['Cable Reverse Curls', '2-3', '8-12', 'Cable set to bottom, straight bar'],
-        ['Cable Underhand Wrist Rotations', '2-3', '8-12', 'Cable set to bottom, straight bar'],
-        ['Triceps Rope Pushdown', null, null, 'Targets the lateral head'],
-        ['Triceps Straight-Bar Pushdown', null, null, 'Targets the medial head']]
+    {
+      "key": "C",
+      "label": "C",
+      "note": "Intensity / Peak — tougher variants, heavier and lower-rep, then re-test."
     }
-  };
+  ],
+  "days": [
+    {
+      "key": "Squat",
+      "label": "Squat",
+      "sub": "Lower · squat-focused"
+    },
+    {
+      "key": "Bench",
+      "label": "Bench",
+      "sub": "Upper · horizontal press"
+    },
+    {
+      "key": "Deadlift",
+      "label": "Deadlift",
+      "sub": "Lower · hinge / deadlift"
+    },
+    {
+      "key": "Overhead",
+      "label": "Overhead",
+      "sub": "Upper · vertical press"
+    }
+  ],
+  "roles": {
+    "main": {
+      "sym": "⭐",
+      "label": "Main lift"
+    },
+    "finisher": {
+      "sym": "🔚",
+      "label": "Finisher"
+    }
+  },
+  "legend": [
+    {
+      "sym": "⭐",
+      "txt": "Main lift"
+    },
+    {
+      "sym": "🔚",
+      "txt": "Finisher / core"
+    }
+  ],
+  "howto": "<div class=\"rot-howto__desc\">Three rotations &mdash; <b>A</b>, <b>B</b>, <b>C</b> &mdash; on one Lower/Upper barbell split. Each is a ~5&ndash;6 week block; finish one, then rotate: A grooves the competition lifts, B swaps in variants and piles on hypertrophy volume, C goes heavy and peaks. Same four days each block &mdash; <b>Squat &middot; Bench &middot; Deadlift &middot; Overhead</b>, main barbell lift first while you&rsquo;re fresh. Tap an exercise to tick it off; checks are saved, per rotation.</div><div class=\"rot-howto__block rot-howto__block--sep\"><div class=\"rot-howto__term\">5/3/1+ (wave)</div><div class=\"rot-howto__def\">The main lift runs a three-week 5/3/1 wave off a Training Max (90% of your 1RM). The <b>+</b> is an AMRAP top set &mdash; go for max reps leaving 1&ndash;2 in the tank. Add weight to the TM after each wave.</div></div><div class=\"rot-howto__block\"><div class=\"rot-howto__term\">% TM &middot; RPE &middot; RIR</div><div class=\"rot-howto__def\">Load cues. <b>% TM</b> is percent of Training Max; <b>RPE</b> is how hard the set felt (7&ndash;9); <b>RIR</b> is reps left in reserve. Pick a weight that lands in the cue with strict form.</div></div><div class=\"rot-howto__block\"><div class=\"rot-howto__term\">Double progression</div><div class=\"rot-howto__def\">For accessories: work the rep range; when you hit the top of the range on every set, add the smallest load and drop back to the bottom. Open the <b>Progress</b> line on any exercise for its specific rule.</div></div><div class=\"rot-howto__block rot-howto__block--sep\"><div class=\"rot-howto__term rot-howto__term--muted\">Running the rotation</div><div class=\"rot-howto__def\">4 lifting days a week (e.g. Mon / Tue / Thu / Fri), each pattern hit ~2&times;. Stay on one rotation ~5&ndash;6 weeks, deload, then advance A &rarr; B &rarr; C &mdash; every pass the Training Maxes are higher and new lift variants rotate in. <b>New novice?</b> Run linear progression first (see the closing note).</div></div>"
+};
 
-  // Per-exercise Instagram source reel, keyed by `program|day|name` (the same
-  // key scheme as `checks`). Generated from fitscrape/rotations_mapping.json:
-  // 75/75 exercises mapped (74 high-confidence, 1 medium — C/Legs "Weighted
-  // Hanging Leg Raises", flagged for Drew's review). These are the *specific*
-  // source clips per move (distinct from the day-level DAYMETA reels and the
-  // generic per-exercise YouTube search).
-  var REELS = {
-    'A|Push|Incline Press': 'https://www.instagram.com/p/DF6M9z0xJCR/',
-    'A|Push|Cable Fly': 'https://www.instagram.com/p/DF6M9z0xJCR/',
-    'A|Push|Seated Pec Deck Fly': 'https://www.instagram.com/p/DIHbKS8x2dn/',
-    'A|Push|Front Delt Raises': 'https://www.instagram.com/p/DRPx7n-EY-B/',
-    'A|Push|Side Lateral Raises': 'https://www.instagram.com/p/DRPx7n-EY-B/',
-    'A|Push|Front Raise + Lateral Raise superset': 'https://www.instagram.com/p/DHXKliCxLbQ/',
-    'A|Push|Cable Rope Pushdown': 'https://www.instagram.com/reel/DHHa8QBx6Nn/',
-    'A|Push|Tricep Pushdown (Straight Bar)': 'https://www.instagram.com/reel/DHHa8QBx6Nn/',
-    'A|Pull|Lat Pulldown': 'https://www.instagram.com/p/DGa5HZuRQ1Q/',
-    'A|Pull|Kneeling Face Pull': 'https://www.instagram.com/p/DQ95xYhEZCS/',
-    'A|Pull|Cable Rear Delt Pull-Through': 'https://www.instagram.com/reel/DP1_QoMkYMq/',
-    'A|Pull|Standing Cable Curls': 'https://www.instagram.com/p/DS24nMGEd-2/',
-    'A|Pull|21s': 'https://www.instagram.com/reel/DQZe30FkXuu/',
-    'A|Pull|Pull-Up': 'https://www.instagram.com/p/DGa5HZuRQ1Q/',
-    'A|Legs|Bulgarian Split Squat': 'https://www.instagram.com/reel/DGBXeFQRoXM/',
-    'A|Legs|Leg Press': 'https://www.instagram.com/reel/DLU5gOQMClw/',
-    'A|Legs|Leg Extension Machine': 'https://www.instagram.com/reel/DLU5gOQMClw/',
-    'A|Legs|Leg Raises': 'https://www.instagram.com/reel/DMqBT_9xNJX/',
-    'A|Legs|Weighted Decline Crunch': 'https://www.instagram.com/reel/DOb9iPQEbhG/',
-    'A|Arms|Seated Front Delt Raise': 'https://www.instagram.com/reel/DGMjpUWxcdP/',
-    'A|Arms|Semi Lateral Raise': 'https://www.instagram.com/reel/DGMjpUWxcdP/',
-    'A|Arms|Cable Front Raise': 'https://www.instagram.com/reel/DKpZtD5xYpe/',
-    'A|Arms|Standing Barbell Curls': 'https://www.instagram.com/p/DS-9W6CEbnN/',
-    'A|Arms|Rope Curls': 'https://www.instagram.com/p/DS-9W6CEbnN/',
-    'A|Arms|Cable Triceps Kickback': 'https://www.instagram.com/reel/DJPE8mMRlMB/',
-    'A|Arms|Plate 90 Holds': 'https://www.instagram.com/p/DXc3n7VkSdR/',
-    'B|Push|Incline Dumbbell Press': 'https://www.instagram.com/p/DF6M9z0xJCR/',
-    'B|Push|Incline Dumbbell Fly': 'https://www.instagram.com/p/DF6M9z0xJCR/',
-    'B|Push|High to Low Cable Fly': 'https://www.instagram.com/p/DIHbKS8x2dn/',
-    'B|Push|Shoulder Press Machine': 'https://www.instagram.com/p/DRPx7n-EY-B/',
-    'B|Push|Chest-Supported Superman Lateral Raises': 'https://www.instagram.com/p/DRPx7n-EY-B/',
-    'B|Push|Cable Reverse Fly': 'https://www.instagram.com/p/DHXKliCxLbQ/',
-    'B|Push|Single-Arm Tricep Kickback': 'https://www.instagram.com/reel/DHHa8QBx6Nn/',
-    'B|Push|Cable Tricep Kickbacks': 'https://www.instagram.com/reel/DPe0WoIEUbh/',
-    'B|Pull|Close-Grip Mag-Grip Pulldown': 'https://www.instagram.com/p/DGa5HZuRQ1Q/',
-    'B|Pull|Cable Lat Pullover': 'https://www.instagram.com/p/DQ95xYhEZCS/',
-    'B|Pull|Bent-Over Rear Delt Fly': 'https://www.instagram.com/reel/DJzlavgx86w/',
-    'B|Pull|Reverse Cable Fly': 'https://www.instagram.com/reel/DP1_QoMkYMq/',
-    'B|Pull|Single-Arm Peak Builder Bicep Curls': 'https://www.instagram.com/p/DS24nMGEd-2/',
-    'B|Pull|Preacher Curls': 'https://www.instagram.com/reel/DQZe30FkXuu/',
-    'B|Legs|Bulgarian Split Squats': 'https://www.instagram.com/reel/DLU5gOQMClw/',
-    'B|Legs|Leg Press': 'https://www.instagram.com/p/DQ14JHwEcff/',
-    'B|Legs|Leg Extension Machine (Drop Set)': 'https://www.instagram.com/reel/DLU5gOQMClw/',
-    'B|Legs|High Leg Raises': 'https://www.instagram.com/reel/DMqBT_9xNJX/',
-    'B|Legs|Weighted Sit-Ups': 'https://www.instagram.com/reel/DOb9iPQEbhG/',
-    'B|Arms|Full Lateral Raise': 'https://www.instagram.com/reel/DGMjpUWxcdP/',
-    'B|Arms|Rear Delt Raise': 'https://www.instagram.com/reel/DGMjpUWxcdP/',
-    'B|Arms|Rope Curls (Forearm Emphasis)': 'https://www.instagram.com/p/DS-9W6CEbnN/',
-    'B|Arms|Reverse Wrist Rotations': 'https://www.instagram.com/p/DS-9W6CEbnN/',
-    'B|Arms|Cable Overhand Wrist Rotations': 'https://www.instagram.com/p/DXc3n7VkSdR/',
-    'B|Arms|Rope Pushdown': 'https://www.instagram.com/reel/DJh6r0exmpA/',
-    'B|Arms|Straight-Bar Pushdown': 'https://www.instagram.com/reel/DJh6r0exmpA/',
-    'C|Push|Flat Bench Press': 'https://www.instagram.com/p/DIHbKS8x2dn/',
-    'C|Push|Pullover': 'https://www.instagram.com/p/DF6M9z0xJCR/',
-    'C|Push|Push-Up': 'https://www.instagram.com/p/DIHbKS8x2dn/',
-    'C|Push|Incline Shoulder Press': 'https://www.instagram.com/p/DHXKliCxLbQ/',
-    'C|Push|Lateral Raises': 'https://www.instagram.com/p/DRPx7n-EY-B/',
-    'C|Push|Rope & Straight-Bar Tricep Pushdown superset': 'https://www.instagram.com/reel/DPe0WoIEUbh/',
-    'C|Push|Dips': 'https://www.instagram.com/reel/DPe0WoIEUbh/',
-    'C|Push|Cable Lateral Raise': 'https://www.instagram.com/p/DHXKliCxLbQ/',
-    'C|Pull|Straight-Bar Lat Pulldown': 'https://www.instagram.com/p/DGa5HZuRQ1Q/',
-    'C|Pull|Reverse Single-Arm Fly': 'https://www.instagram.com/reel/DP1_QoMkYMq/',
-    'C|Pull|Standing Curls': 'https://www.instagram.com/reel/DQZe30FkXuu/',
-    'C|Pull|Peak Builder Bicep Curls': 'https://www.instagram.com/reel/DQZe30FkXuu/',
-    'C|Pull|Bicep Finisher (Hammer Curls)': 'https://www.instagram.com/p/DS24nMGEd-2/',
-    'C|Legs|Hack Squat': 'https://www.instagram.com/reel/DLU5gOQMClw/',
-    'C|Legs|Leg Extensions & Hamstring Curls': 'https://www.instagram.com/p/DQ14JHwEcff/',
-    'C|Legs|Leg Raises with a Twist': 'https://www.instagram.com/reel/DMqBT_9xNJX/',
-    'C|Legs|Weighted Hanging Leg Raises': 'https://www.instagram.com/p/DXke6d5ET55/',
-    'C|Arms|Cable Face Pull': 'https://www.instagram.com/reel/DKpZtD5xYpe/',
-    'C|Arms|Cable Lateral Raise': 'https://www.instagram.com/reel/DKpZtD5xYpe/',
-    'C|Arms|Cable Reverse Curls': 'https://www.instagram.com/p/DXc3n7VkSdR/',
-    'C|Arms|Cable Underhand Wrist Rotations': 'https://www.instagram.com/p/DXc3n7VkSdR/',
-    'C|Arms|Triceps Rope Pushdown': 'https://www.instagram.com/reel/DJPE8mMRlMB/',
-    'C|Arms|Triceps Straight-Bar Pushdown': 'https://www.instagram.com/reel/DJPE8mMRlMB/'
-  };
+  var DATA = {
+  "A": {
+    "Squat": {
+      "focus": "Back squat strength + posterior-chain and quad base",
+      "ex": [
+        {
+          "name": "Barbell Squat",
+          "sets": "3",
+          "reps": "5/3/1+ (wave)",
+          "intensity": "65-95% TM per 5/3/1 week, last set AMRAP @ ~1-2 RIR",
+          "progression": "5/3/1 wave; +10 lb to TM each completed wave",
+          "notes": "High-bar, full depth, brace before unrack. Sub: Goblet Squat if mobility-limited.",
+          "role": "main"
+        },
+        {
+          "name": "Romanian Deadlift",
+          "sets": "3-4",
+          "reps": "8-10",
+          "intensity": "RPE 7-8 / 2-3 RIR",
+          "progression": "Double progression 8->10 across all sets, then add load; ramp 3->4 sets over the block",
+          "notes": "Soft knees, push hips back, bar drags the thighs; stop at mid-shin stretch.",
+          "role": "accessory"
+        },
+        {
+          "name": "Barbell Lunge",
+          "sets": "3",
+          "reps": "10 per leg",
+          "intensity": "RPE 7-8",
+          "progression": "Double progression; add load when 3x10/leg clean",
+          "notes": "Long stride to bias glutes. Sub: Dumbbell Lunges or Split Squats.",
+          "role": "accessory"
+        },
+        {
+          "name": "Lying Leg Curls",
+          "sets": "3",
+          "reps": "10-15",
+          "intensity": "RPE 8-9 / 1-2 RIR",
+          "progression": "Double progression 10->15, then add load",
+          "notes": "Hamstring volume to balance all the hip-hinge. Full ROM, controlled.",
+          "role": "accessory"
+        },
+        {
+          "name": "Standing Calf Raises",
+          "sets": "3",
+          "reps": "12-15",
+          "intensity": "RPE 9 / 0-1 RIR",
+          "progression": "Double progression; pause at top and bottom",
+          "notes": "Small muscle, short rest (~60s).",
+          "role": "accessory"
+        },
+        {
+          "name": "Hanging Leg Raise",
+          "sets": "3",
+          "reps": "10-15",
+          "intensity": "RPE 8",
+          "progression": "Add reps then add ankle weight (treat abs as strength work, not endless crunches)",
+          "notes": "No swing; posterior pelvic tilt. Sub: Plank for time.",
+          "role": "finisher"
+        }
+      ]
+    },
+    "Bench": {
+      "focus": "Bench strength with matched horizontal + vertical pulling",
+      "ex": [
+        {
+          "name": "Barbell Bench Press - Medium Grip",
+          "sets": "3",
+          "reps": "5/3/1+ (wave)",
+          "intensity": "65-95% TM, last set AMRAP @ 1-2 RIR",
+          "progression": "5/3/1 wave; +5 lb to TM each completed wave",
+          "notes": "Shoulder blades retracted/depressed, leg drive, touch lower chest.",
+          "role": "main"
+        },
+        {
+          "name": "Barbell Shoulder Press",
+          "sets": "5",
+          "reps": "10",
+          "intensity": "~50% bench TM (BBB supplemental)",
+          "progression": "FSL/BBB; ramp 3->5 sets across the block (MEV->MRV)",
+          "notes": "Strict, ribs down, bar over mid-foot at lockout.",
+          "role": "accessory"
+        },
+        {
+          "name": "Bent Over Barbell Row",
+          "sets": "4",
+          "reps": "8-10",
+          "intensity": "RPE 7-8",
+          "progression": "Double progression then add load; matches bench pressing volume",
+          "notes": "Torso ~45deg, pull to lower ribs, no jerking. Sub: One-Arm Dumbbell Row.",
+          "role": "accessory"
+        },
+        {
+          "name": "Wide-Grip Lat Pulldown",
+          "sets": "3",
+          "reps": "10-12",
+          "intensity": "RPE 8",
+          "progression": "Double progression 10->12 then add load",
+          "notes": "Drive elbows down, pull to collarbone. Sub: Pullups (band-assist if needed).",
+          "role": "accessory"
+        },
+        {
+          "name": "Side Lateral Raise",
+          "sets": "3",
+          "reps": "12-15",
+          "intensity": "RPE 8-9",
+          "progression": "Double progression; strict, no swing",
+          "notes": "Side-delt balance for healthy pressing shoulders. Short rest.",
+          "role": "accessory"
+        },
+        {
+          "name": "Triceps Pushdown",
+          "sets": "3",
+          "reps": "12-15",
+          "intensity": "RPE 9 / 0-1 RIR",
+          "progression": "Double progression; failure permissible here (isolation)",
+          "notes": "Elbows pinned; this is where Helms allows training near failure.",
+          "role": "finisher"
+        }
+      ]
+    },
+    "Deadlift": {
+      "focus": "Deadlift strength + glute and posterior-chain overload",
+      "ex": [
+        {
+          "name": "Barbell Deadlift",
+          "sets": "3",
+          "reps": "5/3/1+ (wave)",
+          "intensity": "65-95% TM, last set AMRAP @ 1-2 RIR",
+          "progression": "5/3/1 wave; +10 lb to TM each completed wave. Pull heavy only ~1x/week per Rippetoe.",
+          "notes": "Bar over mid-foot, slack pulled out, neutral spine; reset each rep.",
+          "role": "main"
+        },
+        {
+          "name": "Front Barbell Squat",
+          "sets": "3-4",
+          "reps": "5",
+          "intensity": "RPE 7-8 (~80% of front-squat 5RM)",
+          "progression": "Add 5 lb when all sets x5 clean; ramp 3->4 sets",
+          "notes": "Elbows high, upright torso — quad/upper-back work that spares the low back after deadlifts.",
+          "role": "accessory"
+        },
+        {
+          "name": "Barbell Hip Thrust",
+          "sets": "3",
+          "reps": "10-12",
+          "intensity": "RPE 8",
+          "progression": "Double progression then add load",
+          "notes": "Full lockout, ribs down, 1s glute squeeze at top.",
+          "role": "accessory"
+        },
+        {
+          "name": "Split Squats",
+          "sets": "3",
+          "reps": "8-10 per leg",
+          "intensity": "RPE 7-8",
+          "progression": "Double progression; add load each leg",
+          "notes": "Vertical shin on front leg, control the descent. Sub: Step-up with Knee Raise.",
+          "role": "accessory"
+        },
+        {
+          "name": "Glute Ham Raise",
+          "sets": "3",
+          "reps": "8-12",
+          "intensity": "RPE 8",
+          "progression": "Add reps then add weight/band; regress to Natural Glute Ham Raise",
+          "notes": "Heavy hamstring/erector-spinae work. Sub: Hyperextensions (Back Extensions).",
+          "role": "accessory"
+        },
+        {
+          "name": "Plank",
+          "sets": "3",
+          "reps": "30-60 sec",
+          "intensity": "RPE 8",
+          "progression": "Add time then add plate on back",
+          "notes": "Anti-extension brace that carries over to the deadlift. Sub: Cable Crunch.",
+          "role": "finisher"
+        }
+      ]
+    },
+    "Overhead": {
+      "focus": "Overhead press strength + vertical pulling and arms",
+      "ex": [
+        {
+          "name": "Barbell Shoulder Press",
+          "sets": "3",
+          "reps": "5/3/1+ (wave)",
+          "intensity": "65-95% TM, last set AMRAP @ 1-2 RIR",
+          "progression": "5/3/1 wave; +5 lb to TM each completed wave",
+          "notes": "Strict overhead, glutes tight, head through at lockout.",
+          "role": "main"
+        },
+        {
+          "name": "Incline Dumbbell Press",
+          "sets": "4",
+          "reps": "8-12",
+          "intensity": "RPE 7-8",
+          "progression": "Double progression then add load; ramp 3->4 sets",
+          "notes": "~30deg bench, full stretch at bottom. Upper-chest balance for bench.",
+          "role": "accessory"
+        },
+        {
+          "name": "Chin-Up",
+          "sets": "3",
+          "reps": "AMRAP (target 8-12)",
+          "intensity": "Bodyweight to RPE 9",
+          "progression": "Rippetoe rule: when you exceed 15 reps/set, add weight and work to fail at 5-7",
+          "notes": "Full hang to chin over bar. Sub: assisted/band if <5 reps.",
+          "role": "accessory"
+        },
+        {
+          "name": "Seated Cable Rows",
+          "sets": "3",
+          "reps": "10-12",
+          "intensity": "RPE 8",
+          "progression": "Double progression then add load",
+          "notes": "Tall chest, squeeze shoulder blades, no torso heave.",
+          "role": "accessory"
+        },
+        {
+          "name": "Face Pull",
+          "sets": "3",
+          "reps": "15-20",
+          "intensity": "RPE 8",
+          "progression": "Double progression; prioritize quality over load",
+          "notes": "Rear-delt/scap-health work that offsets all the pressing. Short rest.",
+          "role": "accessory"
+        },
+        {
+          "name": "Barbell Curl",
+          "sets": "3",
+          "reps": "10-12",
+          "intensity": "RPE 9 / 0-1 RIR",
+          "progression": "Double progression; failure OK (isolation)",
+          "notes": "Audience-favorite arm work, kept subordinate to the compounds. Sub: Hammer Curls.",
+          "role": "finisher"
+        }
+      ]
+    }
+  },
+  "B": {
+    "Squat": {
+      "focus": "Front-squat variant + high-volume quad/hamstring hypertrophy (MEV->MRV)",
+      "ex": [
+        {
+          "name": "Front Barbell Squat",
+          "sets": "3",
+          "reps": "5/3/1+ (wave)",
+          "intensity": "65-95% of front-squat TM, last set AMRAP",
+          "progression": "5/3/1 wave on a front-squat TM; +10 lb/wave. Directed variation off Rotation A's back squat.",
+          "notes": "New stimulus: more quad/upper-back, upright torso. Keeps squatting heavy while sparing the pattern.",
+          "role": "main"
+        },
+        {
+          "name": "Romanian Deadlift",
+          "sets": "5",
+          "reps": "10",
+          "intensity": "~50-60% / RPE 7-8 (BBB volume)",
+          "progression": "BBB 5x10; ramp 3->5 sets across the block toward MRV",
+          "notes": "Hamstring/glute hypertrophy block. Controlled eccentric.",
+          "role": "accessory"
+        },
+        {
+          "name": "Leg Press",
+          "sets": "3-4",
+          "reps": "12-15",
+          "intensity": "RPE 8-9",
+          "progression": "Double progression 12->15 then add load",
+          "notes": "High-SFR quad volume with low axial fatigue (Israetel). Full ROM, knees track toes.",
+          "role": "accessory"
+        },
+        {
+          "name": "Split Squat with Dumbbells",
+          "sets": "3",
+          "reps": "10-12 per leg",
+          "intensity": "RPE 8",
+          "progression": "Double progression; add load each leg",
+          "notes": "Elevate rear foot for more range if able. Sub: Dumbbell Lunges.",
+          "role": "accessory"
+        },
+        {
+          "name": "Seated Leg Curl",
+          "sets": "3",
+          "reps": "12-15",
+          "intensity": "RPE 9 / 0-1 RIR",
+          "progression": "Double progression then add load",
+          "notes": "Different hamstring length than lying curl — varies the stimulus.",
+          "role": "accessory"
+        },
+        {
+          "name": "Seated Calf Raise",
+          "sets": "4",
+          "reps": "15-20",
+          "intensity": "RPE 9",
+          "progression": "Double progression; pause at top",
+          "notes": "Biases soleus (vs standing). Short rest.",
+          "role": "finisher"
+        }
+      ]
+    },
+    "Bench": {
+      "focus": "Bench strength held + BBB pressing volume and balanced pulling",
+      "ex": [
+        {
+          "name": "Barbell Bench Press - Medium Grip",
+          "sets": "3",
+          "reps": "5/3/1+ (wave)",
+          "intensity": "65-95% TM, AMRAP top set",
+          "progression": "5/3/1 wave; +5 lb/wave",
+          "notes": "Carry the AMRAP rep PRs from Rotation A forward at a higher TM.",
+          "role": "main"
+        },
+        {
+          "name": "Incline Dumbbell Press",
+          "sets": "5",
+          "reps": "10",
+          "intensity": "RPE 7-8 (BBB volume)",
+          "progression": "BBB 5x10; ramp sets 3->5 toward MRV",
+          "notes": "Upper-chest hypertrophy supplemental. Full stretch.",
+          "role": "accessory"
+        },
+        {
+          "name": "One-Arm Dumbbell Row",
+          "sets": "4",
+          "reps": "10-12",
+          "intensity": "RPE 8",
+          "progression": "Double progression; add load each arm",
+          "notes": "Unilateral pulling matches the pressing volume and fixes L/R imbalance.",
+          "role": "accessory"
+        },
+        {
+          "name": "Wide-Grip Lat Pulldown",
+          "sets": "3",
+          "reps": "12-15",
+          "intensity": "RPE 8-9",
+          "progression": "Double progression then add load",
+          "notes": "Lat width. Drive elbows to ribs.",
+          "role": "accessory"
+        },
+        {
+          "name": "Side Lateral Raise",
+          "sets": "4",
+          "reps": "15-20",
+          "intensity": "RPE 9",
+          "progression": "Double progression; partials allowed at the end",
+          "notes": "Higher delt volume in the hypertrophy block. Short rest.",
+          "role": "accessory"
+        },
+        {
+          "name": "EZ-Bar Skullcrusher",
+          "sets": "3",
+          "reps": "10-12",
+          "intensity": "RPE 9 / 0-1 RIR",
+          "progression": "Double progression; failure OK",
+          "notes": "Long-head triceps for bench carryover. Sub: Triceps Pushdown.",
+          "role": "finisher"
+        }
+      ]
+    },
+    "Deadlift": {
+      "focus": "Pull variant + glute/hamstring/posterior hypertrophy",
+      "ex": [
+        {
+          "name": "Sumo Deadlift",
+          "sets": "3",
+          "reps": "5/3/1+ (wave)",
+          "intensity": "65-95% of a sumo TM, AMRAP top set",
+          "progression": "5/3/1 wave on a sumo TM; +10 lb/wave. Variant of Rotation A's conventional pull.",
+          "notes": "More quad/adductor and upright torso. Sub: Trap Bar Deadlift if sumo mobility is poor.",
+          "role": "main"
+        },
+        {
+          "name": "Good Morning",
+          "sets": "3-4",
+          "reps": "8-10",
+          "intensity": "RPE 7 (start light)",
+          "progression": "Add 5 lb when all sets clean; ramp 3->4 sets",
+          "notes": "Direct erector/hamstring strength — adds a 3rd hinge variant the old program lacked. Brace hard.",
+          "role": "accessory"
+        },
+        {
+          "name": "Barbell Hip Thrust",
+          "sets": "4",
+          "reps": "12-15",
+          "intensity": "RPE 8",
+          "progression": "Double progression then add load",
+          "notes": "High-volume glute work, full lockout.",
+          "role": "accessory"
+        },
+        {
+          "name": "Dumbbell Lunges",
+          "sets": "3",
+          "reps": "12 per leg",
+          "intensity": "RPE 8",
+          "progression": "Double progression; add load",
+          "notes": "Walking or stationary. Sub: Step-up with Knee Raise.",
+          "role": "accessory"
+        },
+        {
+          "name": "Lying Leg Curls",
+          "sets": "3",
+          "reps": "12-15",
+          "intensity": "RPE 9",
+          "progression": "Double progression then add load",
+          "notes": "Keeps weekly hamstring sets high alongside the RDL day.",
+          "role": "accessory"
+        },
+        {
+          "name": "Cable Crunch",
+          "sets": "3",
+          "reps": "12-15",
+          "intensity": "RPE 9",
+          "progression": "Double progression — loaded ab work, not endless crunches (Rippetoe)",
+          "notes": "Round the spine, hips fixed. Sub: Hanging Leg Raise.",
+          "role": "finisher"
+        }
+      ]
+    },
+    "Overhead": {
+      "focus": "Press variant + vertical pulling volume and arms",
+      "ex": [
+        {
+          "name": "Arnold Dumbbell Press",
+          "sets": "4",
+          "reps": "8-10",
+          "intensity": "RPE 7-8",
+          "progression": "Double progression then add load; ramp 3->4 sets",
+          "notes": "Dumbbell overhead variant of the barbell press — more ROM and front/side delt. Sub: Barbell Shoulder Press.",
+          "role": "main"
+        },
+        {
+          "name": "Seated Cable Rows",
+          "sets": "5",
+          "reps": "10",
+          "intensity": "RPE 7-8 (BBB volume)",
+          "progression": "BBB 5x10; ramp 3->5 sets toward MRV",
+          "notes": "Mid-back volume to balance overhead pressing. Squeeze and control.",
+          "role": "accessory"
+        },
+        {
+          "name": "Pullups",
+          "sets": "3",
+          "reps": "AMRAP (target 8-12)",
+          "intensity": "Bodyweight to RPE 9",
+          "progression": "Add weight once >15 reps/set (Rippetoe)",
+          "notes": "Overhand. Sub: Wide-Grip Lat Pulldown.",
+          "role": "accessory"
+        },
+        {
+          "name": "Face Pull",
+          "sets": "4",
+          "reps": "15-20",
+          "intensity": "RPE 8",
+          "progression": "Double progression; quality first",
+          "notes": "More rear-delt/scap volume in the hypertrophy block.",
+          "role": "accessory"
+        },
+        {
+          "name": "Hammer Curls",
+          "sets": "3",
+          "reps": "10-12",
+          "intensity": "RPE 9",
+          "progression": "Double progression; failure OK",
+          "notes": "Brachialis/brachioradialis. Sub: Barbell Curl.",
+          "role": "accessory"
+        },
+        {
+          "name": "Triceps Pushdown",
+          "sets": "3",
+          "reps": "15-20",
+          "intensity": "RPE 9 / 0 RIR",
+          "progression": "Double progression; metabolite finisher",
+          "notes": "Short rest, chase the pump (Israetel high-rep isolation).",
+          "role": "finisher"
+        }
+      ]
+    }
+  },
+  "C": {
+    "Squat": {
+      "focus": "Heavy squat-strength variant + single-leg and posterior overload",
+      "ex": [
+        {
+          "name": "Box Squat",
+          "sets": "5",
+          "reps": "3",
+          "intensity": "RPE 8-9 (~80-90% TM), last set AMRAP optional",
+          "progression": "Work up to a heavy 3 each week, +5-10 lb when all 5x3 are crisp; 1s pause on the box",
+          "notes": "Builds out-of-the-hole strength and teaches a vertical shin. Sub: pause Barbell Squat (3s in the hole).",
+          "role": "main"
+        },
+        {
+          "name": "Deficit Deadlift",
+          "sets": "3",
+          "reps": "5",
+          "intensity": "RPE 7-8 (~70-80% of deadlift TM)",
+          "progression": "Add 5-10 lb when all 3x5 clean",
+          "notes": "Stand on a 1-2in plate to overload the bottom; carries to the standard pull. Sub: Barbell Deadlift.",
+          "role": "accessory"
+        },
+        {
+          "name": "Step-up with Knee Raise",
+          "sets": "3",
+          "reps": "8-10 per leg",
+          "intensity": "RPE 8",
+          "progression": "Double progression; raise box height or add load",
+          "notes": "Knee-dominant single-leg strength and balance. Sub: Split Squats.",
+          "role": "accessory"
+        },
+        {
+          "name": "Glute Ham Raise",
+          "sets": "3",
+          "reps": "6-10",
+          "intensity": "RPE 8-9",
+          "progression": "Add weight/band as reps climb",
+          "notes": "Heavy eccentric hamstring strength. Sub: Natural Glute Ham Raise or Lying Leg Curls.",
+          "role": "accessory"
+        },
+        {
+          "name": "Standing Calf Raises",
+          "sets": "4",
+          "reps": "10-12",
+          "intensity": "RPE 9",
+          "progression": "Double progression; heavier/lower reps this block",
+          "notes": "Pause top and bottom.",
+          "role": "accessory"
+        },
+        {
+          "name": "Barbell Ab Rollout",
+          "sets": "3",
+          "reps": "8-12",
+          "intensity": "RPE 8",
+          "progression": "Increase ROM then add range/load",
+          "notes": "Heavy anti-extension to protect the spine under the peaking loads. Sub: Plank.",
+          "role": "finisher"
+        }
+      ]
+    },
+    "Bench": {
+      "focus": "Heavy lockout-strength pressing + heavy pulling",
+      "ex": [
+        {
+          "name": "Close-Grip Barbell Bench Press",
+          "sets": "5",
+          "reps": "3",
+          "intensity": "RPE 8-9 (~85% TM)",
+          "progression": "Heavy triples, +5 lb when all 5x3 clean; overloads triceps/lockout to drive the comp bench",
+          "notes": "Shoulder-width grip, elbows tucked. Sub: Pin Presses for a dead-stop variant.",
+          "role": "main"
+        },
+        {
+          "name": "Pin Presses",
+          "sets": "3",
+          "reps": "5",
+          "intensity": "RPE 8",
+          "progression": "Add 5 lb when all sets clean",
+          "notes": "Dead-stop from mid-chest pins — kills the stretch reflex, builds the sticking point. Sub: Floor Press.",
+          "role": "accessory"
+        },
+        {
+          "name": "T-Bar Row with Handle",
+          "sets": "4",
+          "reps": "6-8",
+          "intensity": "RPE 8",
+          "progression": "Double progression then add load; heavier/lower reps this block",
+          "notes": "Heavy mid-back to match the heavy pressing. Sub: Bent Over Barbell Row.",
+          "role": "accessory"
+        },
+        {
+          "name": "Chin-Up",
+          "sets": "4",
+          "reps": "5-6 (weighted)",
+          "intensity": "RPE 8-9",
+          "progression": "Add weight as 4x6 becomes easy (Rippetoe weighted-chin progression)",
+          "notes": "Weighted, lower-rep strength focus. Sub: Wide-Grip Lat Pulldown heavy.",
+          "role": "accessory"
+        },
+        {
+          "name": "Face Pull",
+          "sets": "3",
+          "reps": "15-20",
+          "intensity": "RPE 8",
+          "progression": "Double progression; maintain shoulder health under heavy loads",
+          "notes": "Keep this in every block — insurance for the pressing volume.",
+          "role": "accessory"
+        },
+        {
+          "name": "Triceps Pushdown",
+          "sets": "3",
+          "reps": "10-12",
+          "intensity": "RPE 9",
+          "progression": "Double progression; failure OK",
+          "notes": "Direct lockout work. Sub: EZ-Bar Skullcrusher.",
+          "role": "finisher"
+        }
+      ]
+    },
+    "Deadlift": {
+      "focus": "Peak deadlift strength + heavy posterior chain and single-leg",
+      "ex": [
+        {
+          "name": "Barbell Deadlift",
+          "sets": "3",
+          "reps": "5/3/1+ (wave, peak)",
+          "intensity": "Wk3 works up to 1+ @ 95% TM; treat the AMRAP single as a strength test",
+          "progression": "Final 5/3/1 wave of the macrocycle; use AMRAP to estimate a new 1RM, then reset TMs +higher for the next A block",
+          "notes": "This is where the loop pays off — heavier than the last pass. Reset between reps.",
+          "role": "main"
+        },
+        {
+          "name": "Front Barbell Squat",
+          "sets": "3",
+          "reps": "3-5",
+          "intensity": "RPE 8 (~80-85%)",
+          "progression": "Add 5-10 lb when all sets clean",
+          "notes": "Heavy quad/brace work that supports the deadlift without re-fatiguing the back-squat pattern.",
+          "role": "accessory"
+        },
+        {
+          "name": "Barbell Hip Thrust",
+          "sets": "3",
+          "reps": "6-8",
+          "intensity": "RPE 8-9",
+          "progression": "Double progression; heavier/lower reps",
+          "notes": "Heavy lockout glute drive for the deadlift. Pause at top.",
+          "role": "accessory"
+        },
+        {
+          "name": "Split Squat with Dumbbells",
+          "sets": "3",
+          "reps": "6-8 per leg",
+          "intensity": "RPE 8",
+          "progression": "Double progression; add load each leg",
+          "notes": "Lower-rep, heavier single-leg strength. Sub: Barbell Lunge.",
+          "role": "accessory"
+        },
+        {
+          "name": "Natural Glute Ham Raise",
+          "sets": "3",
+          "reps": "6-10",
+          "intensity": "RPE 8",
+          "progression": "Add reps then band/plate resistance",
+          "notes": "Posterior-chain insurance. Sub: Lying Leg Curls.",
+          "role": "accessory"
+        },
+        {
+          "name": "Hanging Leg Raise",
+          "sets": "3",
+          "reps": "10-15",
+          "intensity": "RPE 8",
+          "progression": "Add reps then ankle weight",
+          "notes": "Controlled, no swing. Sub: Cable Crunch.",
+          "role": "finisher"
+        }
+      ]
+    },
+    "Overhead": {
+      "focus": "Peak overhead strength + heavy pulling and arms",
+      "ex": [
+        {
+          "name": "Push Press",
+          "sets": "5",
+          "reps": "3",
+          "intensity": "RPE 8 (loads above strict-press TM)",
+          "progression": "Add 5 lb when all 5x3 clean; leg drive lets you overload the overhead lockout",
+          "notes": "Dip-drive vertical, finish strict overhead. Sub: Barbell Shoulder Press heavy.",
+          "role": "main"
+        },
+        {
+          "name": "Floor Press",
+          "sets": "3",
+          "reps": "5",
+          "intensity": "RPE 8",
+          "progression": "Add 5 lb when all sets clean",
+          "notes": "Dead-stop horizontal pressing, triceps-biased; spares the shoulder. Sub: Close-Grip Barbell Bench Press.",
+          "role": "accessory"
+        },
+        {
+          "name": "Bent Over Barbell Row",
+          "sets": "4",
+          "reps": "6-8",
+          "intensity": "RPE 8",
+          "progression": "Double progression then add load; heavy/lower-rep",
+          "notes": "Strict torso angle, build the back that supports every pull.",
+          "role": "accessory"
+        },
+        {
+          "name": "Wide-Grip Lat Pulldown",
+          "sets": "3",
+          "reps": "8-10",
+          "intensity": "RPE 8-9",
+          "progression": "Double progression then add load",
+          "notes": "Heavier lat work this block. Sub: Pullups.",
+          "role": "accessory"
+        },
+        {
+          "name": "Side Lateral Raise",
+          "sets": "3",
+          "reps": "12-15",
+          "intensity": "RPE 8-9",
+          "progression": "Double progression",
+          "notes": "Keep delt balance through the peak. Short rest.",
+          "role": "accessory"
+        },
+        {
+          "name": "Barbell Curl",
+          "sets": "3",
+          "reps": "8-10",
+          "intensity": "RPE 9",
+          "progression": "Double progression; failure OK",
+          "notes": "Heavier curls to close the macrocycle. Sub: Hammer Curls.",
+          "role": "finisher"
+        }
+      ]
+    }
+  }
+};
 
   /* ---------------- state ---------------- */
-  var state = { program: 'A', day: 'Push', layout: 'expanded', week: 1,
-                checks: {}, expanded: null, howToOpen: false, reelsOpen: false,
+  var PROGKEYS = CONFIG.programs.map(function (p) { return p.key; });
+  var DAYKEYS = CONFIG.days.map(function (d) { return d.key; });
+
+  var state = { program: PROGKEYS[0], day: DAYKEYS[0], layout: 'expanded',
+                week: 1, checks: {}, expanded: null, howToOpen: false,
                 menuOpen: false, stuck: false };
 
-  var migrated = false;
   try {
-    var raw = localStorage.getItem(LS_KEY);
+    var raw = localStorage.getItem(CONFIG.lsKey);
     if (raw) {
       var s = JSON.parse(raw);
       if (s && typeof s === 'object') {
-        if (s.program) state.program = s.program;
-        if (s.day) state.day = s.day;
+        if (s.program && PROGKEYS.indexOf(s.program) >= 0) state.program = s.program;
+        if (s.day && DAYKEYS.indexOf(s.day) >= 0) state.day = s.day;
         if (s.layout) state.layout = s.layout;
         if (s.week) state.week = s.week;
         if (s.checks && typeof s.checks === 'object') state.checks = s.checks;
       }
-    } else {
-      // Migrate from v1. Its `checks` were keyed by ARRAY INDEX
-      // (program|day|i), which the Pull-day reorder invalidated — index 1
-      // is no longer the same exercise. Remapping them would land marks on
-      // the wrong rows, so carry only the stable prefs (program/day/layout/
-      // week) and drop the checks: a clean reset. v2 keys checks by exercise
-      // NAME, which survives future reorders.
-      var oldRaw = localStorage.getItem(LS_KEY_OLD);
-      if (oldRaw) {
-        var o = JSON.parse(oldRaw);
-        if (o && typeof o === 'object') {
-          if (o.program) state.program = o.program;
-          if (o.day) state.day = o.day;
-          if (o.layout) state.layout = o.layout;
-          if (o.week) state.week = o.week;
-        }
-        try { localStorage.removeItem(LS_KEY_OLD); } catch (e) {}
-        migrated = true;
-      }
     }
   } catch (e) {}
 
-  // If we carried prefs forward from v1, write v2 now so the migration is
-  // durable even if the user never interacts this session (persist() is
-  // hoisted, so calling it before its definition is fine).
-  if (migrated) persist();
-
   function persist() {
     try {
-      localStorage.setItem(LS_KEY, JSON.stringify({
+      localStorage.setItem(CONFIG.lsKey, JSON.stringify({
         program: state.program, day: state.day, layout: state.layout,
         week: state.week, checks: state.checks
       }));
@@ -272,26 +830,32 @@
     if (cls) e.className = cls;
     return e;
   }
-
   function prettify(v) {
     return v == null ? '' : String(v).replace(/(\d)\s*-\s*(\d)/g, '$1–$2');
   }
+  function dayMeta(key) {
+    for (var i = 0; i < CONFIG.days.length; i++) if (CONFIG.days[i].key === key) return CONFIG.days[i];
+    return { key: key, label: key, sub: '' };
+  }
+  function progMeta(key) {
+    for (var i = 0; i < CONFIG.programs.length; i++) if (CONFIG.programs[i].key === key) return CONFIG.programs[i];
+    return { key: key, label: key };
+  }
+  function dayData(p, d) { return (DATA[p] && DATA[p][d]) || { focus: '', ex: [] }; }
+  function exList(p, d) { return dayData(p, d).ex || []; }
+
   function fmtPresc(sets, reps) {
     var sl = '';
-    if (sets) { sl = /^\d+(-\d+)?$/.test(sets) ? prettify(sets) + ' set' + (sets === '1' ? '' : 's') : sets; }
-    var rl = '';
-    if (reps) { rl = /^\d+$/.test(reps) ? reps + ' reps' : prettify(reps); }
+    if (sets) { sl = /^\d+(-\d+)?$/.test(sets) ? prettify(sets) + ' set' + (sets === '1' ? '' : 's') : prettify(sets); }
+    var rl = reps ? prettify(reps) : '';
     var parts = [sl, rl].filter(Boolean);
     return parts.length ? parts.join('   ·   ') : 'As prescribed';
   }
-  // Checks are keyed by exercise NAME (stable across reorders), not index.
-  // Names are unique within a single program/day, so program|day|name is a
-  // safe key; '|' never appears in an exercise name.
+  // Checks keyed by exercise NAME (stable across reorders), unique within a day.
   function checkKey(p, d, name) { return p + '|' + d + '|' + name; }
-
   function countDone(p, d) {
-    var list = PROGRAMS[p][d] || [], done = 0;
-    for (var i = 0; i < list.length; i++) { if (state.checks[checkKey(p, d, list[i][0])]) done++; }
+    var list = exList(p, d), done = 0;
+    for (var i = 0; i < list.length; i++) { if (state.checks[checkKey(p, d, list[i].name)]) done++; }
     return { done: done, total: list.length };
   }
 
@@ -314,35 +878,32 @@
   /* ---------------- view fragments ---------------- */
   function buildHowTo() {
     var p = h('div', 'rot-howto');
-    p.innerHTML =
-      '<div class="rot-howto__inner">'
-      + '<div class="rot-howto__desc">Three four-day programs &mdash; <b>A, B, C</b> &mdash; built from one exercise pool. Run one for a few weeks, then rotate; same split order every time: Push &rarr; Pull &rarr; Legs &rarr; Arms, compounds first while you&rsquo;re fresh. Tap an exercise to tick it off &mdash; your checks are saved, per program.</div>'
-      + '<div class="rot-howto__block rot-howto__block--sep"><div class="rot-howto__term">15 / 12 / 6&ndash;8</div><div class="rot-howto__def">One set per number, in order &mdash; set 1 is 15 reps, set 2 is 12, set 3 is 6&ndash;8. Go through the sequence <b>once</b>, not repeated. Add weight as the target drops.</div></div>'
-      + '<div class="rot-howto__block"><div class="rot-howto__term">A range like 6&ndash;8</div><div class="rot-howto__def">One set; reach failure somewhere in that range. It is not two separate sets.</div></div>'
-      + '<div class="rot-howto__block"><div class="rot-howto__term">Superset</div><div class="rot-howto__def">The two paired moves back-to-back with <b>no rest</b> between them. Rest only after the pair, then repeat for the listed sets.</div></div>'
-      + '<div class="rot-howto__block"><div class="rot-howto__term">to failure &middot; burnout &middot; quick pump</div><div class="rot-howto__def">Intensity cues &mdash; how hard to push that set. Form over ego when it says to failure.</div></div>'
-      + '<div class="rot-howto__block rot-howto__block--sep"><div class="rot-howto__term rot-howto__term--muted">Running the rotation</div><div class="rot-howto__def">4 lifting days a week (e.g. Mon / Tue / Thu / Fri), 3 rest. Stay on one program for a few weeks, then switch A &rarr; B &rarr; C. Same order every time: Push &rarr; Pull &rarr; Legs &rarr; Arms, compounds first while you&rsquo;re fresh.</div></div>'
-      + '</div>';
+    p.innerHTML = '<div class="rot-howto__inner">' + CONFIG.howto + '</div>';
     return p;
   }
 
   function buildMenu() {
     var m = h('div', 'rot-menu');
     var label = h('div', 'rot-menu__label');
-    label.innerHTML = 'Currently running &mdash; Program ' + state.program;
+    label.innerHTML = CONFIG.menuLabel + ' &mdash; ' + progMeta(state.program).label;
     m.appendChild(label);
 
     var prog = h('div', 'rot-prog');
-    ['A', 'B', 'C'].forEach(function (p) {
-      var b = h('button', 'rot-prog__btn' + (p === state.program ? ' is-active' : ''));
-      b.type = 'button'; b.textContent = p;
-      b.addEventListener('click', function () { selectProgram(p); });
+    CONFIG.programs.forEach(function (p) {
+      var b = h('button', 'rot-prog__btn' + (p.key === state.program ? ' is-active' : ''));
+      b.type = 'button'; b.textContent = p.label;
+      b.addEventListener('click', function () { selectProgram(p.key); });
       prog.appendChild(b);
     });
     m.appendChild(prog);
 
+    if (CONFIG.programs[state.program] || state.program) {
+      var pm = progMeta(state.program);
+      if (pm.note) { var pn = h('div', 'rot-menu__note'); pn.textContent = pm.note; m.appendChild(pn); }
+    }
+
     var wk = h('div', 'rot-week');
-    var wl = h('span', 'rot-week__label'); wl.textContent = 'Week of block';
+    var wl = h('span', 'rot-week__label'); wl.textContent = CONFIG.weekLabel;
     var ctrl = h('div', 'rot-week__ctrl');
     var minus = h('button', 'rot-step'); minus.type = 'button'; minus.innerHTML = '&minus;';
     minus.addEventListener('click', function () { weekDelta(-1); });
@@ -357,25 +918,29 @@
 
   function buildHeader() {
     var header = h('div', 'rot-header');
-
     var bar = h('div', 'rot-headbar');
     var left = h('div', 'rot-headbar__left');
-    var kicker = h('span', 'rot-kicker'); kicker.innerHTML = 'Training &middot; Rotating Split';
+    var kicker = h('span', 'rot-kicker'); kicker.innerHTML = CONFIG.kicker;
     var howBtn = h('button', 'rot-howto-toggle'); howBtn.type = 'button';
-    var howLbl = h('span', 'rot-howto-toggle__label'); howLbl.textContent = 'How to read the card';
+    var howLbl = h('span', 'rot-howto-toggle__label'); howLbl.textContent = CONFIG.howtoLabel;
     var howChev = h('span', 'rot-howto-toggle__chev'); howChev.textContent = state.howToOpen ? '⌃' : '⌄';
     howBtn.appendChild(howLbl); howBtn.appendChild(howChev);
-    howBtn.addEventListener('click', function () { state.howToOpen = !state.howToOpen; render(); });
+    // The how-to and program menu are mutually exclusive — opening one closes
+    // the other so the dropdown never paints over the panel below it.
+    howBtn.addEventListener('click', function () {
+      state.howToOpen = !state.howToOpen; if (state.howToOpen) state.menuOpen = false; render();
+    });
     left.appendChild(kicker); left.appendChild(howBtn);
 
     var menuBtn = h('button', 'rot-menu-btn'); menuBtn.type = 'button';
     menuBtn.setAttribute('aria-label', 'Program menu');
     menuBtn.textContent = state.menuOpen ? '✕' : '☰';
-    menuBtn.addEventListener('click', function () { state.menuOpen = !state.menuOpen; render(); });
+    menuBtn.addEventListener('click', function () {
+      state.menuOpen = !state.menuOpen; if (state.menuOpen) state.howToOpen = false; render();
+    });
 
     bar.appendChild(left); bar.appendChild(menuBtn);
     header.appendChild(bar);
-
     if (state.howToOpen) header.appendChild(buildHowTo());
     if (state.menuOpen) header.appendChild(buildMenu());
     return header;
@@ -383,12 +948,13 @@
 
   function buildDayTabs() {
     var tabs = h('div', 'rot-days');
-    DAYKEYS.forEach(function (d) {
+    CONFIG.days.forEach(function (dm) {
+      var d = dm.key;
       var c = countDone(state.program, d);
       var complete = c.total > 0 && c.done === c.total;
       var active = d === state.day;
       var b = h('button', 'rot-day' + (active ? ' is-active' : '')); b.type = 'button';
-      var l = h('span', 'rot-day__label'); l.textContent = d;
+      var l = h('span', 'rot-day__label'); l.textContent = dm.label;
       var bd = h('span', 'rot-day__badge' + (complete ? ' is-complete' : ''));
       bd.innerHTML = complete ? 'done &#10003;' : (c.done + '/' + c.total);
       b.appendChild(l); b.appendChild(bd);
@@ -398,13 +964,10 @@
     return tabs;
   }
 
-  // Sticky day header: a 1px sentinel followed by a position:sticky wrapper.
-  // The wrapper shows the full header at rest and a compact pinned bar when stuck.
   function buildStickyRegion(frag) {
     var sentinel = h('div', 'rot-sentinel');
     sentinel.setAttribute('data-rotation-sentinel', '1');
     frag.appendChild(sentinel);
-
     var wrap = h('div', 'rot-sticky' + (state.stuck ? ' is-stuck' : ''));
     wrap.appendChild(state.stuck ? buildDayHeaderStuck() : buildDayHeaderFull());
     frag.appendChild(wrap);
@@ -412,13 +975,13 @@
 
   function buildDayHeaderFull() {
     var box = h('div', 'rot-dayhead-full');
-
     var top = h('div', 'rot-dayhead');
     var info = h('div');
     var num = h('div', 'rot-dayhead__num');
-    num.innerHTML = 'Program ' + state.program + '&nbsp;&nbsp;&middot;&nbsp;&nbsp;Day ' + (DAYKEYS.indexOf(state.day) + 1);
-    var title = h('div', 'rot-dayhead__title'); title.textContent = state.day;
-    var sub = h('div', 'rot-dayhead__sub'); sub.textContent = DAYMETA[state.day].sub;
+    num.innerHTML = progMeta(state.program).label + '&nbsp;&nbsp;&middot;&nbsp;&nbsp;'
+      + 'Day ' + (DAYKEYS.indexOf(state.day) + 1);
+    var title = h('div', 'rot-dayhead__title'); title.textContent = dayMeta(state.day).label;
+    var sub = h('div', 'rot-dayhead__sub'); sub.textContent = dayData(state.program, state.day).focus || dayMeta(state.day).sub;
     info.appendChild(num); info.appendChild(title); info.appendChild(sub);
     var reset = h('button', 'rot-reset'); reset.type = 'button'; reset.textContent = 'Reset';
     reset.addEventListener('click', function () { resetDay(); });
@@ -443,11 +1006,11 @@
     var c = countDone(state.program, state.day);
     var pct = c.total ? Math.round(c.done / c.total * 100) : 0;
     var allDone = c.total > 0 && c.done === c.total;
-
     var box = h('div');
     var row = h('div', 'rot-stuck__row');
     var left = h('div', 'rot-stuck__left');
-    var label = h('span', 'rot-stuck__label'); label.textContent = 'Program ' + state.program + ' · ' + state.day;
+    var label = h('span', 'rot-stuck__label');
+    label.textContent = progMeta(state.program).label + ' · ' + dayMeta(state.day).label;
     var count = h('span', 'rot-stuck__count'); count.textContent = c.done + '/' + c.total;
     left.appendChild(label); left.appendChild(count);
     var right = h('div', 'rot-stuck__right');
@@ -456,18 +1019,15 @@
     var menu = h('button', 'rot-stuck__menu'); menu.type = 'button';
     menu.setAttribute('aria-label', 'Program menu');
     menu.textContent = state.menuOpen ? '✕' : '☰';
-    // The program menu is anchored at the very top, so scroll up first, then open it.
     menu.addEventListener('click', function () {
       try { window.scrollTo(0, 0); } catch (e) {}
       state.menuOpen = true; render();
     });
     right.appendChild(reset); right.appendChild(menu);
     row.appendChild(left); row.appendChild(right);
-
     var track = h('div', 'rot-stuck__track');
     var fill = h('div', 'rot-progress__fill' + (allDone ? ' is-done' : '')); fill.style.width = pct + '%';
     track.appendChild(fill);
-
     box.appendChild(row); box.appendChild(track);
     return box;
   }
@@ -486,38 +1046,41 @@
     return lt;
   }
 
+  function roleBadge(role) {
+    var r = CONFIG.roles && CONFIG.roles[role];
+    if (!r) return null;
+    var b = h('span', 'rot-ex__role');
+    b.setAttribute('title', r.label);
+    b.setAttribute('aria-label', r.label);
+    b.textContent = r.sym;
+    return b;
+  }
+
   function buildList() {
-    var list = PROGRAMS[state.program][state.day] || [];
+    var list = exList(state.program, state.day);
     var wrap = h('div', 'rot-list');
-    list.forEach(function (row, i) {
-      var name = row[0], sets = row[1], reps = row[2], note = row[3];
-      var key = checkKey(state.program, state.day, name);
+    list.forEach(function (ex) {
+      var name = ex.name, key = checkKey(state.program, state.day, name);
       var done = !!state.checks[key];
       var showDetails = (state.layout === 'expanded') || (state.expanded === key);
 
-      var card = h('div', 'rot-ex' + (done ? ' is-done' : ''));
+      var card = h('div', 'rot-ex' + (done ? ' is-done' : '') + (ex.role === 'main' ? ' is-main' : ''));
       card.addEventListener('click', function () { toggleCheck(key); });
 
       var top = h('div', 'rot-ex__top');
       var check = h('div', 'rot-ex__check'); check.innerHTML = done ? '&#10003;' : '';
       var body = h('div', 'rot-ex__body');
-      var nm = h('div', 'rot-ex__name'); nm.textContent = name;
-      var pe = h('div', 'rot-ex__presc'); pe.textContent = fmtPresc(sets, reps);
-      body.appendChild(nm); body.appendChild(pe);
+      var nameRow = h('div', 'rot-ex__namerow');
+      // Badge before the name so it anchors at the line start and never orphans
+      // onto a wrapped line below the text it annotates.
+      var rb = roleBadge(ex.role); if (rb) nameRow.appendChild(rb);
+      var nm = h('span', 'rot-ex__name'); nm.textContent = name;
+      nameRow.appendChild(nm);
+      body.appendChild(nameRow);
+      var pe = h('div', 'rot-ex__presc'); pe.textContent = fmtPresc(ex.sets, ex.reps);
+      body.appendChild(pe);
+      if (ex.intensity) { var it = h('div', 'rot-ex__intensity'); it.textContent = prettify(ex.intensity); body.appendChild(it); }
       top.appendChild(check); top.appendChild(body);
-
-      // Per-exercise source-reel link — small, always visible in both layouts,
-      // opens the specific IG clip this move was pulled from. stopPropagation so
-      // it doesn't tick the card.
-      var reelUrl = REELS[key];
-      if (reelUrl) {
-        var reel = h('a', 'rot-ex__reel');
-        reel.href = reelUrl; reel.target = '_blank'; reel.rel = 'noopener';
-        reel.setAttribute('aria-label', 'Watch the source reel for ' + name);
-        reel.innerHTML = '<span class="rot-ex__reel-ic" aria-hidden="true">&#9654;</span>Reel';
-        reel.addEventListener('click', function (e) { e.stopPropagation(); });
-        top.appendChild(reel);
-      }
 
       if (state.layout === 'compact') {
         var chev = h('button', 'rot-ex__chev'); chev.type = 'button';
@@ -529,11 +1092,16 @@
 
       if (showDetails) {
         var det = h('div', 'rot-ex__details');
-        if (note) { var nt = h('div', 'rot-ex__note'); nt.textContent = note; det.appendChild(nt); }
+        if (ex.notes) { var nt = h('div', 'rot-ex__note'); nt.textContent = ex.notes; det.appendChild(nt); }
+        if (ex.progression) {
+          var pr = h('div', 'rot-ex__prog');
+          pr.innerHTML = '<span class="rot-ex__prog-k">Progress</span> ' + prettify(ex.progression);
+          det.appendChild(pr);
+        }
         var ytWrap = h('div');
         var yt = h('a', 'rot-yt');
         yt.href = 'https://www.youtube.com/results?search_query='
-          + encodeURIComponent(name.replace(/superset/i, '').trim() + ' exercise form');
+          + encodeURIComponent(name.replace(/\(.*?\)/g, '').trim() + ' exercise form');
         yt.target = '_blank'; yt.rel = 'noopener';
         yt.innerHTML = '&#9655;&nbsp; YouTube demo';
         yt.addEventListener('click', function (e) { e.stopPropagation(); });
@@ -546,34 +1114,19 @@
     return wrap;
   }
 
-  function buildReels(frag) {
-    var reels = DAYMETA[state.day].reels || [];
-    var btn = h('button', 'rot-reels-btn'); btn.type = 'button';
-    var label = h('span', 'rot-reels-btn__label');
-    label.innerHTML = 'Form reels for ' + state.day + ' &middot; ' + reels.length;
-    var chev = h('span', 'rot-reels-btn__chev'); chev.textContent = state.reelsOpen ? '⌃' : '⌄';
-    btn.appendChild(label); btn.appendChild(chev);
-    btn.addEventListener('click', function () { state.reelsOpen = !state.reelsOpen; render(); });
-    frag.appendChild(btn);
-
-    if (state.reelsOpen) {
-      var panel = h('div', 'rot-reels');
-      var note = h('div', 'rot-reels__note');
-      note.textContent = 'Original day reels from the source program (whole-session clips, not per-exercise).';
-      var listEl = h('div', 'rot-reels__list');
-      reels.forEach(function (u, i) {
-        var a = h('a', 'rot-reel'); a.href = u; a.target = '_blank'; a.rel = 'noopener';
-        a.innerHTML = '&#9836; Reel ' + (i + 1) + ' &#8599;';
-        listEl.appendChild(a);
-      });
-      panel.appendChild(note); panel.appendChild(listEl);
-      frag.appendChild(panel);
-    }
+  function buildLegend(frag) {
+    if (!CONFIG.legend || !CONFIG.legend.length) return;
+    var box = h('div', 'rot-legend');
+    CONFIG.legend.forEach(function (item) {
+      var chip = h('span', 'rot-legend__item');
+      chip.innerHTML = '<span class="rot-legend__sym">' + item.sym + '</span>' + item.txt;
+      box.appendChild(chip);
+    });
+    frag.appendChild(box);
   }
 
   /* ---------------- render ---------------- */
-  var mount = document.getElementById('rotation');
-
+  var mount = document.getElementById(CONFIG.mountId);
   function render() {
     if (!mount) return;
     var frag = document.createDocumentFragment();
@@ -582,21 +1135,19 @@
     buildStickyRegion(frag);
     frag.appendChild(buildLayoutToggle());
     frag.appendChild(buildList());
-    buildReels(frag);
+    buildLegend(frag);
     mount.innerHTML = '';
     mount.appendChild(frag);
   }
-
-  // Flip `stuck` when the sentinel scrolls to the top of the viewport.
-  // Passive scroll listener; only re-render on an actual change.
   function onScroll() {
     if (!mount) return;
     var el = mount.querySelector('[data-rotation-sentinel]');
     if (!el) return;
     var stuck = el.getBoundingClientRect().top <= 0;
-    if (stuck !== state.stuck) { state.stuck = stuck; render(); }
+    // Closing the menu when the header pins avoids a stale ✕ in the compact bar
+    // whose dropdown is scrolled out of view.
+    if (stuck !== state.stuck) { state.stuck = stuck; if (stuck) state.menuOpen = false; render(); }
   }
-
   render();
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
