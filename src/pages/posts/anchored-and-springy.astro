@@ -1,0 +1,47 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getPost } from '../../posts';
+import '../../styles/posts/anchored-and-springy.css';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+const post = getPost('anchored-and-springy');
+
+// dance.js is served verbatim from public/ (Astro doesn't fingerprint it), so
+// append a build-time content hash as ?v= for cache-busting — same scheme as
+// the-rotation. The hash changes only when the file changes.
+const danceJs = readFileSync('public/posts/anchored-and-springy/dance.js');
+const jsVersion = createHash('sha256').update(danceJs).digest('hex').slice(0, 12);
+---
+<PostLayout post={post}>
+<div class="article">
+
+  <!-- Interactive conditioning checklist — built in JS from the authored
+       program data. See public/posts/anchored-and-springy/dance.js
+       (generated from fitscrape/data/dancer/program.json). -->
+  <div id="dance" class="rotation-app"></div>
+
+  <p class="rot-closer">Strong from the floor up. <b>Springy when the music asks.</b></p>
+
+  <section class="rot-notes">
+    <h3 class="rot-notes__h">Notes</h3>
+    <ol class="rot-notes__list">
+      <li><b>Built for West Coast Swing.</b> The work is ordered by what the dance actually
+        demands: a controllable <i>rolling foot</i> and ankle first, then single-leg stability for
+        small-base weight transfer, an anti-rotation core to hold your center against a partner, and
+        supple hips for the anchor settle &mdash; while bulletproofing the lower leg, knee and low
+        back against long social nights.</li>
+      <li><b>Where this comes from.</b> The foot/ankle and core work follow Jacqui Haas&rsquo;
+        <i>Dance Anatomy</i>; the mobility dosing &mdash; 10&ndash;15 min a day, 2 min per side,
+        test&ndash;retest &mdash; follows Kelly Starrett&rsquo;s <i>Becoming a Supple Leopard</i>.</li>
+      <li><b>How to schedule it.</b> Three control sessions a week (Foot, Balance, Core) plus the
+        Mobility menu as a daily dose. Keep the heavy Balance day <b>off</b> tired pre-dance legs;
+        run full Mobility the morning after your biggest night. Always do 2&ndash;3 min of ankle
+        doming and a balance drill before dancing.</li>
+      <li><b>Not medical advice.</b> Progress one lever at a time, and back off anything that
+        provokes an old ankle, knee or back issue.</li>
+    </ol>
+  </section>
+
+  <script src={`/posts/anchored-and-springy/dance.js?v=${jsVersion}`} is:inline></script>
+</div>
+</PostLayout>

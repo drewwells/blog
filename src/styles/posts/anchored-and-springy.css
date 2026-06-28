@@ -1,38 +1,34 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap');
 
 /* ============================================================
-   WST Blog editorial theme — "The Rotation"
-   "Coach" type: Bricolage Grotesque (display) + Schibsted
-   Grotesk (text). No monospace — the "label" role (--mono) is
-   Schibsted set UPPERCASE with tracking. Warm paper
-   Phone-first interactive gym checklist. Two semantic accents:
-     --move = a set still to do, --done = completed.
-   (per-article theme; structural grammar is shared — see DS)
+   WST Blog editorial theme — "Anchored & Springy"
+   "Studio" type: Fraunces (supple display serif) + Schibsted
+   Grotesk (text). The "label" role (--mono) is Schibsted set
+   UPPERCASE with tracking. Cool studio paper; two semantic
+   accents: --move = a drill still to do (petrol/teal, "springy"),
+   --done = completed (warm ochre, "anchored").
+   Structural grammar is shared 1:1 with "The Rotation" — only
+   the token theme + fonts differ (per-article theme; see DS).
 
-   NOTE: tokens are scoped to .article, NOT :root. site.css is
-   inlined into the page <head> AFTER this stylesheet, so its
-   :root tokens would win the cascade. Setting the overrides on
-   the .article element (an ancestor of all post content) beats
-   the inherited :root values regardless of source order — and
-   keeps the post from restyling the shared header/footer.
+   Tokens are scoped to .article (not :root) so they beat the
+   inlined site.css :root tokens regardless of source order and
+   don't restyle the shared header/footer.
    ============================================================ */
 .article{
-  --paper:#f7f4ec; --paper-2:#efe9dc; --card:#fffdf7;
-  --ink:#1b1813; --ink-soft:#4d473c; --ink-faint:#8b8475;
-  --rule:#e4ddcd; --rule-soft:#efe9dc;
-  /* primary accent — a set still to do */
-  --move:#c0432a; --move-ink:#97311c; --move-wash:#f7e6df;
-  /* secondary accent — completed */
-  --done:#3f7d52; --done-ink:#2f6440; --done-wash:#e4efe5;
+  --paper:#f4f6f5; --paper-2:#e7eceb; --card:#ffffff;
+  --ink:#16201f; --ink-soft:#3f4d4b; --ink-faint:#7c8a88;
+  --rule:#d9e2e0; --rule-soft:#e7eceb;
+  /* primary accent — a drill still to do (petrol/teal) */
+  --move:#1f7a8c; --move-ink:#175e6c; --move-wash:#dceef1;
+  /* secondary accent — completed (warm ochre, "anchored") */
+  --done:#bd7b2e; --done-ink:#925d20; --done-wash:#f3e7d3;
   /* dark control-center band */
-  --dark:#15171e; --dark-2:#1c1f29; --dark-ink:#cdd0d8; --gold:#e0a23a;
+  --dark:#13201f; --dark-2:#1b2c2a; --dark-ink:#c9d4d2; --gold:#d8a24a;
   --maxw:640px; --col:640px;
-  /* "Coach" type — no monospace anywhere. Token names kept to match
-     the prototype, but --mono is a deliberate misnomer: it is the
-     "label" role (UPPERCASE + letter-spacing), still Schibsted Grotesk. */
-  --serif:'Bricolage Grotesque',Georgia,sans-serif; /* display: day title / closer */
-  --sans:'Schibsted Grotesk',system-ui,sans-serif;  /* body + exercise names */
-  --mono:'Schibsted Grotesk',system-ui,sans-serif;  /* tracked-caps label role */
+  /* "Studio" type — Fraunces display, Schibsted text + label role. */
+  --serif:'Fraunces',Georgia,serif;                  /* display: day title / closer */
+  --sans:'Schibsted Grotesk',system-ui,sans-serif;   /* body + exercise names */
+  --mono:'Schibsted Grotesk',system-ui,sans-serif;   /* tracked-caps label role */
 }
 *{box-sizing:border-box}
 

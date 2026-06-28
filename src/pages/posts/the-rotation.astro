@@ -16,23 +16,30 @@ const jsVersion = createHash('sha256').update(rotationJs).digest('hex').slice(0,
 <PostLayout post={post}>
 <div class="article">
 
-  <!-- Interactive gym checklist — built in JS from the program data.
-       See public/posts/the-rotation/rotation.js (ported from the
-       Claude Design prototype "Rotating Workout.dc.html"). -->
+  <!-- Interactive gym checklist — built in JS from the authored program data.
+       See public/posts/the-rotation/rotation.js (generated from
+       fitscrape/data/strength/program.json). -->
   <div id="rotation" class="rotation-app"></div>
 
-  <p class="rot-closer">Pick a program. Run it until it&rsquo;s boring. <b>Then rotate.</b></p>
+  <p class="rot-closer">Run a rotation until it&rsquo;s boring. <b>Then climb a notch and rotate.</b></p>
 
   <section class="rot-notes">
     <h3 class="rot-notes__h">Notes</h3>
     <ol class="rot-notes__list">
-      <li><b>Nothing invented.</b> Every exercise, set, rep and cue is lifted straight from the
-        synthesized program built from 349 reels by Jaden Levin.</li>
-      <li><b>Videos.</b> The YouTube button runs a search for that exercise&rsquo;s form;
-        &ldquo;Form reels&rdquo; link the original Instagram clips for that day &mdash; they cover
-        the whole session, not one move.</li>
-      <li><b>Not medical advice.</b> Adjust weight to hit the failure / burnout cues with strict
-        form. Warm up first.</li>
+      <li><b>Where this comes from.</b> The program is authored from the standard strength
+        literature &mdash; Rippetoe&rsquo;s <i>Practical Programming</i> and <i>Starting Strength</i>,
+        Wendler&rsquo;s <i>5/3/1</i>, Helms&rsquo; <i>Muscle &amp; Strength Pyramid</i>, and
+        Israetel&rsquo;s hypertrophy work. The four barbell lifts run a 5/3/1 wave; accessories run
+        double progression; the A&nbsp;&rarr;&nbsp;B&nbsp;&rarr;&nbsp;C rotation swaps in new variants
+        and climbs in load each pass.</li>
+      <li><b>New to the barbell?</b> Don&rsquo;t start here &mdash; run a linear novice progression
+        first (squat 3&times;5 adding weight every session; deadlift 1&times;5; bench/press 3&times;5).
+        Graduate to the rotation once linear gains stall, usually after 8&ndash;16 weeks.</li>
+      <li><b>Reading the loads.</b> Build your Training Max at 90% of a true 1RM and let the
+        wave do the rest. The <b>YouTube</b> button on any exercise pulls up a form demo; the
+        <b>Progress</b> line tells you how to advance that specific movement.</li>
+      <li><b>Not medical advice.</b> Warm up, keep 1&ndash;2 reps in the tank on the work sets, and
+        stop a set the moment form breaks.</li>
     </ol>
   </section>
 

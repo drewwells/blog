@@ -23,12 +23,20 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    slug: 'anchored-and-springy',
+    title: 'Anchored & Springy',
+    dek: 'A West Coast Swing conditioning and injury-prevention program, ordered by what the dance actually demands: a rolling foot and ankle, single-leg balance, an anti-rotation core, and supple hips. Two rotating blocks — Foundation, then Performance — as a tap-through card that remembers where you stopped.',
+    kicker: 'Dance · WCS Conditioning',
+    date: '2026-06-28',
+    tags: ['training', 'dance', 'mobility', 'reference'],
+  },
+  {
     slug: 'the-rotation',
     title: 'The Rotation',
-    dek: 'Three interchangeable four-day programs — A, B, C — built from one exercise pool. A tap-through gym card that remembers where you stopped.',
-    kicker: 'Training · Rotating Split',
+    dek: 'A balanced barbell program — squat, hinge, press, pull — in three rotating blocks: A grooves the lifts, B piles on volume, C peaks. A 5/3/1 wave climbs the load every pass. A tap-through gym card that remembers where you stopped.',
+    kicker: 'Training · Barbell Rotation',
     date: '2026-06-27',
-    tags: ['training', 'reference'],
+    tags: ['training', 'strength', 'reference'],
   },
   {
     slug: 'schwab-crypto-fees',
