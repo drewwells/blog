@@ -881,25 +881,34 @@
     document.body.appendChild(ov);
   }
 
-  // Two-frame movement reference (start -> finish). Public-domain figures.
+  // Movement reference — built on the WST Blog figure grammar (fig-tag label,
+  // labelled frames, top-ruled figcaption). Two public-domain frames,
+  // start -> finish; tap a frame to enlarge.
+  var REF_FRAMES = ['Start', 'Finish'];
   function buildRef(ref) {
     var fig = h('figure', 'rot-ref');
+    var tag = h('div', 'rot-ref__tag');
+    tag.textContent = ref.approx ? 'Closest match' : 'Movement reference';
+    fig.appendChild(tag);
     var frames = h('div', 'rot-ref__frames');
-    [0, 1].forEach(function (i) {
+    REF_FRAMES.forEach(function (lbl, i) {
+      var cell = h('figure', 'rot-ref__cell');
       var im = h('img', 'rot-ref__img');
       im.src = IMG_BASE + '/' + ref.id + '/' + i + '.jpg';
-      im.alt = ref.label + (i === 0 ? ' — start position' : ' — end position');
+      im.alt = ref.label + ' — ' + lbl.toLowerCase() + ' position';
       im.loading = 'lazy'; im.decoding = 'async';
       im.setAttribute('role', 'button');
       im.setAttribute('aria-label', 'Enlarge: ' + im.alt);
       // stopPropagation so enlarging doesn't tick the card check or collapse it.
       im.addEventListener('click', function (e) { e.stopPropagation(); openLightbox(im.src, im.alt); });
-      frames.appendChild(im);
+      var fl = h('figcaption', 'rot-ref__framelbl'); fl.textContent = lbl;
+      cell.appendChild(im); cell.appendChild(fl);
+      frames.appendChild(cell);
     });
     fig.appendChild(frames);
     var cap = h('figcaption', 'rot-ref__cap');
-    cap.innerHTML = (ref.approx ? '<b>Closest reference</b> &middot; ' + ref.label : '<b>' + ref.label + '</b>')
-      + ' &middot; tap a frame to enlarge &middot; free-exercise-db (public domain)';
+    cap.innerHTML = '<b>' + ref.label + '</b> &middot; figures from free-exercise-db '
+      + '(public domain) &middot; tap a frame to enlarge';
     fig.appendChild(cap);
     return fig;
   }

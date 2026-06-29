@@ -292,14 +292,25 @@
 }
 .rot-ref-toggle.is-open{color:var(--move-ink);background:var(--move-wash);border-color:var(--move)}
 .rot-ref-toggle__ic{font-size:13px;line-height:1}
-/* the expanded two-frame figure (start -> finish) */
-.rot-ref{margin:2px 0 0}
-.rot-ref__frames{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}
+/* the expanded reference figure — WST Blog figure grammar (tag · frames · cap) */
+.rot-ref{margin:4px 0 0}
+/* fig-tag: mono uppercase label, quiet — mirrors the DS .fig .fig-tag */
+.rot-ref__tag{
+  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px;
+}
+.rot-ref__frames{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+.rot-ref__cell{margin:0;display:flex;flex-direction:column;gap:5px}
 /* natural aspect — the two frames of a drill share source dimensions, so they
    stay matched side by side; no fixed ratio means no cropping across drills. */
 .rot-ref__img{
   width:100%;height:auto;display:block;cursor:zoom-in;
   background:var(--paper-2);border:1px solid var(--rule);border-radius:9px;
+}
+/* start / finish frame label — tracked mono, subordinate */
+.rot-ref__framelbl{
+  font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-faint);
 }
 /* tap-to-enlarge overlay — full-screen, appended to <body> */
 .rot-lb{
@@ -315,9 +326,11 @@
   font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
   color:rgba(255,255,255,.62);
 }
+/* caption: top-ruled, mono-flavored, quiet — mirrors the DS figcaption */
 .rot-ref__cap{
-  font-family:var(--mono);font-size:10px;line-height:1.4;letter-spacing:.02em;
-  color:var(--ink-faint);margin-top:7px;text-wrap:pretty;
+  font-family:var(--mono);font-size:11px;line-height:1.5;letter-spacing:.01em;
+  color:var(--ink-faint);margin-top:11px;padding-top:9px;
+  border-top:1px solid var(--rule-soft);text-wrap:pretty;
 }
 .rot-ref__cap b{color:var(--ink-soft);font-weight:600}
 
