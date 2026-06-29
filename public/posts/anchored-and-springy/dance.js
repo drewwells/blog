@@ -863,6 +863,24 @@
     return b;
   }
 
+  // Tap-to-enlarge: full-screen overlay for a hard-to-read reference frame.
+  // Lives outside the mount (appended to <body>) so render() never disturbs it;
+  // closes on tap or Esc.
+  function openLightbox(src, alt) {
+    var ov = h('div', 'rot-lb');
+    var img = h('img', 'rot-lb__img'); img.src = src; img.alt = alt;
+    var hint = h('div', 'rot-lb__hint'); hint.textContent = 'Tap anywhere to close';
+    ov.appendChild(img); ov.appendChild(hint);
+    function close() {
+      ov.parentNode && ov.parentNode.removeChild(ov);
+      document.removeEventListener('keydown', onKey);
+    }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    ov.addEventListener('click', close);
+    document.addEventListener('keydown', onKey);
+    document.body.appendChild(ov);
+  }
+
   // Two-frame movement reference (start -> finish). Public-domain figures.
   function buildRef(ref) {
     var fig = h('figure', 'rot-ref');
@@ -872,12 +890,16 @@
       im.src = IMG_BASE + '/' + ref.id + '/' + i + '.jpg';
       im.alt = ref.label + (i === 0 ? ' — start position' : ' — end position');
       im.loading = 'lazy'; im.decoding = 'async';
+      im.setAttribute('role', 'button');
+      im.setAttribute('aria-label', 'Enlarge: ' + im.alt);
+      // stopPropagation so enlarging doesn't tick the card check or collapse it.
+      im.addEventListener('click', function (e) { e.stopPropagation(); openLightbox(im.src, im.alt); });
       frames.appendChild(im);
     });
     fig.appendChild(frames);
     var cap = h('figcaption', 'rot-ref__cap');
     cap.innerHTML = (ref.approx ? '<b>Closest reference</b> &middot; ' + ref.label : '<b>' + ref.label + '</b>')
-      + ' &middot; figures from free-exercise-db (public domain)';
+      + ' &middot; tap a frame to enlarge &middot; free-exercise-db (public domain)';
     fig.appendChild(cap);
     return fig;
   }
