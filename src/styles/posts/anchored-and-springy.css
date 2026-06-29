@@ -235,84 +235,76 @@
 .rot-ex.is-done{
   background:var(--done-wash);border-color:var(--done);border-left-color:var(--done);opacity:.72;
 }
-.rot-ex__top{display:flex;gap:12px;align-items:flex-start}
-.rot-ex__check{
-  flex:none;width:26px;height:26px;border-radius:7px;border:2px solid var(--ink-faint);
-  background:transparent;color:#fff;display:flex;align-items:center;justify-content:center;
-  font-size:15px;font-weight:700;margin-top:1px;
-}
-.rot-ex.is-done .rot-ex__check{border-color:var(--done);background:var(--done)}
-.rot-ex__body{flex:1;min-width:0}
-.rot-ex__namerow{display:flex;align-items:baseline;gap:7px}
-.rot-ex__name{
-  flex:1;min-width:0;
-  font-family:var(--sans);font-size:16px;font-weight:600;line-height:1.25;color:var(--ink);
-}
-.rot-ex.is-done .rot-ex__name{text-decoration:line-through;text-decoration-color:var(--done-ink)}
-/* role badge — emoji glyph (⭐ main / 🔚 finisher), tiny and subordinate */
+/* role badge — emoji glyph (⭐ main / 🩹 prehab / 🧘 mobility), tiny and subordinate */
 .rot-ex__role{font-size:12px;line-height:1;flex:none;transform:translateY(1px)}
-/* the main barbell lift of the day gets a heavier left rail */
+/* the main lift of the day gets a heavier left rail */
 .rot-ex.is-main{border-left-width:5px}
-.rot-ex__presc{
-  font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--move-ink);
-  margin-top:3px;letter-spacing:.01em;
-}
-.rot-ex.is-done .rot-ex__presc{color:var(--ink-faint)}
 /* intensity / load cue — quieter line under the prescription */
 .rot-ex__intensity{
   font-size:12.5px;line-height:1.4;color:var(--ink-faint);margin-top:3px;text-wrap:pretty;
 }
+/* compact-mode disclosure chevron — left-aligned in the content column */
 .rot-ex__chev{
-  flex:none;width:34px;height:34px;border-radius:8px;border:1px solid var(--rule);
+  flex:none;align-self:flex-start;margin-top:8px;
+  width:34px;height:34px;border-radius:8px;border:1px solid var(--rule);
   background:var(--paper-2);color:var(--ink-soft);font-size:15px;line-height:1;cursor:pointer;
 }
-.rot-ex__details{margin-left:38px;margin-top:10px;display:flex;flex-direction:column;gap:9px}
-.rot-ex__note{font-size:13.5px;line-height:1.5;color:var(--ink-soft);text-wrap:pretty}
 /* progression rule — "Progress" label + the per-exercise advancement cue */
-.rot-ex__prog{font-size:13px;line-height:1.5;color:var(--ink-soft);text-wrap:pretty}
+.rot-ex__prog{font-size:13px;line-height:1.5;color:var(--ink-soft);text-wrap:pretty;margin-top:7px}
 .rot-ex__prog-k{
   font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
   color:var(--done-ink);margin-right:5px;
 }
-/* demo / reference affordances — sit on one wrapping row under the details */
-.rot-ex__actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.rot-yt{
-  display:inline-flex;align-items:center;gap:7px;
-  font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;
-  color:var(--move-ink);background:var(--move-wash);border:1px solid var(--move);border-radius:8px;
-  padding:9px 13px;min-height:40px;text-decoration:none;
+
+/* ---------------- exercise card · Hero split (DS previews/05-workout-item) ---------------- */
+.rot-ex--hero{display:grid;grid-template-columns:128px 1fr;gap:14px;align-items:stretch}
+.rot-hero__media{position:relative;align-self:stretch}
+.rot-hero__img{
+  width:128px;height:100%;min-height:152px;display:block;object-fit:cover;object-position:center 30%;
+  background:var(--paper-2);border:1px solid var(--rule);border-radius:10px;cursor:zoom-in;
 }
-/* movement-reference toggle — quieter (ghost) than the YouTube pill; it's
-   secondary helper content. Goes solid when its image is open. */
-.rot-ref-toggle{
-  display:inline-flex;align-items:center;gap:7px;
-  font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;
-  color:var(--ink-soft);background:var(--card);border:1px solid var(--rule);border-radius:8px;
-  padding:9px 13px;min-height:40px;cursor:pointer;
+.rot-hero__seg{
+  position:absolute;left:8px;bottom:8px;display:flex;border-radius:7px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.5);box-shadow:0 2px 8px -3px rgba(0,0,0,.5);
 }
-.rot-ref-toggle.is-open{color:var(--move-ink);background:var(--move-wash);border-color:var(--move)}
-.rot-ref-toggle__ic{font-size:13px;line-height:1}
-/* the expanded reference figure — WST Blog figure grammar (tag · frames · cap) */
-.rot-ref{margin:4px 0 0}
-/* fig-tag: mono uppercase label, quiet — mirrors the DS .fig .fig-tag */
-.rot-ref__tag{
-  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px;
+.rot-hero__seg button{
+  border:0;cursor:pointer;padding:6px 9px;min-height:30px;
+  font-family:var(--mono);font-size:8.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  background:rgba(8,16,15,.62);color:rgba(255,255,255,.78);
 }
-.rot-ref__frames{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
-.rot-ref__cell{margin:0;display:flex;flex-direction:column;gap:5px}
-/* natural aspect — the two frames of a drill share source dimensions, so they
-   stay matched side by side; no fixed ratio means no cropping across drills. */
-.rot-ref__img{
-  width:100%;height:auto;display:block;cursor:zoom-in;
-  background:var(--paper-2);border:1px solid var(--rule);border-radius:9px;
+.rot-hero__seg button.is-active{background:var(--card);color:var(--move-ink)}
+.rot-hero__content{min-width:0;display:flex;flex-direction:column}
+.rot-hero__namerow{display:flex;align-items:flex-start;gap:10px}
+.rot-hero__check{
+  flex:none;width:24px;height:24px;border-radius:7px;border:2px solid var(--ink-faint);
+  background:transparent;color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;
 }
-/* start / finish frame label — tracked mono, subordinate */
-.rot-ref__framelbl{
-  font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--ink-faint);
+.rot-ex--hero.is-done .rot-hero__check{border-color:var(--done);background:var(--done)}
+.rot-hero__name{
+  flex:1;min-width:0;font-size:16px;font-weight:600;line-height:1.22;color:var(--ink);
+  display:flex;align-items:baseline;gap:7px;
 }
-/* tap-to-enlarge overlay — full-screen, appended to <body> */
+.rot-ex--hero.is-done .rot-hero__name{text-decoration:line-through;text-decoration-color:var(--done-ink)}
+.rot-hero__presc{
+  font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--move-ink);
+  margin-top:5px;letter-spacing:.01em;
+}
+.rot-hero__note{font-size:13px;line-height:1.5;color:var(--ink-soft);margin-top:7px;text-wrap:pretty}
+/* compact icon-only YouTube — rides the name row, right-aligned */
+.rot-hero__yt{
+  flex:none;width:40px;height:40px;border-radius:8px;
+  display:inline-flex;align-items:center;justify-content:center;
+  color:var(--move-ink);background:var(--move-wash);border:1px solid var(--move);
+  text-decoration:none;font-size:13px;line-height:1;
+}
+.rot-hero--none{grid-template-columns:1fr}
+@media (max-width:520px){
+  .rot-ex--hero{grid-template-columns:1fr}
+  .rot-hero__img{width:100%;height:188px;min-height:0}
+}
+
+/* tap-to-enlarge overlay — full-screen, appended to <body> (reused by Hero split) */
 .rot-lb{
   position:fixed;inset:0;z-index:999;cursor:zoom-out;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
@@ -326,13 +318,6 @@
   font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
   color:rgba(255,255,255,.62);
 }
-/* caption: top-ruled, mono-flavored, quiet — mirrors the DS figcaption */
-.rot-ref__cap{
-  font-family:var(--mono);font-size:11px;line-height:1.5;letter-spacing:.01em;
-  color:var(--ink-faint);margin-top:11px;padding-top:9px;
-  border-top:1px solid var(--rule-soft);text-wrap:pretty;
-}
-.rot-ref__cap b{color:var(--ink-soft);font-weight:600}
 
 /* ---------------- role legend ---------------- */
 .rot-legend{

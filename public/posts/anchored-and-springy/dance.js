@@ -603,7 +603,7 @@
 
   var state = { program: PROGKEYS[0], day: DAYKEYS[0], layout: 'expanded',
                 week: 1, checks: {}, expanded: null, howToOpen: false,
-                menuOpen: false, stuck: false, imgOpen: {} };
+                menuOpen: false, stuck: false };
 
   try {
     var raw = localStorage.getItem(CONFIG.lsKey);
@@ -673,9 +673,6 @@
     persist(); render();
   }
   function toggleExpand(key) { state.expanded = state.expanded === key ? null : key; render(); }
-  // Reference image is opt-in helper content: ephemeral (not persisted), and the
-  // <img> is only built into the DOM once opened, so its bytes load on demand.
-  function toggleImg(key) { if (state.imgOpen[key]) delete state.imgOpen[key]; else state.imgOpen[key] = true; render(); }
   function resetDay() {
     var pre = state.program + '|' + state.day + '|';
     Object.keys(state.checks).forEach(function (k) { if (k.indexOf(pre) === 0) delete state.checks[k]; });
@@ -881,105 +878,92 @@
     document.body.appendChild(ov);
   }
 
-  // Movement reference — built on the WST Blog figure grammar (fig-tag label,
-  // labelled frames, top-ruled figcaption). Two public-domain frames,
-  // start -> finish; tap a frame to enlarge.
-  var REF_FRAMES = ['Start', 'Finish'];
-  function buildRef(ref) {
-    var fig = h('figure', 'rot-ref');
-    var tag = h('div', 'rot-ref__tag');
-    tag.textContent = ref.approx ? 'Closest match' : 'Movement reference';
-    fig.appendChild(tag);
-    var frames = h('div', 'rot-ref__frames');
-    REF_FRAMES.forEach(function (lbl, i) {
-      var cell = h('figure', 'rot-ref__cell');
-      var im = h('img', 'rot-ref__img');
-      im.src = IMG_BASE + '/' + ref.id + '/' + i + '.jpg';
-      im.alt = ref.label + ' — ' + lbl.toLowerCase() + ' position';
-      im.loading = 'lazy'; im.decoding = 'async';
-      im.setAttribute('role', 'button');
-      im.setAttribute('aria-label', 'Enlarge: ' + im.alt);
-      // stopPropagation so enlarging doesn't tick the card check or collapse it.
-      im.addEventListener('click', function (e) { e.stopPropagation(); openLightbox(im.src, im.alt); });
-      var fl = h('figcaption', 'rot-ref__framelbl'); fl.textContent = lbl;
-      cell.appendChild(im); cell.appendChild(fl);
-      frames.appendChild(cell);
-    });
-    fig.appendChild(frames);
-    var cap = h('figcaption', 'rot-ref__cap');
-    cap.innerHTML = '<b>' + ref.label + '</b> &middot; figures from free-exercise-db '
-      + '(public domain) &middot; tap a frame to enlarge';
-    fig.appendChild(cap);
-    return fig;
-  }
-
+  // Exercise card — Design C "Hero split" (WST Blog DS, previews/05-workout-item).
+  // Reference photo is an always-visible left hero with an in-place Start/Finish
+  // swap; a compact YouTube ▶ icon rides the name row. Drills with no IMG match
+  // collapse to a single text column. HAND-AUTHORED renderer — re-apply after any
+  // gen_blog_data.py regen (or teach the generator to emit it).
   function buildList() {
     var list = exList(state.program, state.day);
     var wrap = h('div', 'rot-list');
     list.forEach(function (ex) {
       var name = ex.name, key = checkKey(state.program, state.day, name);
       var done = !!state.checks[key];
+      var ref = IMG[name];                 // hand-authored map; may be undefined
+      var hasImg = !!ref;
       var showDetails = (state.layout === 'expanded') || (state.expanded === key);
 
-      var card = h('div', 'rot-ex' + (done ? ' is-done' : '') + (ex.role === 'main' ? ' is-main' : ''));
+      var card = h('div', 'rot-ex rot-ex--hero'
+        + (done ? ' is-done' : '')
+        + (ex.role === 'main' ? ' is-main' : '')
+        + (hasImg ? '' : ' rot-hero--none'));
       card.addEventListener('click', function () { toggleCheck(key); });
 
-      var top = h('div', 'rot-ex__top');
-      var check = h('div', 'rot-ex__check'); check.innerHTML = done ? '&#10003;' : '';
-      var body = h('div', 'rot-ex__body');
-      var nameRow = h('div', 'rot-ex__namerow');
-      // Badge before the name so it anchors at the line start and never orphans
-      // onto a wrapped line below the text it annotates.
-      var rb = roleBadge(ex.role); if (rb) nameRow.appendChild(rb);
-      var nm = h('span', 'rot-ex__name'); nm.textContent = name;
-      nameRow.appendChild(nm);
-      body.appendChild(nameRow);
-      var pe = h('div', 'rot-ex__presc'); pe.textContent = fmtPresc(ex.sets, ex.reps);
-      body.appendChild(pe);
-      if (ex.intensity) { var it = h('div', 'rot-ex__intensity'); it.textContent = prettify(ex.intensity); body.appendChild(it); }
-      top.appendChild(check); top.appendChild(body);
-
-      if (state.layout === 'compact') {
-        var chev = h('button', 'rot-ex__chev'); chev.type = 'button';
-        chev.textContent = state.expanded === key ? '⌃' : '⌄';
-        chev.addEventListener('click', function (e) { e.stopPropagation(); toggleExpand(key); });
-        top.appendChild(chev);
+      // ---- media column (always on when a reference exists) ----
+      if (hasImg) {
+        var media = h('div', 'rot-hero__media');
+        var img = h('img', 'rot-hero__img');
+        var frame = 1; // finish frame — usually the most informative pose
+        img.src = IMG_BASE + '/' + ref.id + '/' + frame + '.jpg';
+        img.alt = ref.label + ' — finish position';
+        img.loading = 'lazy'; img.decoding = 'async';
+        img.addEventListener('click', function (e) { e.stopPropagation(); openLightbox(img.src, img.alt); });
+        media.appendChild(img);
+        var seg = h('div', 'rot-hero__seg');
+        ['Start', 'Finish'].forEach(function (lbl, i) {
+          var b = h('button'); b.type = 'button'; b.textContent = lbl;
+          if (i === frame) b.className = 'is-active';
+          b.addEventListener('click', function (e) {
+            e.stopPropagation(); frame = i;
+            img.src = IMG_BASE + '/' + ref.id + '/' + i + '.jpg';
+            img.alt = ref.label + ' — ' + lbl.toLowerCase() + ' position';
+            seg.querySelectorAll('button').forEach(function (x, xi) { x.className = (xi === i) ? 'is-active' : ''; });
+          });
+          seg.appendChild(b);
+        });
+        media.appendChild(seg);
+        card.appendChild(media);
       }
-      card.appendChild(top);
+
+      // ---- content column ----
+      var content = h('div', 'rot-hero__content');
+      var nr = h('div', 'rot-hero__namerow');
+      var check = h('div', 'rot-hero__check'); check.innerHTML = done ? '&#10003;' : '';
+      nr.appendChild(check);
+      var nm = h('div', 'rot-hero__name');
+      var rb = roleBadge(ex.role); if (rb) nm.appendChild(rb);
+      var nmt = document.createElement('span'); nmt.textContent = name; nm.appendChild(nmt);
+      nr.appendChild(nm);
+      var yt = h('a', 'rot-hero__yt');
+      yt.href = 'https://www.youtube.com/results?search_query='
+        + encodeURIComponent(name.replace(/\(.*?\)/g, '').trim() + ' exercise form');
+      yt.target = '_blank'; yt.rel = 'noopener';
+      yt.setAttribute('aria-label', 'YouTube demo'); yt.setAttribute('title', 'YouTube demo');
+      yt.innerHTML = '&#9654;';
+      yt.addEventListener('click', function (e) { e.stopPropagation(); });
+      nr.appendChild(yt);
+      content.appendChild(nr);
+
+      var pe = h('div', 'rot-hero__presc'); pe.textContent = fmtPresc(ex.sets, ex.reps);
+      content.appendChild(pe);
+      if (ex.intensity) { var it = h('div', 'rot-ex__intensity'); it.textContent = prettify(ex.intensity); content.appendChild(it); }
 
       if (showDetails) {
-        var det = h('div', 'rot-ex__details');
-        if (ex.notes) { var nt = h('div', 'rot-ex__note'); nt.textContent = ex.notes; det.appendChild(nt); }
+        if (ex.notes) { var nt = h('div', 'rot-hero__note'); nt.textContent = ex.notes; content.appendChild(nt); }
         if (ex.progression) {
           var pr = h('div', 'rot-ex__prog');
           pr.innerHTML = '<span class="rot-ex__prog-k">Progress</span> ' + prettify(ex.progression);
-          det.appendChild(pr);
+          content.appendChild(pr);
         }
-        var actions = h('div', 'rot-ex__actions');
-        var yt = h('a', 'rot-yt');
-        yt.href = 'https://www.youtube.com/results?search_query='
-          + encodeURIComponent(name.replace(/\(.*?\)/g, '').trim() + ' exercise form');
-        yt.target = '_blank'; yt.rel = 'noopener';
-        yt.innerHTML = '&#9655;&nbsp; YouTube demo';
-        yt.addEventListener('click', function (e) { e.stopPropagation(); });
-        actions.appendChild(yt);
-
-        // Movement-reference image — secondary helper content, collapsed by default.
-        var ref = IMG[name];
-        if (ref) {
-          var imgKey = key, open = !!state.imgOpen[imgKey];
-          var refBtn = h('button', 'rot-ref-toggle' + (open ? ' is-open' : '')); refBtn.type = 'button';
-          refBtn.innerHTML = '<span class="rot-ref-toggle__ic">&#9974;</span>'
-            + (open ? 'Hide reference' : 'Show movement');
-          refBtn.addEventListener('click', function (e) { e.stopPropagation(); toggleImg(imgKey); });
-          actions.appendChild(refBtn);
-          det.appendChild(actions);
-          if (open) det.appendChild(buildRef(ref));
-        } else {
-          det.appendChild(actions);
-        }
-        card.appendChild(det);
       }
+      if (state.layout === 'compact') {
+        var chev = h('button', 'rot-ex__chev'); chev.type = 'button';
+        chev.textContent = (state.expanded === key) ? '⌃' : '⌄';
+        chev.addEventListener('click', function (e) { e.stopPropagation(); toggleExpand(key); });
+        content.appendChild(chev);
+      }
+
+      card.appendChild(content);
       wrap.appendChild(card);
     });
     return wrap;
