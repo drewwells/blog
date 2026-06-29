@@ -274,12 +274,38 @@
   font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
   color:var(--done-ink);margin-right:5px;
 }
+/* demo / reference affordances — sit on one wrapping row under the details */
+.rot-ex__actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .rot-yt{
   display:inline-flex;align-items:center;gap:7px;
   font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;
   color:var(--move-ink);background:var(--move-wash);border:1px solid var(--move);border-radius:8px;
   padding:9px 13px;min-height:40px;text-decoration:none;
 }
+/* movement-reference toggle — quieter (ghost) than the YouTube pill; it's
+   secondary helper content. Goes solid when its image is open. */
+.rot-ref-toggle{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;
+  color:var(--ink-soft);background:var(--card);border:1px solid var(--rule);border-radius:8px;
+  padding:9px 13px;min-height:40px;cursor:pointer;
+}
+.rot-ref-toggle.is-open{color:var(--move-ink);background:var(--move-wash);border-color:var(--move)}
+.rot-ref-toggle__ic{font-size:13px;line-height:1}
+/* the expanded two-frame figure (start -> finish) */
+.rot-ref{margin:2px 0 0}
+.rot-ref__frames{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}
+/* natural aspect — the two frames of a drill share source dimensions, so they
+   stay matched side by side; no fixed ratio means no cropping across drills. */
+.rot-ref__img{
+  width:100%;height:auto;display:block;
+  background:var(--paper-2);border:1px solid var(--rule);border-radius:9px;
+}
+.rot-ref__cap{
+  font-family:var(--mono);font-size:10px;line-height:1.4;letter-spacing:.02em;
+  color:var(--ink-faint);margin-top:7px;text-wrap:pretty;
+}
+.rot-ref__cap b{color:var(--ink-soft);font-weight:600}
 
 /* ---------------- role legend ---------------- */
 .rot-legend{
