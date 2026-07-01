@@ -1,6 +1,9 @@
 /* ============================================================
    The Barbell Rotation — interactive strength card (WST Blog)
-   Auto-generated from fitscrape program.json by gen_blog_data.py.
+   The CONFIG + DATA blobs below are regenerated from fitscrape
+   data/strength/program.json by blog scripts/gen_blog_data.py (run it after
+   editing the program). The render engine below is hand-authored and is
+   NOT overwritten by the generator.
    Dependency-free vanilla JS. Renders into #rotation.
    State persists to localStorage key "wst-rotation-v3".
    ============================================================ */
