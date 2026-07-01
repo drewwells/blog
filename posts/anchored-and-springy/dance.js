@@ -1,6 +1,9 @@
 /* ============================================================
    Anchored & Springy — interactive WCS conditioning card (WST Blog)
-   Auto-generated from fitscrape program.json by gen_blog_data.py.
+   The CONFIG + DATA blobs below are regenerated from fitscrape
+   data/dancer/program.json by blog scripts/gen_blog_data.py (run it after
+   editing the program). The render engine below is hand-authored and is
+   NOT overwritten by the generator.
    Dependency-free vanilla JS. Renders into #dance.
    State persists to localStorage key "wst-dance-v1".
    ============================================================ */
@@ -127,7 +130,10 @@
           "intensity": "light load on thighs (~5 lb each)",
           "progression": "raise reps before raising load (soleus is fatigue-resistant)",
           "notes": "Knee bent 90 deg targets the soleus - high type-I fiber content drives balance and keeps you from falling forward; HIGH reps to build endurance for a long night.",
-          "role": "accessory"
+          "role": "accessory",
+          "imgStart": "Seated_Calf_Raise/0.jpg",
+          "imgFinish": "Seated_Calf_Raise/1.jpg",
+          "imgLabel": "Seated calf raise"
         },
         {
           "name": "Standing Calf Raises (Releve)",
@@ -136,7 +142,10 @@
           "intensity": "bodyweight",
           "progression": "two-foot -> single-leg -> 'up on two, down on one' eccentric",
           "notes": "Align tibia over 2nd/3rd toe, no sickling. Trains the push-off and the controlled lower (Haas: most people spend all effort going up and let gravity drop them - that is where injuries happen).",
-          "role": "main"
+          "role": "main",
+          "imgStart": "Standing_Calf_Raises/0.jpg",
+          "imgFinish": "Standing_Calf_Raises/1.jpg",
+          "imgLabel": "Standing calf raise"
         },
         {
           "name": "Calf Stretch Hands Against Wall",
@@ -145,7 +154,10 @@
           "intensity": "mobility",
           "progression": "test-retest dorsiflexion depth",
           "notes": "Starrett: missing dorsiflexion forces an open/turned-out foot and collapsed ankle. Restore gastroc/heel-cord length so the ankle can roll cleanly through each step.",
-          "role": "mobility"
+          "role": "mobility",
+          "imgStart": "Calf_Stretch_Hands_Against_Wall/0.jpg",
+          "imgFinish": "Calf_Stretch_Hands_Against_Wall/1.jpg",
+          "imgLabel": "Calf stretch, hands against wall"
         }
       ]
     },
@@ -168,7 +180,10 @@
           "intensity": "bodyweight",
           "progression": "add band around knee (cue glute, resist valgus) per seed; then add load",
           "notes": "Glute max/medius for the anchor and posterior-chain control; the band teaches lateral hip stability that protects the knee on direction changes.",
-          "role": "main"
+          "role": "main",
+          "imgStart": "Single_Leg_Glute_Bridge/0.jpg",
+          "imgFinish": "Single_Leg_Glute_Bridge/1.jpg",
+          "imgLabel": "Single-leg glute bridge"
         },
         {
           "name": "Touchdown Single-Leg Squat (off low box)",
@@ -186,7 +201,10 @@
           "intensity": "bodyweight",
           "progression": "raise box height; pause at top in balance",
           "notes": "Concentric weight transfer onto one leg with a balanced finish - rehearses stepping into a new weighted foot under control.",
-          "role": "accessory"
+          "role": "accessory",
+          "imgStart": "Step-up_with_Knee_Raise/0.jpg",
+          "imgFinish": "Step-up_with_Knee_Raise/1.jpg",
+          "imgLabel": "Step-up with knee raise"
         },
         {
           "name": "Cossack Squat",
@@ -204,7 +222,10 @@
           "intensity": "bodyweight",
           "progression": "two-foot -> single-leg -> add catch/pass or band tug",
           "notes": "Reactive ankle/hip stabilization on an unstable surface, prepping the Airplane-on-disc work in the Performance block.",
-          "role": "accessory"
+          "role": "accessory",
+          "imgStart": "Balance_Board/0.jpg",
+          "imgFinish": "Balance_Board/1.jpg",
+          "imgLabel": "Balance board"
         }
       ]
     },
@@ -218,7 +239,10 @@
           "intensity": "light-moderate band/cable",
           "progression": "tall-kneeling -> split-stance -> single-leg stance",
           "notes": "The signature anti-rotation drill: resist the cable's twist exactly as you resist a partner's lead while keeping your own center. Brace ribs-down, neutral spine (Starrett midline stabilization).",
-          "role": "main"
+          "role": "main",
+          "imgStart": "Pallof_Press/0.jpg",
+          "imgFinish": "Pallof_Press/1.jpg",
+          "imgLabel": "Pallof press"
         },
         {
           "name": "Side Bridge",
@@ -227,7 +251,10 @@
           "intensity": "bodyweight",
           "progression": "from knees -> full -> top-leg raised",
           "notes": "Haas 'Side Lift': anti-lateral-flexion through the obliques/QL; press the down shoulder-blade down and stay long - the lateral-chain stiffness that keeps the torso from collapsing toward your partner.",
-          "role": "main"
+          "role": "main",
+          "imgStart": "Side_Bridge/0.jpg",
+          "imgFinish": "Side_Bridge/1.jpg",
+          "imgLabel": "Side bridge"
         },
         {
           "name": "Plank",
@@ -236,7 +263,10 @@
           "intensity": "bodyweight",
           "progression": "add Plank-and-Pike on a ball (Haas) for anti-extension + scapular control",
           "notes": "Anti-extension brace with scapular stability - protects the low back and builds the postural endurance behind a tall frame.",
-          "role": "accessory"
+          "role": "accessory",
+          "imgStart": "Plank/0.jpg",
+          "imgFinish": "Plank/1.jpg",
+          "imgLabel": "Plank"
         },
         {
           "name": "Cable Russian Twists (Oblique Lift / Trunk Twist)",
@@ -245,7 +275,10 @@
           "intensity": "light",
           "progression": "slow tempo -> standing contra-body pattern",
           "notes": "Trained rotation from the thoracic spine WITHOUT twisting the pelvis (Haas cue) = clean contra-body movement instead of leaking force through the low back.",
-          "role": "accessory"
+          "role": "accessory",
+          "imgStart": "Cable_Russian_Twists/0.jpg",
+          "imgFinish": "Cable_Russian_Twists/1.jpg",
+          "imgLabel": "Cable Russian twist"
         },
         {
           "name": "Face Pull",
@@ -254,7 +287,10 @@
           "intensity": "light band/cable",
           "progression": "add Scapular Pull-Ups for grip + scapular endurance",
           "notes": "Builds lower-trap/rear-delt and scapular control for a long-lasting upright frame; counters the rounded posture of desk life and a night of connection.",
-          "role": "accessory"
+          "role": "accessory",
+          "imgStart": "Face_Pull/0.jpg",
+          "imgFinish": "Face_Pull/1.jpg",
+          "imgLabel": "Face pull"
         },
         {
           "name": "Prone Spinal Brace (Multifidi)",
@@ -277,7 +313,10 @@
           "intensity": "mobility",
           "progression": "kneeling lunge -> rear shin up the wall (full Couch Stretch)",
           "notes": "Starrett's premier hip-flexor/quad opener; posterior pelvic tilt first (don't hyperextend the low back). Open hip extension so the anchor can settle without arching.",
-          "role": "mobility"
+          "role": "mobility",
+          "imgStart": "Kneeling_Hip_Flexor/0.jpg",
+          "imgFinish": "Kneeling_Hip_Flexor/1.jpg",
+          "imgLabel": "Kneeling hip-flexor stretch"
         },
         {
           "name": "90/90 Hip Switches",
@@ -295,7 +334,10 @@
           "intensity": "ball/foam",
           "progression": "ball -> add hip rotation under the ball (Starrett Glute/Hip Capsule smash)",
           "notes": "Release deep hip rotators/glutes (Area 7) that tighten from holding the anchor and pivoting; restores clean hip rotation.",
-          "role": "mobility"
+          "role": "mobility",
+          "imgStart": "Piriformis-SMR/0.jpg",
+          "imgFinish": "Piriformis-SMR/1.jpg",
+          "imgLabel": "Piriformis foam-roll"
         },
         {
           "name": "Calves-SMR + Ankle Circles",
@@ -313,7 +355,10 @@
           "intensity": "mobility",
           "progression": "add open-book thoracic rotation",
           "notes": "Free the thoracic spine so rotation comes from the mid-back (frame) and not the lumbar spine - supports the contra-body work.",
-          "role": "mobility"
+          "role": "mobility",
+          "imgStart": "Cat_Stretch/0.jpg",
+          "imgFinish": "Cat_Stretch/1.jpg",
+          "imgLabel": "Cat stretch"
         },
         {
           "name": "Heel Squeeze (Deep Rotator / Lower Glute Activation)",
@@ -356,7 +401,11 @@
           "intensity": "bodyweight -> light dumbbell",
           "progression": "up on two/down on one -> single-leg full -> add load",
           "notes": "Haas eccentric releve: 'go up with two feet, return down with one.' Builds the controlled landing that defines no-flat-step weight transfer.",
-          "role": "main"
+          "role": "main",
+          "imgStart": "Standing_Calf_Raises/0.jpg",
+          "imgFinish": "Standing_Calf_Raises/1.jpg",
+          "imgLabel": "Standing calf raise",
+          "imgApprox": true
         },
         {
           "name": "Seated Calf Raise (Soleus Endurance)",
@@ -365,7 +414,10 @@
           "intensity": "moderate load on thighs",
           "progression": "raise load only after 30 clean reps",
           "notes": "Keep the slow-twitch soleus durable for the back half of a 4-hour social - the muscle that keeps you upright and balanced.",
-          "role": "accessory"
+          "role": "accessory",
+          "imgStart": "Seated_Calf_Raise/0.jpg",
+          "imgFinish": "Seated_Calf_Raise/1.jpg",
+          "imgLabel": "Seated calf raise"
         },
         {
           "name": "Toe Isolations (Toes 2-5)",
@@ -415,7 +467,10 @@
           "intensity": "bodyweight -> light load",
           "progression": "lower the box over time toward a Pistol Squat; add load",
           "notes": "Deeper single-leg strength and control for low anchors; pelvis stacked over the foot, knee tracks toes.",
-          "role": "main"
+          "role": "main",
+          "imgStart": "Single-Leg_High_Box_Squat/0.jpg",
+          "imgFinish": "Single-Leg_High_Box_Squat/1.jpg",
+          "imgLabel": "Single-leg box squat"
         },
         {
           "name": "Attitude on Disc (single-leg glute/hamstring)",
@@ -433,7 +488,10 @@
           "intensity": "low, controlled",
           "progression": "in-place stick -> forward/lateral stick -> small box",
           "notes": "Reactive landing onto a stable single-leg base. Keep volume low and only on fresh legs, far from a dance night. Emphasize a quiet, balanced catch.",
-          "role": "accessory"
+          "role": "accessory",
+          "imgStart": "Single-Leg_Hop_Progression/0.jpg",
+          "imgFinish": "Single-Leg_Hop_Progression/1.jpg",
+          "imgLabel": "Single-leg hop"
         }
       ]
     },
@@ -447,7 +505,10 @@
           "intensity": "moderate band/cable",
           "progression": "split-stance -> single-leg stance; slow eccentric back to center",
           "notes": "Press out, control a rotation, return to center without the pelvis twisting - holding your own axis while moving against a partner's pull.",
-          "role": "main"
+          "role": "main",
+          "imgStart": "Pallof_Press_With_Rotation/0.jpg",
+          "imgFinish": "Pallof_Press_With_Rotation/1.jpg",
+          "imgLabel": "Pallof press with rotation"
         },
         {
           "name": "Side Bridge with Top-Leg Raise",
@@ -474,7 +535,10 @@
           "intensity": "bodyweight",
           "progression": "scap pull-ups -> band-assisted pull-ups",
           "notes": "Scapular control + grip/forearm endurance for maintaining frame and connection over a long night.",
-          "role": "accessory"
+          "role": "accessory",
+          "imgStart": "Scapular_Pull-Up/0.jpg",
+          "imgFinish": "Scapular_Pull-Up/1.jpg",
+          "imgLabel": "Scapular pull-up"
         },
         {
           "name": "Standing Contra-Body Trunk Twist (cable/band)",
@@ -506,7 +570,11 @@
           "intensity": "mobility",
           "progression": "wall-supported -> add a contract-relax",
           "notes": "Starrett: no less than 2 min per hip. Full hip-flexor/quad length so the anchor settles deep without the low back compensating into extension.",
-          "role": "mobility"
+          "role": "mobility",
+          "imgStart": "Kneeling_Hip_Flexor/0.jpg",
+          "imgFinish": "Kneeling_Hip_Flexor/1.jpg",
+          "imgLabel": "Kneeling hip-flexor stretch",
+          "imgApprox": true
         },
         {
           "name": "Banded Hip Distraction (flexion + external rotation)",
@@ -524,7 +592,10 @@
           "intensity": "ball + stretch",
           "progression": "smash -> active straight-leg raise retest",
           "notes": "Open adductors and hamstrings (Area 9/10) for lateral travel and the wide base of Cossack-style direction changes.",
-          "role": "mobility"
+          "role": "mobility",
+          "imgStart": "90_90_Hamstring/0.jpg",
+          "imgFinish": "90_90_Hamstring/1.jpg",
+          "imgLabel": "90/90 hamstring"
         },
         {
           "name": "Peroneals Stretch + Posterior Tibialis Stretch",
@@ -533,7 +604,10 @@
           "intensity": "mobility",
           "progression": "add Foot-SMR underfoot",
           "notes": "Balance the stirrup: keep both sides of the lower-leg supple so neither pulls the ankle out of neutral; restores clean foot roll.",
-          "role": "mobility"
+          "role": "mobility",
+          "imgStart": "Peroneals_Stretch/0.jpg",
+          "imgFinish": "Peroneals_Stretch/1.jpg",
+          "imgLabel": "Peroneals stretch"
         },
         {
           "name": "Open-Book Thoracic Rotation",
@@ -551,51 +625,24 @@
           "intensity": "bodyweight + band",
           "progression": "band around knee (resist valgus) per seed; then load",
           "notes": "Close the recovery day by re-grooving glute control over the newly opened hip so range is owned, not just borrowed.",
-          "role": "prehab"
+          "role": "prehab",
+          "imgStart": "Single_Leg_Glute_Bridge/0.jpg",
+          "imgFinish": "Single_Leg_Glute_Bridge/1.jpg",
+          "imgLabel": "Single-leg glute bridge"
         }
       ]
     }
   }
 };
 
-  /* ============================================================
-     Movement-reference images (HAND-AUTHORED — keep on regen).
-     Public-domain figures from the free-exercise-db dataset
-     (yuhonas/free-exercise-db, Unlicense), vendored + downscaled
-     under ./img/<id>/{0,1}.jpg. Keyed by exercise NAME so the map
-     survives reorders. Only movements with a faithful match are
-     listed; foot-intrinsic / dance-specific drills intentionally
-     have none. `approx:true` = closest pattern, not the exact drill.
-     NOTE: dance.js is generated by fitscrape gen_blog_data.py — if
-     you regenerate, re-apply this block (or teach the generator to
-     emit an `img` field per exercise). ============================================================ */
+  /* Movement-reference images travel with each exercise as
+     imgStart/imgFinish/imgLabel(/imgApprox), sourced upstream from
+     fitscrape data/dancer/program.json and emitted into DATA by
+     scripts/gen_blog_data.py — a regen can never drop them. Public-domain
+     figures from the free-exercise-db dataset (yuhonas/free-exercise-db,
+     Unlicense), vendored + downscaled under ./img/<slug>/{0,1}.jpg. Drills
+     with no faithful match carry no img* (card collapses to text column). */
   var IMG_BASE = 'img';
-  var IMG = {
-    "Seated Calf Raise (Soleus Pump)":        { id: "Seated_Calf_Raise",                label: "Seated calf raise" },
-    "Standing Calf Raises (Releve)":          { id: "Standing_Calf_Raises",             label: "Standing calf raise" },
-    "Calf Stretch Hands Against Wall":        { id: "Calf_Stretch_Hands_Against_Wall",  label: "Calf stretch, hands against wall" },
-    "Single Leg Glute Bridge":                { id: "Single_Leg_Glute_Bridge",          label: "Single-leg glute bridge" },
-    "Step-up with Knee Raise":                { id: "Step-up_with_Knee_Raise",          label: "Step-up with knee raise" },
-    "Balance Board / Disc Holds":             { id: "Balance_Board",                    label: "Balance board" },
-    "Pallof Press":                           { id: "Pallof_Press",                     label: "Pallof press" },
-    "Side Bridge":                            { id: "Side_Bridge",                      label: "Side bridge" },
-    "Plank":                                  { id: "Plank",                            label: "Plank" },
-    "Cable Russian Twists (Oblique Lift / Trunk Twist)": { id: "Cable_Russian_Twists",  label: "Cable Russian twist" },
-    "Face Pull":                              { id: "Face_Pull",                        label: "Face pull" },
-    "Kneeling Hip Flexor (Couch Stretch progression)":   { id: "Kneeling_Hip_Flexor",   label: "Kneeling hip-flexor stretch" },
-    "Piriformis-SMR":                         { id: "Piriformis-SMR",                   label: "Piriformis foam-roll" },
-    "Cat Stretch (Thoracic mobility)":        { id: "Cat_Stretch",                      label: "Cat stretch" },
-    "Seated Calf Raise (Soleus Endurance)":   { id: "Seated_Calf_Raise",                label: "Seated calf raise" },
-    "Single-Leg Standing Calf Raise (Eccentric)": { id: "Standing_Calf_Raises",         label: "Standing calf raise", approx: true },
-    "Single-Leg High Box Squat":              { id: "Single-Leg_High_Box_Squat",        label: "Single-leg box squat" },
-    "Single-Leg Hop Progression (controlled landings)":  { id: "Single-Leg_Hop_Progression", label: "Single-leg hop" },
-    "Pallof Press With Rotation":             { id: "Pallof_Press_With_Rotation",       label: "Pallof press with rotation" },
-    "Scapular Pull-Up":                       { id: "Scapular_Pull-Up",                 label: "Scapular pull-up" },
-    "Couch Stretch":                          { id: "Kneeling_Hip_Flexor",              label: "Kneeling hip-flexor stretch", approx: true },
-    "Adductor Smash / 90/90 Hamstring":       { id: "90_90_Hamstring",                  label: "90/90 hamstring" },
-    "Peroneals Stretch + Posterior Tibialis Stretch": { id: "Peroneals_Stretch",        label: "Peroneals stretch" },
-    "Single Leg Glute Bridge (re-activation)": { id: "Single_Leg_Glute_Bridge",         label: "Single-leg glute bridge" }
-  };
 
   /* ---------------- state ---------------- */
   var PROGKEYS = CONFIG.programs.map(function (p) { return p.key; });
@@ -889,8 +936,7 @@
     list.forEach(function (ex) {
       var name = ex.name, key = checkKey(state.program, state.day, name);
       var done = !!state.checks[key];
-      var ref = IMG[name];                 // hand-authored map; may be undefined
-      var hasImg = !!ref;
+      var hasImg = !!ex.imgStart;          // img* travels with the exercise (program.json)
       var showDetails = (state.layout === 'expanded') || (state.expanded === key);
 
       var card = h('div', 'rot-ex rot-ex--hero'
@@ -903,9 +949,10 @@
       if (hasImg) {
         var media = h('div', 'rot-hero__media');
         var img = h('img', 'rot-hero__img');
+        var frames = [ex.imgStart, ex.imgFinish];
         var frame = 1; // finish frame — usually the most informative pose
-        img.src = IMG_BASE + '/' + ref.id + '/' + frame + '.jpg';
-        img.alt = ref.label + ' — finish position';
+        img.src = IMG_BASE + '/' + frames[frame];
+        img.alt = ex.imgLabel + ' — finish position';
         img.loading = 'lazy'; img.decoding = 'async';
         img.addEventListener('click', function (e) { e.stopPropagation(); openLightbox(img.src, img.alt); });
         media.appendChild(img);
@@ -915,8 +962,8 @@
           if (i === frame) b.className = 'is-active';
           b.addEventListener('click', function (e) {
             e.stopPropagation(); frame = i;
-            img.src = IMG_BASE + '/' + ref.id + '/' + i + '.jpg';
-            img.alt = ref.label + ' — ' + lbl.toLowerCase() + ' position';
+            img.src = IMG_BASE + '/' + frames[i];
+            img.alt = ex.imgLabel + ' — ' + lbl.toLowerCase() + ' position';
             seg.querySelectorAll('button').forEach(function (x, xi) { x.className = (xi === i) ? 'is-active' : ''; });
           });
           seg.appendChild(b);
